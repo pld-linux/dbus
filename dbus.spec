@@ -419,7 +419,7 @@ fi
 %{_mandir}/man1/dbus-daemon-1.1*
 %{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-send.1*
-#%{_libdir}/dbus-1.0/services
+%dir %{_libdir}/dbus-1.0/services
 
 %files libs
 %defattr(644,root,root,755)
