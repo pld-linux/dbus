@@ -1,5 +1,5 @@
 #
-# TODO: mono
+# TODO: SELinux support
 #
 # Conditional build:
 %bcond_without	glib	# without glib support
@@ -7,6 +7,7 @@
 %bcond_without	qt	# without qt support
 %bcond_with	gcj	# without Java support
 %bcond_without	python	# without python support
+%bcond_without	dotnet	# without .net support
 #
 %if %{without glib}
 %undefine	with_gtk
@@ -17,15 +18,16 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.21
-Release:	2
+Version:	0.22
+Release:	1
 License:	AFL v2.0 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	311229d60154334ee3f908badc56747d
+# Source0-md5:	6b1c2476ea8b82dd9fb7f29ef857cb9f
 Source1:	messagebus.init
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
+Patch2:		%{name}-monodoc-destdir.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
@@ -37,6 +39,8 @@ BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	libgcj-devel}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %{?with_qt:BuildRequires:	kdelibs-devel}
+%{?with_dotnet:BuildRequires:	mono-csharp >= 0.95}
+%{?with_dotnet:BuildRequires:	monodoc >= 0.16}
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %if %{with python}
@@ -141,6 +145,32 @@ GTK+-based graphical D-BUS frontend utility.
 %description gtk -l pl
 Oparte na GTK+ graficzne narzêdzie do D-BUS.
 
+%package -n dotnet-%{name}-sharp
+Summary:	.NET library for using D-BUS
+Summary(pl):	Biblioteka .NET do u¿ywania D-BUS
+Group:		Development/Libraries
+Requires:	mono
+Requires:	%{name} = %{version}-%{release}
+
+%description -n dotnet-%{name}-sharp
+.NET library for using D-BUS
+
+%description -n dotnet-%{name}-sharp -l pl
+Biblioteka .NET do u¿ywania D-BUS
+
+%package -n dotnet-%{name}-sharp-devel
+Summary:	.NET library for using D-BUS with API documentation
+Summary(pl):	Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacje API
+Group:		Development/Libraries
+Requires:	dotnet-%{name}-sharp = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
+
+%description -n dotnet-%{name}-sharp-devel
+.NET library for using D-BUS, with API documentation
+
+%description -n dotnet-%{name}-sharp-devel -l pl
+Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacje API
+
 %package qt
 Summary:	Qt-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Qt
@@ -237,6 +267,7 @@ z Pythonem.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p0
 
 %build
 %{__libtoolize}
@@ -252,20 +283,28 @@ z Pythonem.
 	%{!?with_python:--disable-python} \
 	%{!?with_gcj:--disable-gcj} \
 	%{?with_gcj:--enable-gcj} \
+	%{?with_dotnet:--enable-mono} \
+	%{?with_dotnet:--enable-mono-docs} \
 	--disable-tests \
 	--disable-verbose-mode \
-	--disable-asserts
+	--disable-asserts \
+	--with-xml=expat
+
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+%if %{with dotnet}
+install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
+%endif
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -381,6 +420,18 @@ fi
 %files gtk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-viewer
+%endif
+
+%if %{with dotnet}
+%files -n dotnet-%{name}-sharp
+%defattr(644,root,root,755)
+%dir %{_libdir}/mono/gac/dbus-sharp
+%{_libdir}/mono/gac/dbus-sharp/*
+
+%files -n dotnet-%{name}-sharp-devel
+%defattr(644,root,root,755)
+%{_libdir}/monodoc/sources/*
+%{_pkgconfigdir}/dbus-sharp.pc
 %endif
 
 %if %{with qt}
