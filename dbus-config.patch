@@ -6,7 +6,7 @@ diff -Nuard dbus-0.22.orig/bus/session.conf.in dbus-0.22/bus/session.conf.in
    <listen>unix:tmpdir=@DBUS_SESSION_SOCKET_DIR@</listen>
  
 -  <servicedir>@EXPANDED_LIBDIR@/dbus-1.0/services</servicedir>
-+  <servicedir>@datadir@/dbus-1.0/services</servicedir>
++  <servicedir>@datadir@/dbus-1/services</servicedir>
  
    <policy context="default">
      <!-- Allow everything to be sent -->
