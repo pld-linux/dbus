@@ -23,13 +23,15 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	11
+Release:	12
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	6b1c2476ea8b82dd9fb7f29ef857cb9f
 Source1:	messagebus.init
-Source2:	dbus-daemon-1-profile.d-sh
+Source2:	%{name}-daemon-1-profile.d-sh
+Source3:	%{name}-sysconfig
+Source4:	%{name}-xinitrc.sh
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-monodoc-destdir.patch
@@ -69,6 +71,7 @@ Requires(post,preun):	/sbin/chkconfig
 Requires(post,postun):	/sbin/ldconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Requires:	xinitrc
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -344,6 +347,8 @@ z Pythonem.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
+install -d $RPM_BUILD_ROOT/etc/sysconfig
+install -d $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1.0/services
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1.0
 %if %{with dotnet}
@@ -356,6 +361,8 @@ install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/dbus
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/dbus.sh
 
 %if %{with python}
 rm -f $RPM_BUILD_ROOT%{py_sitedir}/*.{py,la,a}
@@ -426,8 +433,10 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-send
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
+%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/dbus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
+%attr(755,root,root) /etc/X11/xinit/xinitrc.d/dbus.sh
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_datadir}/dbus-1.0/services
 %dir %{_localstatedir}/lib/dbus-1.0
