@@ -275,7 +275,7 @@ if [ -n "`/usr/bin/getgid messagebus`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 122 -r -f dbus
+	/usr/sbin/groupadd -g 122 -r -f messagebus
 fi
 if [ -n "`/bin/id -u messagebus 2>/dev/null`" ]; then
 	if [ "`/bin/id -u messagebus`" != "122" ]; then
