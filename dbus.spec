@@ -5,7 +5,7 @@
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	qt	# without qt support
-%bcond_with	gcj	# without Java support
+%bcond_with	gcj	# with Java support
 %bcond_without	python	# without python support
 %bcond_without	dotnet	# without .net support
 #
