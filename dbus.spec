@@ -28,7 +28,7 @@ per-user-login-session messaging facility.
 %package devel
 Summary:	Libraries and headers for D-BUS
 Group:		Development/Libraries
-Requires:	%name = %{version}
+Requires:	%{name} = %{version}
 
 %description devel
 Headers and static libraries for D-BUS.
@@ -36,7 +36,7 @@ Headers and static libraries for D-BUS.
 %package glib
 Summary:	GLib-based library for using D-BUS
 Group:		Development/Libraries
-Requires:	%name = %{version}
+Requires:	%{name} = %{version}
 
 %description glib
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -46,7 +46,7 @@ GLib thread abstraction and main loop.
 %package qt
 Summary:	Qt-based library for using D-BUS
 Group:		Development/Libraries
-Requires:	%name = %{version}
+Requires:	%{name} = %{version}
 
 %description qt
 D-BUS add-on library to integrate the standard D-BUS library with the
