@@ -157,23 +157,23 @@ Requires:	mono
 Requires:	%{name} = %{version}-%{release}
 
 %description -n dotnet-%{name}-sharp
-.NET library for using D-BUS
+.NET library for using D-BUS.
 
 %description -n dotnet-%{name}-sharp -l pl
-Biblioteka .NET do u¿ywania D-BUS
+Biblioteka .NET do u¿ywania D-BUS.
 
 %package -n dotnet-%{name}-sharp-devel
 Summary:	.NET library for using D-BUS with API documentation
-Summary(pl):	Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacje API
+Summary(pl):	Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacjê API
 Group:		Development/Libraries
 Requires:	dotnet-%{name}-sharp = %{version}-%{release}
 Requires:	%{name} = %{version}-%{release}
 
 %description -n dotnet-%{name}-sharp-devel
-.NET library for using D-BUS, with API documentation
+.NET library for using D-BUS, with API documentation.
 
 %description -n dotnet-%{name}-sharp-devel -l pl
-Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacje API
+Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacjê API.
 
 %package qt
 Summary:	Qt-based library for using D-BUS
