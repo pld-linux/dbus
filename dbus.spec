@@ -17,16 +17,15 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.20
-Release:	3
+Version:	0.21
+Release:	1
 License:	AFL v2.0 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	8ebff3cb4beec993e9160ff844e0411c
+# Source0-md5:	311229d60154334ee3f908badc56747d
 Source1:	messagebus.init
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
-Patch2:		http://freedesktop.org/~david/%{name}-python-signals-dze.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
@@ -42,7 +41,7 @@ BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %if %{with python}
 BuildRequires:	python-devel >= 2.2
-Buildrequires:	python-Pyrex
+Buildrequires:	python-Pyrex >= 0.9-2
 %endif
 %{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 PreReq:	rc-scripts
@@ -237,8 +236,6 @@ z Pythonem.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-cd python
-%patch2 -p0
 
 %build
 %{__libtoolize}
