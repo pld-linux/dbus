@@ -16,9 +16,9 @@
 # mono still broken
 %undefine	with_dotnet
 %endif
-%define expat_version           1.95.5
-%define glib2_version           2.2.0
-%define qt_version              3.1.0
+%define		expat_version	1.95.5
+%define		glib2_version	2.2.0
+%define		qt_version	3.1.0
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
@@ -57,7 +57,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-devel >= 2.2
 Buildrequires:	python-Pyrex >= 0.9.3
 %endif
-%{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
+%{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 BuildRequires:	rpmbuild(macros) >= 1.159
 PreReq:	rc-scripts
 Requires:	%{name}-libs = %{version}-%{release}
@@ -405,17 +405,17 @@ if [ "$1" = "0" ]; then
 	%groupremove messagebus
 fi
 
-%post   libs -p /sbin/ldconfig
-%postun libs -p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 		
-%post   glib -p /sbin/ldconfig
-%postun glib -p /sbin/ldconfig
+%post	glib -p /sbin/ldconfig
+%postun	glib -p /sbin/ldconfig
 
-%post   qt -p /sbin/ldconfig
-%postun qt -p /sbin/ldconfig
+%post	qt -p /sbin/ldconfig
+%postun	qt -p /sbin/ldconfig
 
-%post   gcj -p /sbin/ldconfig
-%postun gcj -p /sbin/ldconfig
+%post	gcj -p /sbin/ldconfig
+%postun	gcj -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
