@@ -1,0 +1,18 @@
+--- mono/doc/Makefile.am.orig	2004-07-06 17:15:59.000000000 +0200
++++ mono/doc/Makefile.am	2004-08-13 11:30:38.121819640 +0200
+@@ -1,11 +1,11 @@
+ if ENABLE_MONODOC
+ TARGETS = dbus-sharp-docs.zip dbus-sharp-docs.tree dbus-sharp-docs.source
+-DOCDIR = `$(MONODOC) --get-sourcesdir`
++DOCDIR = $(DESTDIR)`$(MONODOC) --get-sourcesdir`
+ 
+ install-data-local:
+-	install -m 644 $(srcdir)/dbus-sharp-docs.source `monodoc --get-sourcesdir`
+-	install -m 644 $(srcdir)/dbus-sharp-docs.tree `monodoc --get-sourcesdir`
+-	install -m 644 $(srcdir)/dbus-sharp-docs.zip `monodoc --get-sourcesdir`
++	install -m 644 $(srcdir)/dbus-sharp-docs.source $(DOCDIR)
++	install -m 644 $(srcdir)/dbus-sharp-docs.tree $(DOCDIR)
++	install -m 644 $(srcdir)/dbus-sharp-docs.zip $(DOCDIR)
+ else
+ TARGETS = 
+ DOCDIR = $(datadir)
