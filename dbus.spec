@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	1
+Release:	2
 License:	AFL v2.0 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -32,6 +32,7 @@ Source1:	messagebus.init
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-monodoc-destdir.patch
+Patch3:		%{name}-mint.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
@@ -272,6 +273,7 @@ z Pythonem.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p0
+%patch3 -p0
 
 %build
 %{__libtoolize}
@@ -435,6 +437,8 @@ fi
 %files -n dotnet-%{name}-sharp-devel
 %defattr(644,root,root,755)
 %{_libdir}/monodoc/sources/*
+%dir %{_libdir}/mono/dbus-sharp
+%{_libdir}/mono/dbus-sharp/*
 %{_pkgconfigdir}/dbus-sharp.pc
 %endif
 
