@@ -5,7 +5,7 @@
    <listen>unix:tmpdir=@DBUS_SESSION_SOCKET_DIR@</listen>
  
 -  <servicedir>@EXPANDED_DATADIR@/dbus-1/services</servicedir>
-+  <servicedir>@datadir@/dbus-1.0/services</servicedir>
++  <servicedir>@datadir@/dbus-1/services</servicedir>
  
    <policy context="default">
      <!-- Allow everything to be sent -->
