@@ -82,7 +82,7 @@ i mo¿liwo¶æ przesy³ania komunikatów w ramach jednej sesji u¿ytkownika.
 Summary:	Header files for D-BUS
 Summary(pl):	Pliki nag³ówkowe D-BUS
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 Header files for D-BUS.
@@ -404,7 +404,6 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
 %attr(755,root,root) %{_bindir}/dbus-daemon-1
 # dbus-launch R: XFree86-libs
@@ -424,7 +423,7 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%doc doc/*.{html,txt}
+%doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
 %attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
 
 %files devel
