@@ -349,7 +349,7 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -d $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
-install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1.0/services
+install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1.0
 %if %{with dotnet}
 install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
@@ -438,7 +438,7 @@ fi
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/dbus.sh
 %dir %{_sysconfdir}/dbus-1/system.d
-%dir %{_datadir}/dbus-1.0/services
+%dir %{_datadir}/dbus-1/services
 %dir %{_localstatedir}/lib/dbus-1.0
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon-1.1*
