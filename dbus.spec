@@ -10,12 +10,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.11
-Release:	2
+Version:	0.13
+Release:	1
 License:	AFL/GPL
 Group:		Libraries
-Source0:	http://www.freedesktop.org/software/dbus/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	87f8cf7ffd114846d577e454ef3129aa
+Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	b7f29a4b581445a1290df84d1fbb31ee
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 URL:		http://www.freedesktop.org/software/dbus/
