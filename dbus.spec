@@ -34,6 +34,7 @@ Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-monodoc-destdir.patch
 Patch3:		%{name}-mint.patch
+Patch4:		%{name}-config.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
@@ -304,6 +305,7 @@ z Pythonem.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
+%patch4 -p0
 
 %build
 %{__libtoolize}
