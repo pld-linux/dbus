@@ -18,7 +18,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.20
-Release:	2
+Release:	3
 License:	AFL v2.0 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -26,6 +26,7 @@ Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}
 Source1:	messagebus.init
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
+Patch2:		http://freedesktop.org/~david/%{name}-python-signals-dze.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
@@ -69,7 +70,7 @@ i mo¿liwo¶æ przesy³ania komunikatów w ramach jednej sesji u¿ytkownika.
 Summary:	Header files for D-BUS
 Summary(pl):	Pliki nag³ówkowe D-BUS
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for D-BUS.
@@ -92,7 +93,7 @@ Statyczne biblioteki D-BUS.
 Summary:	GLib-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description glib
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -106,8 +107,8 @@ z abstrakcj± w±tków i g³ówn± pêtl± GLib.
 Summary:	Header files for GLib-based library for using D-BUS
 Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
-Requires:	%{name}-glib = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-glib = %{version}-%{release}
 Requires:	glib2-devel >= %{glib_version}
 
 %description glib-devel
@@ -120,7 +121,7 @@ Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib.
 Summary:	Static GLib-based library for using D-BUS
 Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Development/Libraries
-Requires:	%{name}-glib-devel = %{version}
+Requires:	%{name}-glib-devel = %{version}-%{release}
 
 %description glib-static
 Static GLib-based library for using D-BUS.
@@ -132,7 +133,7 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o GLib.
 Summary:	GTK+-based graphical D-BUS frontend utility
 Summary(pl):	Oparte na GTK+ graficzne narzêdzie do D-BUS
 Group:		X11/Applications
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description gtk
 GTK+-based graphical D-BUS frontend utility.
@@ -144,7 +145,7 @@ Oparte na GTK+ graficzne narzêdzie do D-BUS.
 Summary:	Qt-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Qt
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description qt
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -158,8 +159,8 @@ z abstrakcj± w±tków i g³ówn± pêtl± Qt.
 Summary:	Header files for Qt-based library for using D-BUS
 Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Qt
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
-Requires:	%{name}-qt = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-qt = %{version}-%{release}
 Requires:	kdelibs-devel
 
 %description qt-devel
@@ -172,7 +173,7 @@ Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Qt.
 Summary:	Static Qt-based library for using D-BUS
 Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o Qt
 Group:		Development/Libraries
-Requires:	%{name}-qt-devel = %{version}
+Requires:	%{name}-qt-devel = %{version}-%{release}
 
 %description qt-static
 Static Qt-based library for using D-BUS.
@@ -184,7 +185,7 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
 Summary:	Java library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Javê
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description gcj
 D-BUS add-on library to integrate the standard D-BUS library with
@@ -198,7 +199,7 @@ z Jav±.
 Summary:	Header files for Java-based library for using D-BUS
 Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Javê
 Group:		Development/Libraries
-Requires:	%{name}-gcj = %{version}
+Requires:	%{name}-gcj = %{version}-%{release}
 
 %description gcj-devel
 Header files for Java-based library for using D-BUS.
@@ -210,7 +211,7 @@ Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Javê.
 Summary:	Static Java-based library for using D-BUS
 Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o Javê
 Group:		Development/Libraries
-Requires:	%{name}-gcj-devel = %{version}
+Requires:	%{name}-gcj-devel = %{version}-%{release}
 
 %description gcj-static
 Static Java-based library for using D-BUS.
@@ -222,7 +223,7 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Javê.
 Summary:	Python library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Pythona
 Group:		Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description -n python-dbus
 D-BUS add-on library to integrate the standard D-BUS library with
@@ -236,6 +237,8 @@ z Pythonem.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+cd python
+%patch2 -p0
 
 %build
 %{__libtoolize}
