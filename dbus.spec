@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	10
+Release:	8
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -42,6 +42,7 @@ BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
+BuildRequires:	doxygen
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gcj:BuildRequires:	gcc-java-tools}
 %{?with_gcj:BuildRequires:	libgcj-devel}
@@ -330,7 +331,8 @@ z Pythonem.
 	--disable-asserts \
 	--with-xml=expat \
 	--with-session-socket-dir=/tmp \
-	--with-system-pid-file=/var/run/dbus.pid
+	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
+	--with-system-socket=%{_localstatedir}/lib/dbus-1.0/system_bus_socket
 
 
 
@@ -342,6 +344,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1.0/services
+install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1.0
 %if %{with dotnet}
 install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 %endif
@@ -425,8 +428,8 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %dir %{_sysconfdir}/dbus-1/system.d
-%dir %{_localstatedir}/run/dbus
 %dir %{_datadir}/dbus-1.0/services
+%dir %{_localstatedir}/lib/dbus-1.0
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon-1.1*
 %{_mandir}/man1/dbus-launch.1*
