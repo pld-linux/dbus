@@ -1,0 +1,44 @@
+--- configure.in.orig	2004-08-13 13:04:05.710336608 +0200
++++ configure.in	2004-08-13 13:22:08.932661784 +0200
+@@ -188,24 +188,32 @@
+ MONO_REQUIRED_VERSION=0.95
+ AC_SUBST(MONO_REQUIRED_VERSION)
+ PKG_CHECK_MODULES(MONO_DEPENDENCY, mono >= $MONO_REQUIRED_VERSION, have_mono=true, have_mono=false)
++PKG_CHECK_MODULES(MONO_DEPENDENCY, mint >= $MONO_REQUIRED_VERSION, have_mint=true, have_mint=false)
+ 
+ if test "x$have_mono" = "xtrue"; then
+-if test `uname -s` = "Darwin"; then
++    if test `uname -s` = "Darwin"; then
+ 	AC_PATH_PROG(RUNTIME, mint, no)
+ 	AC_PATH_PROG(CSC, mcs, no)
+ 	LIB_PREFIX=
+-    LIB_SUFFIX=.dylib
+-else
++	LIB_SUFFIX=.dylib
++    else
+ 	AC_PATH_PROG(RUNTIME, mono, no)
+ 	AC_PATH_PROG(CSC, mcs, no)
+ 	LIB_PREFIX=.so
+-    LIB_SUFFIX=
+-fi
++	LIB_SUFFIX=
++    fi
+ else
+-AC_PATH_PROG(CSC, csc.exe, no)
+-RUNTIME=
+-LIB_PREFIX=
+-LIB_SUFFIX=.dylib
++    if test "x$have_mint" = "xtrue"; then
++	AC_PATH_PROG(RUNTIME, mint, no)
++	AC_PATH_PROG(CSC, mcs, no)
++    else
++	AC_PATH_PROG(CSC, csc.exe, no)
++	RUNTIME=
++	LIB_PREFIX=
++	LIB_SUFFIX=.dylib
++	AC_MSG_ERROR([Unable to find mono or mint packages]);
++    fi
++    
+ fi
+ 
+ if test x$enable_mono = xyes; then
