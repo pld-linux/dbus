@@ -41,7 +41,7 @@ BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %if %{with python}
 BuildRequires:	python-devel >= 2.2
-Buildrequires:	python-Pyrex >= 0.9-2
+Buildrequires:	python-Pyrex >= 0.9.3
 %endif
 %{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 PreReq:	rc-scripts
