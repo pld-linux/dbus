@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	13
+Release:	14
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/dbus/releases/%{name}-%{version}.tar.gz
@@ -126,6 +126,7 @@ Summary:	GLib-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	glib2 >= %{glib2_version}
 
 %description glib
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -141,7 +142,7 @@ Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	%{name}-glib = %{version}-%{release}
-Requires:	glib2-devel >= %{glib_version}
+Requires:	glib2-devel >= %{glib2_version}
 
 %description glib-devel
 Header files for GLib-based library for using D-BUS.
@@ -179,6 +180,7 @@ Summary:	GTK+-based graphical D-BUS frontend utility
 Summary(pl):	Oparte na GTK+ graficzne narzêdzie do D-BUS
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-glib = %{version}-%{release}
 
 %description gtk
 GTK+-based graphical D-BUS frontend utility.
@@ -190,8 +192,8 @@ Oparte na GTK+ graficzne narzêdzie do D-BUS.
 Summary:	.NET library for using D-BUS
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS
 Group:		Development/Libraries
-Requires:	mono
 Requires:	%{name} = %{version}-%{release}
+Requires:	mono
 
 %description -n dotnet-%{name}-sharp
 .NET library for using D-BUS.
@@ -294,7 +296,7 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Javê.
 Summary:	Python library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Pythona
 Group:		Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-glib = %{version}-%{release}
 %pyrequires_eq	python
 
 %description -n python-dbus
