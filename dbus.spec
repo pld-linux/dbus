@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	5
+Release:	6
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -59,7 +59,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun):		/sbin/chkconfig
+Requires(post,preun):	/sbin/chkconfig
 Requires(post,postun):	/sbin/ldconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -114,7 +114,7 @@ Statyczne biblioteki D-BUS.
 Summary:	GLib-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description glib
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -129,7 +129,7 @@ Summary:	Header files for GLib-based library for using D-BUS
 Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
-Requires:	%{name}-glib = %{version}-%{release}
+Requires:	%{name}-glib-tools = %{version}-%{release}
 Requires:	glib2-devel >= %{glib_version}
 
 %description glib-devel
@@ -149,6 +149,19 @@ Static GLib-based library for using D-BUS.
 
 %description glib-static -l pl
 Statyczna biblioteka do u¿ywania D-BUS oparta o GLib.
+
+%package glib-tools
+Summary:	GLib-based tools for D-BUS
+Summary(pl):	Narzêdzia dla D-BUS oparte o GLib
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-glib = %{version}-%{release}
+
+%description glib-tools
+GLib-based tools for D-BUS.
+
+%description glib-tools -l pl
+Narzêdzia dla D-BUS oparte o GLib
 
 %package gtk
 Summary:	GTK+-based graphical D-BUS frontend utility
@@ -428,10 +441,7 @@ fi
 %if %{with glib}
 %files glib
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/dbus-glib-tool
-%attr(755,root,root) %{_bindir}/dbus-monitor
 %attr(755,root,root) %{_libdir}/libdbus-glib-1.so.*.*.*
-%{_mandir}/man1/dbus-monitor.1*
 
 %files glib-devel
 %defattr(644,root,root,755)
@@ -443,6 +453,12 @@ fi
 %files glib-static
 %defattr(644,root,root,755)
 %{_libdir}/libdbus-glib-1.a
+
+%files glib-tools
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dbus-glib-tool
+%attr(755,root,root) %{_bindir}/dbus-monitor
+%{_mandir}/man1/dbus-monitor.1*
 %endif
 
 %if %{with gtk}
