@@ -132,7 +132,7 @@ Summary:	Header files for GLib-based library for using D-BUS
 Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
-Requires:	%{name}-glib-tools = %{version}-%{release}
+Requires:	%{name}-glib = %{version}-%{release}
 Requires:	glib2-devel >= %{glib_version}
 
 %description glib-devel
@@ -448,6 +448,7 @@ fi
 
 %files glib-devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dbus-glib-tool
 %attr(755,root,root) %{_libdir}/libdbus-glib-1.so
 %{_libdir}/libdbus-glib-1.la
 %{_includedir}/dbus*/dbus/dbus-glib.h
@@ -459,7 +460,6 @@ fi
 
 %files glib-tools
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/dbus-glib-tool
 %attr(755,root,root) %{_bindir}/dbus-monitor
 %{_mandir}/man1/dbus-monitor.1*
 %endif
