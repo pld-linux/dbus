@@ -110,7 +110,7 @@ Group:		Development/Libraries
 %description qt-static
 Static Qt-based library for using D-BUS.
 
-%description static -l pl
+%description qt-static -l pl
 Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
 
 %prep
