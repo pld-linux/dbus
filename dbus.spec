@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	3
+Release:	3.9
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -54,6 +54,7 @@ Buildrequires:	python-Pyrex >= 0.9.3
 %endif
 %{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 PreReq:	rc-scripts
+Requires:	%{name}-libs = %{version}-%{release}
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
@@ -85,6 +86,17 @@ Header files for D-BUS.
 
 %description devel -l pl
 Pliki nag³ówkowe D-BUS.
+
+%package libs
+Summary:	D-BUS libraries
+Summary(pl):	Biblioteki D-BUS
+Group:		Libraries
+
+%description libs
+D-BUS libraries.
+
+%description libs -l pl
+Biblioteki D-BUS.
 
 %package static
 Summary:	Static D-BUS libraries
@@ -334,7 +346,6 @@ else
 fi
 
 %post
-/sbin/ldconfig
 /sbin/chkconfig --add messagebus
 if [ -f /var/lock/subsys/messagebus ]; then
 	/etc/rc.d/init.d/messagebus restart >&2
@@ -351,11 +362,13 @@ if [ "$1" = "0" ];then
 fi
 
 %postun
-/sbin/ldconfig
 if [ "$1" = "0" ]; then
 	/usr/sbin/userdel messagebus
 	/usr/sbin/groupdel messagebus
 fi
+
+%post   libs -p /sbin/ldconfig
+%postun libs -p /sbin/ldconfig
 		
 %post   glib -p /sbin/ldconfig
 %postun glib -p /sbin/ldconfig
@@ -387,10 +400,14 @@ fi
 %{_mandir}/man1/dbus-send.1*
 #%{_libdir}/dbus-1.0/services
 
-%files devel
+%files libs
 %defattr(644,root,root,755)
 %doc doc/*.{html,txt}
 %attr(755,root,root) %{_libdir}/libdbus-1.so
+
+%files devel
+%defattr(644,root,root,755)
+%doc doc/*.{html,txt}
 %{_libdir}/libdbus-1.la
 %{_libdir}/dbus-*/include
 %{_pkgconfigdir}/dbus-1.pc
