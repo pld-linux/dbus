@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	3.9
+Release:	4
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -309,7 +309,9 @@ z Pythonem.
 	--with-xml=expat
 
 
-%{__make}
+
+%{__make} \
+	pythondir=%{py_sitedir}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -319,10 +321,14 @@ install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 %endif
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	pythondir=%{py_sitedir}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 
+%if %{with python}
+rm -f $RPM_BUILD_ROOT%{py_sitedir}/*.{py,la,a}
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
