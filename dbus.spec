@@ -1,8 +1,14 @@
 #
-# Conditional build:
-# _without_glib - without glib support
-# _without_qt - without qt support
+# TODO: gcj, mono, python
 #
+# Conditional build:
+%bcond_without	glib	# without glib support
+%bcond_without	gtk	# without GTK+ programs
+%bcond_without	qt	# without qt support
+#
+%if %{without glib}
+%undefine	with_gtk
+%endif
 %define gettext_package dbus
 %define expat_version           1.95.5
 %define glib2_version           2.2.0
@@ -10,22 +16,26 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.13
+Version:	0.20
 Release:	1
-License:	AFL/GPL
+License:	AFL v2.0 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	b7f29a4b581445a1290df84d1fbb31ee
+# Source0-md5:	8ebff3cb4beec993e9160ff844e0411c
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
-URL:		http://www.freedesktop.org/software/dbus/
+# NOTE: it's not directory, don't add /
+URL:		http://www.freedesktop.org/software/dbus
+BuildRequires:	XFree86-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
-%{!?_without_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
-%{!?_without_qt:BuildRequires:	kdelibs-devel}
+%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+%{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
+%{?with_qt:BuildRequires:	kdelibs-devel}
 BuildRequires:	libtool
-%{!?_without_qt:BuildRequires:	qt-devel    >= %{qt_version}}
+BuildRequires:	pkgconfig
+%{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 #PreReq:	rc-scripts
 #Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -83,6 +93,7 @@ Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 Requires:	%{name}-glib = %{version}
+Requires:	glib2-devel >= %{glib_version}
 
 %description glib-devel
 Header files for GLib-based library for using D-BUS.
@@ -101,6 +112,18 @@ Static GLib-based library for using D-BUS.
 
 %description glib-static -l pl
 Statyczna biblioteka do u¿ywania D-BUS oparta o GLib.
+
+%package gtk
+Summary:	GTK+-based graphical D-BUS frontend utility
+Summary(pl):	Oparte na GTK+ graficzne narzêdzie do D-BUS
+Group:		X11/Applications
+Requires:	%{name} = %{version}
+
+%description gtk
+GTK+-based graphical D-BUS frontend utility.
+
+%description gtk -l pl
+Oparte na GTK+ graficzne narzêdzie do D-BUS.
 
 %package qt
 Summary:	Qt-based library for using D-BUS
@@ -122,6 +145,7 @@ Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Qt
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}
 Requires:	%{name}-qt = %{version}
+Requires:	kdelibs-devel
 
 %description qt-devel
 Header files for Qt-based library for using D-BUS.
@@ -150,15 +174,17 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
+%{__autoheader}
 %{__automake}
-
 %configure \
 	QTDIR=/usr \
-	%{?_without_glib:--disable-glib} \
-	%{?_without_qt:--disable-qt} \
+	%{!?with_glib:--disable-glib} \
+	%{!?with_gtk:--disable-gtk} \
+	%{!?with_qt:--disable-qt} \
 	--disable-tests \
 	--disable-verbose-mode \
 	--disable-asserts
+
 %{__make}
 
 %install
@@ -197,23 +223,30 @@ rm -rf $RPM_BUILD_ROOT
 ##  -f %{gettext_package}.lang
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/libdbus-1*.so.*.*.*
+%doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
+%attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
+%attr(755,root,root) %{_bindir}/dbus-daemon-1
+# dbus-launch R: XFree86-libs
+%attr(755,root,root) %{_bindir}/dbus-launch
+%attr(755,root,root) %{_bindir}/dbus-send
+%attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
 %dir %{_libdir}/dbus-*
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
 #/etc/rc.d/init.d/*
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_localstatedir}/run/dbus
-%{_mandir}/man*/*
+%{_mandir}/man1/dbus-cleanup-sockets.1*
+%{_mandir}/man1/dbus-daemon-1.1*
+%{_mandir}/man1/dbus-launch.1*
+%{_mandir}/man1/dbus-send.1*
 #%{_libdir}/dbus-1.0/services
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/*.{html,txt} HACKING
-%attr(755,root,root) %{_libdir}/libdbus-1*.so
-%{_libdir}/libdbus-1*.la
+%doc doc/*.{html,txt}
+%attr(755,root,root) %{_libdir}/libdbus-1.so
+%{_libdir}/libdbus-1.la
 %{_libdir}/dbus-*/include
 %{_pkgconfigdir}/dbus-1.pc
 %{_includedir}/dbus*
@@ -222,37 +255,46 @@ rm -rf $RPM_BUILD_ROOT
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libdbus-1*.a
+%{_libdir}/libdbus-1.a
 
-%if 0%{!?_without_glib:1}
+%if %{with glib}
 %files glib
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libdbus-glib*.so.*.*
+%attr(755,root,root) %{_bindir}/dbus-glib-tool
+%attr(755,root,root) %{_bindir}/dbus-monitor
+%attr(755,root,root) %{_libdir}/libdbus-glib-1.so.*.*.*
 %{_pkgconfigdir}/dbus-glib-1.pc
+%{_mandir}/man1/dbus-monitor.1*
 
 %files glib-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libdbus-glib*.so
-%{_libdir}/libdbus-glib*.la
+%attr(755,root,root) %{_libdir}/libdbus-glib-1.so
+%{_libdir}/libdbus-glib-1.la
 %{_includedir}/dbus*/dbus/dbus-glib.h
 
 %files glib-static
 %defattr(644,root,root,755)
-%{_libdir}/libdbus-glib*.a
+%{_libdir}/libdbus-glib-1.a
 %endif
 
-%if 0%{!?_without_qt:1}
+%if %{with gtk}
+%files gtk
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dbus-viewer
+%endif
+
+%if %{with qt}
 %files qt
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libdbus-qt*.so.*.*
+%attr(755,root,root) %{_libdir}/libdbus-qt-1.so.*.*.*
 
 %files qt-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libdbus-qt*.so
-%{_libdir}/libdbus-qt*.la
+%attr(755,root,root) %{_libdir}/libdbus-qt-1.so
+%{_libdir}/libdbus-qt-1.la
 %{_includedir}/dbus*/dbus/dbus-qt.h
 
 %files qt-static
 %defattr(644,root,root,755)
-%{_libdir}/libdbus-qt*.a
+%{_libdir}/libdbus-qt-1.a
 %endif
