@@ -1,5 +1,5 @@
 #
-# TODO: gcj, mono, python
+# TODO: mono
 #
 # Conditional build:
 %bcond_without	glib	# without glib support
@@ -11,7 +11,6 @@
 %if %{without glib}
 %undefine	with_gtk
 %endif
-%define gettext_package dbus
 %define expat_version           1.95.5
 %define glib2_version           2.2.0
 %define qt_version              3.1.0
@@ -30,7 +29,7 @@ Patch1:		%{name}-nolibs.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
@@ -45,9 +44,14 @@ Buildrequires:	python-Pyrex
 %endif
 %{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 PreReq:	rc-scripts
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):		/sbin/chkconfig
 Requires(post,postun):	/sbin/ldconfig
-Requires(post,postun):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -261,21 +265,30 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 
-## %find_lang %{gettext_package}
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-# Add the "messagebus" user
-/usr/sbin/useradd -c 'System message bus' -u 81 \
-	-s /bin/false -r -d '/' messagebus 2> /dev/null || :
+if [ -n "`/usr/bin/getgid messagebus`" ]; then
+	if [ "`getgid messagebus`" != "122" ]; then
+		echo "Error: group messagebus doesn't have gid=122. Correct this before installing dbus." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 122 -r -f dbus
+fi
+if [ -n "`/bin/id -u messagebus 2>/dev/null`" ]; then
+	if [ "`/bin/id -u messagebus`" != "122" ]; then
+		echo "Error: user messagebus doesn't have uid=122. Correct this before installing dbus." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 122 -r -d /usr/share/empty -s /bin/false -c "System message bus" -g messagebus messagebus 1>&2
+fi
 
 %post
 /sbin/ldconfig
-
 /sbin/chkconfig --add messagebus
-
 if [ -f /var/lock/subsys/messagebus ]; then
 	/etc/rc.d/init.d/messagebus restart >&2
 else
@@ -292,9 +305,9 @@ fi
 
 %postun
 /sbin/ldconfig
-
 if [ "$1" = "0" ]; then
 	/usr/sbin/userdel messagebus
+	/usr/sbin/groupdel messagebus
 fi
 		
 %post   glib -p /sbin/ldconfig
@@ -306,7 +319,6 @@ fi
 %post   gcj -p /sbin/ldconfig
 %postun gcj -p /sbin/ldconfig
 
-##  -f %{gettext_package}.lang
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
