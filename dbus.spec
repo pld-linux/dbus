@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.23
-Release:	3
+Release:	4
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -216,7 +216,7 @@ Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacjê API.
 Summary:	Qt-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Qt
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 
 %description qt
 D-BUS add-on library to integrate the standard D-BUS library with the
