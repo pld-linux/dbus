@@ -1,6 +1,0 @@
-# D-BUS configuration
-# start D-BUS session daemon while login to system
-SESSION_BUS_PROFILE_D="no"
-
-# start D-BUS session daemon while start X session
-SESSION_BUS_X_SESSION="yes"
