@@ -29,6 +29,7 @@ Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	6b1c2476ea8b82dd9fb7f29ef857cb9f
 Source1:	messagebus.init
+Source2:	dbus-daemon-1-profile.d-sh
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-monodoc-destdir.patch
@@ -333,6 +334,7 @@ z Pythonem.
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
+install -d $RPM_BUILD_ROOT/etc/profile.d
 %if %{with dotnet}
 install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 %endif
@@ -342,6 +344,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 	pythondir=%{py_sitedir}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 
 %if %{with python}
 rm -f $RPM_BUILD_ROOT%{py_sitedir}/*.{py,la,a}
@@ -413,6 +416,7 @@ fi
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
 %attr(754,root,root) /etc/rc.d/init.d/*
+%attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
