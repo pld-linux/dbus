@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.23
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -58,6 +58,7 @@ BuildRequires:	python-Pyrex >= 0.9.3
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	xmlto
 PreReq:	rc-scripts
 Requires:	%{name}-libs = %{version}-%{release}
 Requires(pre):	/bin/id
