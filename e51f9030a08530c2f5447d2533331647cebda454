@@ -1,0 +1,1 @@
+- %{_libdir}/dbus-* dir moved to -libs
