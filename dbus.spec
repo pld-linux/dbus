@@ -326,7 +326,7 @@ z Pythonem.
 	%{!?with_dotnet:--disable-mono} \
 	%{!?with_dotnet:--disable-mono-docs} \
 	--disable-tests \
-	--disable-verbose-mode \
+	--enable-verbose-mode \
 	--disable-asserts \
 	--with-xml=expat \
 	--with-session-socket-dir=/tmp \
