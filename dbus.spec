@@ -409,7 +409,6 @@ fi
 # dbus-launch R: XFree86-libs
 %attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-send
-%dir %{_libdir}/dbus-*
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
 %attr(754,root,root) /etc/rc.d/init.d/*
@@ -425,6 +424,7 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
 %attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
+%dir %{_libdir}/dbus-*
 
 %files devel
 %defattr(644,root,root,755)
