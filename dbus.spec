@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	2
+Release:	3
 License:	AFL v2.0 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -289,8 +289,8 @@ z Pythonem.
 	%{!?with_python:--disable-python} \
 	%{!?with_gcj:--disable-gcj} \
 	%{?with_gcj:--enable-gcj} \
-	%{?with_dotnet:--enable-mono} \
-	%{?with_dotnet:--enable-mono-docs} \
+	%{!?with_dotnet:--disable-mono} \
+	%{!?with_dotnet:--disable-mono-docs} \
 	--disable-tests \
 	--disable-verbose-mode \
 	--disable-asserts \
