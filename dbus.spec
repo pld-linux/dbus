@@ -19,15 +19,17 @@
 %define		expat_version	1.95.5
 %define		glib2_version	2.2.0
 %define		qt_version	3.1.0
+%define		snap		20041214
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	12
+Release:	0.%{snap}.0
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
-Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	6b1c2476ea8b82dd9fb7f29ef857cb9f
+#Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
+Source0:	%{name}-%{version}-%{snap}.tar.gz
+# Source0-md5:	9ba907bbe420d74a87c42c1ad6dc730b
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -38,6 +40,7 @@ Patch2:		%{name}-monodoc-destdir.patch
 Patch3:		%{name}-mint.patch
 Patch4:		%{name}-config.patch
 Patch5:		%{name}-hello.patch
+Patch6:		%{name}-make-dbus-glib-error-enum-sh.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
@@ -306,13 +309,14 @@ Dodatkowa biblioteka D-BUS do integracji standardowej biblioteki D-BUS
 z Pythonem.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-%{snap}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p0
-%patch3 -p0
+#%patch2 -p0
+#%patch3 -p0
 %patch4 -p0
-%patch5 -p0
+#%patch5 -p0
+%patch6 -p0
 
 %build
 %{__libtoolize}
@@ -349,7 +353,6 @@ install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -d $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
-install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1.0/services
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1.0
 %if %{with dotnet}
 install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
@@ -438,7 +441,7 @@ fi
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/dbus.sh
 %dir %{_sysconfdir}/dbus-1/system.d
-%dir %{_datadir}/dbus-1.0/services
+%dir %{_datadir}/dbus-1/services
 %dir %{_localstatedir}/lib/dbus-1.0
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon-1.1*
