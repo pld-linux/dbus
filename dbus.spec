@@ -503,7 +503,7 @@ fi
 
 %files -n dotnet-%{name}-sharp-devel
 %defattr(644,root,root,755)
-%{_libdir}/monodoc/sources/
+%{_libdir}/monodoc/sources/*
 %dir %{_libdir}/mono/dbus-sharp
 %{_libdir}/mono/dbus-sharp/*
 %{_pkgconfigdir}/dbus-sharp.pc
