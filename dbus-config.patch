@@ -1,0 +1,16 @@
+diff -Nuard dbus-0.22.orig/bus/session.conf.in dbus-0.22/bus/session.conf.in
+--- bus/session.conf.in	2004-10-27 10:04:50.614822536 +0200
++++ bus/session.conf.in	2004-10-27 10:10:14.765544136 +0200
+@@ -21,6 +21,12 @@
+     <allow own="*"/>
+     <!-- Allow any user to connect -->
+     <allow user="*"/>
++
++    <!-- Added by PLD -->
++    <!-- valid replies are always allowed -->
++    <allow send_requested_reply="true"/>
++    <allow receive_requested_reply="true"/>
++    
+   </policy>
+ 
+   <!-- This is included last so local configuration can override what's 
