@@ -22,24 +22,21 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.22
-Release:	14
+Version:	0.23
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
-Source0:	http://www.freedesktop.org/software/dbus/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	6b1c2476ea8b82dd9fb7f29ef857cb9f
+Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	56a6a06144bd349f21afbd4cc386a60f
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
 Source4:	%{name}-xinitrc.sh
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
-Patch2:		%{name}-monodoc-destdir.patch
+Patch2:		%{name}-config.patch
 Patch3:		%{name}-mint.patch
-Patch4:		%{name}-config.patch
-Patch5:		%{name}-hello.patch
-# NOTE: it's not directory, don't add /
-URL:		http://www.freedesktop.org/software/dbus
+URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
@@ -296,7 +293,7 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Javê.
 Summary:	Python library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Pythona
 Group:		Libraries
-Requires:	%{name}-glib = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 %pyrequires_eq	python
 
 %description -n python-dbus
@@ -313,8 +310,6 @@ z Pythonem.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p0
-%patch4 -p0
-%patch5 -p0
 
 %build
 %{__libtoolize}
@@ -332,13 +327,15 @@ z Pythonem.
 	%{?with_gcj:--enable-gcj} \
 	%{!?with_dotnet:--disable-mono} \
 	%{!?with_dotnet:--disable-mono-docs} \
+	%{?debug:--enable-verbose-mode} \
 	--disable-tests \
 	--enable-verbose-mode \
 	--disable-asserts \
 	--with-xml=expat \
+	--enable-abstract-sockets \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
-	--with-system-socket=%{_localstatedir}/lib/dbus-1.0/system_bus_socket
+	--with-system-socket=%{_localstatedir}/lib/dbus-1/system_bus_socket
 
 
 
@@ -352,7 +349,7 @@ install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -d $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
-install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1.0
+install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1
 %if %{with dotnet}
 install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 %endif
@@ -441,7 +438,7 @@ fi
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/dbus.sh
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_datadir}/dbus-1/services
-%dir %{_localstatedir}/lib/dbus-1.0
+%dir %{_localstatedir}/lib/dbus-1
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon-1.1*
 %{_mandir}/man1/dbus-launch.1*
