@@ -44,6 +44,7 @@ BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	libgcj-devel}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %{?with_qt:BuildRequires:	kdelibs-devel}
+%{?with_dotnet:BuildRequires:	dotnet-gtk-sharp-devel}
 %{?with_dotnet:BuildRequires:	mono-csharp >= 0.95}
 %{?with_dotnet:BuildRequires:	monodoc >= 0.16}
 BuildRequires:	libtool
