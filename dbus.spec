@@ -23,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
-Release:	6
+Release:	7
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
@@ -434,7 +434,7 @@ fi
 %{_libdir}/dbus-*/include
 %{_pkgconfigdir}/dbus-1.pc
 %{_includedir}/dbus*
-%{?with_glib:%exclude %{_includedir}/dbus*/dbus/dbus-glib.h}
+%{?with_glib:%exclude %{_includedir}/dbus*/dbus/dbus-glib*.h}
 %{?with_qt:%exclude %{_includedir}/dbus*/dbus/dbus-qt.h}
 
 %files static
@@ -451,7 +451,7 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-glib-tool
 %attr(755,root,root) %{_libdir}/libdbus-glib-1.so
 %{_libdir}/libdbus-glib-1.la
-%{_includedir}/dbus*/dbus/dbus-glib.h
+%{_includedir}/dbus*/dbus/dbus-glib*.h
 %{_pkgconfigdir}/dbus-glib-1.pc
 
 %files glib-static
