@@ -1,3 +1,8 @@
+#
+# Conditional build:
+# _without_glib - without glib support
+# _without_qt - without qt support
+
 %define gettext_package dbus
 %define expat_version           1.95.5
 %define glib2_version           2.2.0
@@ -7,7 +12,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.11
-Release:	1
+Release:	2
 License:	AFL/GPL
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/dbus/releases/%{name}-%{version}.tar.gz
@@ -17,10 +22,10 @@ URL:		http://www.freedesktop.org/software/dbus/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
-BuildRequires:	glib2-devel >= %{glib2_version}
-BuildRequires:	kdelibs-devel
+%{!?_without_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+%{!?_without_qt:BuildRequires:	kdelibs-devel}
 BuildRequires:	libtool
-BuildRequires:	qt-devel    >= %{qt_version}
+%{!?_without_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 #PreReq:	rc-scripts
 #Requires(post,preun):	chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -72,6 +77,17 @@ GLib thread abstraction and main loop.
 Dodatkowa biblioteka D-BUS do integracji standardowej biblioteki D-BUS
 z abstrakcj± w±tków i g³ówn± pêtl± GLib.
 
+%package glib-static
+Summary:	Static GLib-based library for using D-BUS
+Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o GLib
+Group:		Development/Libraries
+
+%description glib-static
+Static GLib-based library for using D-BUS.
+
+%description glib-static -l pl
+Statyczna biblioteka do u¿ywania D-BUS oparta o GLib.
+
 %package qt
 Summary:	Qt-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Qt
@@ -86,6 +102,17 @@ Qt thread abstraction and main loop.
 Dodatkowa biblioteka D-BUS do integracji standardowej biblioteki D-BUS
 z abstrakcj± w±tków i g³ówn± pêtl± Qt.
 
+%package qt-static
+Summary:	Static Qt-based library for using D-BUS
+Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o Qt
+Group:		Development/Libraries
+
+%description qt-static
+Static Qt-based library for using D-BUS.
+
+%description static -l pl
+Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -95,10 +122,11 @@ z abstrakcj± w±tków i g³ówn± pêtl± Qt.
 %{__aclocal}
 %{__autoconf}
 %{__automake}
-COMMON_ARGS="--enable-glib=yes --enable-qt=yes"
 export QTDIR=/usr
 
-%configure $COMMON_ARGS \
+%configure \
+	%{!?_without_glib:--enable-glib=yes} \
+	%{!?_without_qt:--enable-qt=yes} \
 	--disable-tests \
 	--disable-verbose-mode \
 	--disable-asserts
@@ -140,7 +168,7 @@ rm -rf $RPM_BUILD_ROOT
 ##  -f %{gettext_package}.lang
 %files
 %defattr(644,root,root,755)
-%doc COPYING ChangeLog NEWS
+%doc AUTHORS ChangeLog NEWS README
 %attr(755,root,root) %{_bindir}/*
 %attr(755,root,root) %{_libdir}/*dbus-1*.so.*.*.*
 %dir %{_libdir}/dbus-*
@@ -154,20 +182,36 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/*.{html,txt} HACKING
 %attr(755,root,root) %{_libdir}/libdbus-1*.so
 %{_libdir}/libdbus-1*.la
 %{_libdir}/dbus-*/include
-%{_pkgconfigdir}/*
+%{_pkgconfigdir}/dbus-1.pc
 %{_includedir}/*
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libdbus-1.a
 
+%if %{!?_without_glib:1}%{?_without_glib:0}
 %files glib
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*glib*.so.*.*
+%{_libdir}/*glib*.la
+%{_pkgconfigdir}/dbus-glib-1.pc
 
+%files glib-static
+%defattr(644,root,root,755)
+%{_libdir}/*glib*.a
+%endif
+
+%if %{!?_without_qt:1}%{?_without_qt:0}
 %files qt
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*qt*.so.*.*
+%{_libdir}/*qt*.la
+
+%files qt-static
+%defattr(644,root,root,755)
+%{_libdir}/*qt*.a
+%endif
