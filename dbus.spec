@@ -438,6 +438,7 @@ fi
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/dbus.sh
 %dir %{_sysconfdir}/dbus-1/system.d
+%dir %{_datadir}/dbus-1
 %dir %{_datadir}/dbus-1/services
 %dir %{_localstatedir}/lib/dbus-1
 %{_mandir}/man1/dbus-cleanup-sockets.1*
