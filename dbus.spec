@@ -292,6 +292,7 @@ Summary:	Python library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Pythona
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
+%pyrequires_eq	python
 
 %description -n python-dbus
 D-BUS add-on library to integrate the standard D-BUS library with
