@@ -362,7 +362,6 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-glib-tool
 %attr(755,root,root) %{_bindir}/dbus-monitor
 %attr(755,root,root) %{_libdir}/libdbus-glib-1.so.*.*.*
-%{_pkgconfigdir}/dbus-glib-1.pc
 %{_mandir}/man1/dbus-monitor.1*
 
 %files glib-devel
@@ -370,6 +369,7 @@ fi
 %attr(755,root,root) %{_libdir}/libdbus-glib-1.so
 %{_libdir}/libdbus-glib-1.la
 %{_includedir}/dbus*/dbus/dbus-glib.h
+%{_pkgconfigdir}/dbus-glib-1.pc
 
 %files glib-static
 %defattr(644,root,root,755)
