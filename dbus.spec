@@ -393,7 +393,6 @@ fi
 # dbus-launch R: XFree86-libs
 %attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-send
-%attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
 %dir %{_libdir}/dbus-*
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
@@ -409,11 +408,12 @@ fi
 %files libs
 %defattr(644,root,root,755)
 %doc doc/*.{html,txt}
-%attr(755,root,root) %{_libdir}/libdbus-1.so
+%attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.{html,txt}
+%attr(755,root,root) %{_libdir}/libdbus-1.so
 %{_libdir}/libdbus-1.la
 %{_libdir}/dbus-*/include
 %{_pkgconfigdir}/dbus-1.pc
