@@ -12,6 +12,10 @@
 %if %{without glib}
 %undefine	with_gtk
 %endif
+%ifarch alpha
+# mono still broken
+%undefine	with_dotnet
+%endif
 %define expat_version           1.95.5
 %define glib2_version           2.2.0
 %define qt_version              3.1.0
