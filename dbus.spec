@@ -250,8 +250,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/dbus-*/include
 %{_pkgconfigdir}/dbus-1.pc
 %{_includedir}/dbus*
-%{!?_without_glib:%exclude %{_includedir}/dbus*/dbus/dbus-glib.h}
-%{!?_without_qt:%exclude %{_includedir}/dbus*/dbus/dbus-qt.h}
+%{?with_glib:%exclude %{_includedir}/dbus*/dbus/dbus-glib.h}
+%{?with_qt:%exclude %{_includedir}/dbus*/dbus/dbus-qt.h}
 
 %files static
 %defattr(644,root,root,755)
