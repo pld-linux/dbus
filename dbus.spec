@@ -327,7 +327,8 @@ z Pythonem.
 	--disable-verbose-mode \
 	--disable-asserts \
 	--with-xml=expat \
-	--with-session-socket-dir=/tmp
+	--with-session-socket-dir=/tmp \
+	--with-system-pid-file=/var/run/dbus.pid
 
 
 
