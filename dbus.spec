@@ -5,7 +5,7 @@
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	qt	# without qt support
-%bcond_without	gcj	# without Java support
+%bcond_with	gcj	# without Java support
 %bcond_without	python	# without python support
 #
 %if %{without glib}
@@ -81,6 +81,7 @@ Pliki nag³ówkowe D-BUS.
 Summary:	Static D-BUS libraries
 Summary(pl):	Statyczne biblioteki D-BUS
 Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static D-BUS libraries.
