@@ -1,0 +1,13 @@
+--- dbus-0.11/configure.in.orig	Thu Aug 28 10:57:36 2003
++++ dbus-0.11/configure.in	Thu Aug 28 11:01:51 2003
+@@ -228,8 +228,8 @@
+ fi
+ 
+ #### Various functions
+-AC_CHECK_LIB(socket,socket)
+-AC_CHECK_LIB(nsl,gethostbyname)
++AC_SEARCH_LIBS(socket,socket)
++AC_SEARCH_LIBS(gethostbyname,nsl)
+ 
+ AC_CHECK_FUNCS(vsnprintf vasprintf nanosleep usleep poll setenv unsetenv socketpair getgrouplist)
+ 
