@@ -2,12 +2,11 @@
 # Conditional build:
 # _without_glib - without glib support
 # _without_qt - without qt support
-
+#
 %define gettext_package dbus
 %define expat_version           1.95.5
 %define glib2_version           2.2.0
 %define qt_version              3.1.0
-
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
@@ -18,6 +17,7 @@ Group:		Libraries
 Source0:	http://www.freedesktop.org/software/dbus/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	87f8cf7ffd114846d577e454ef3129aa
 Patch0:		%{name}-ac.patch
+Patch1:		%{name}-nolibs.patch
 URL:		http://www.freedesktop.org/software/dbus/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -27,7 +27,7 @@ BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	libtool
 %{!?_without_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 #PreReq:	rc-scripts
-#Requires(post,preun):	chkconfig
+#Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -77,10 +77,24 @@ GLib thread abstraction and main loop.
 Dodatkowa biblioteka D-BUS do integracji standardowej biblioteki D-BUS
 z abstrakcj± w±tków i g³ówn± pêtl± GLib.
 
+%package glib-devel
+Summary:	Header files for GLib-based library for using D-BUS
+Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}
+Requires:	%{name}-glib = %{version}
+
+%description glib-devel
+Header files for GLib-based library for using D-BUS.
+
+%description glib-devel -l pl
+Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib.
+
 %package glib-static
 Summary:	Static GLib-based library for using D-BUS
 Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Development/Libraries
+Requires:	%{name}-glib-devel = %{version}
 
 %description glib-static
 Static GLib-based library for using D-BUS.
@@ -102,10 +116,24 @@ Qt thread abstraction and main loop.
 Dodatkowa biblioteka D-BUS do integracji standardowej biblioteki D-BUS
 z abstrakcj± w±tków i g³ówn± pêtl± Qt.
 
+%package qt-devel
+Summary:	Header files for Qt-based library for using D-BUS
+Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Qt
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}
+Requires:	%{name}-qt = %{version}
+
+%description qt-devel
+Header files for Qt-based library for using D-BUS.
+
+%description qt-devel -l pl
+Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Qt.
+
 %package qt-static
 Summary:	Static Qt-based library for using D-BUS
 Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o Qt
 Group:		Development/Libraries
+Requires:	%{name}-qt-devel = %{version}
 
 %description qt-static
 Static Qt-based library for using D-BUS.
@@ -116,17 +144,18 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__automake}
-export QTDIR=/usr
 
 %configure \
-	%{!?_without_glib:--enable-glib=yes} \
-	%{!?_without_qt:--enable-qt=yes} \
+	QTDIR=/usr \
+	%{?_without_glib:--disable-glib} \
+	%{?_without_qt:--disable-qt} \
 	--disable-tests \
 	--disable-verbose-mode \
 	--disable-asserts
@@ -170,7 +199,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README
 %attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_libdir}/*dbus-1*.so.*.*.*
+%attr(755,root,root) %{_libdir}/libdbus-1*.so.*.*.*
 %dir %{_libdir}/dbus-*
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
@@ -187,31 +216,43 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libdbus-1*.la
 %{_libdir}/dbus-*/include
 %{_pkgconfigdir}/dbus-1.pc
-%{_includedir}/*
+%{_includedir}/dbus*
+%{!?_without_glib:%exclude %{_includedir}/dbus*/dbus/dbus-glib.h}
+%{!?_without_qt:%exclude %{_includedir}/dbus*/dbus/dbus-qt.h}
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libdbus-1.a
+%{_libdir}/libdbus-1*.a
 
-%if %{!?_without_glib:1}%{?_without_glib:0}
+%if 0%{!?_without_glib:1}
 %files glib
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/*glib*.so.*.*
-%{_libdir}/*glib*.la
+%attr(755,root,root) %{_libdir}/libdbus-glib*.so.*.*
 %{_pkgconfigdir}/dbus-glib-1.pc
+
+%files glib-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libdbus-glib*.so
+%{_libdir}/libdbus-glib*.la
+%{_includedir}/dbus*/dbus/dbus-glib.h
 
 %files glib-static
 %defattr(644,root,root,755)
-%{_libdir}/*glib*.a
+%{_libdir}/libdbus-glib*.a
 %endif
 
-%if %{!?_without_qt:1}%{?_without_qt:0}
+%if 0%{!?_without_qt:1}
 %files qt
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/*qt*.so.*.*
-%{_libdir}/*qt*.la
+%attr(755,root,root) %{_libdir}/libdbus-qt*.so.*.*
+
+%files qt-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libdbus-qt*.so
+%{_libdir}/libdbus-qt*.la
+%{_includedir}/dbus*/dbus/dbus-qt.h
 
 %files qt-static
 %defattr(644,root,root,755)
-%{_libdir}/*qt*.a
+%{_libdir}/libdbus-qt*.a
 %endif
