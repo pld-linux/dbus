@@ -24,7 +24,7 @@ Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.22
 Release:	3
-License:	AFL v2.0 or GPL v2
+License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	6b1c2476ea8b82dd9fb7f29ef857cb9f
