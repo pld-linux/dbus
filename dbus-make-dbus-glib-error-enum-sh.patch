@@ -1,0 +1,12 @@
+diff -u -r1.1 make-dbus-glib-error-enum.sh
+--- dbus/make-dbus-glib-error-enum.sh	20 Jun 2004 15:28:15 -0000	1.1
++++ dbus/make-dbus-glib-error-enum.sh	14 Dec 2004 12:04:12 -0000
+@@ -3,7 +3,7 @@
+ SRC=$1
+ DEST=$2
+ 
+-function die()
++function die
+ {
+     echo $1 1>&2
+     /bin/rm $DEST.tmp
