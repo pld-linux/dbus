@@ -35,6 +35,7 @@ Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-monodoc-destdir.patch
 Patch3:		%{name}-mint.patch
 Patch4:		%{name}-config.patch
+Patch5:		%{name}-hello.patch
 # NOTE: it's not directory, don't add /
 URL:		http://www.freedesktop.org/software/dbus
 BuildRequires:	XFree86-devel
@@ -306,6 +307,7 @@ z Pythonem.
 %patch2 -p0
 %patch3 -p0
 %patch4 -p0
+%patch5 -p0
 
 %build
 %{__libtoolize}
@@ -339,6 +341,7 @@ z Pythonem.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
+install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1.0/services
 %if %{with dotnet}
 install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 %endif
@@ -423,11 +426,11 @@ fi
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_localstatedir}/run/dbus
+%dir %{_datadir}/dbus-1.0/services
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon-1.1*
 %{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-send.1*
-%dir %{_libdir}/dbus-1.0/services
 
 %files libs
 %defattr(644,root,root,755)
