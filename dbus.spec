@@ -8,6 +8,7 @@ Name:		dbus
 Version:	0.11
 Release:	1
 Source0:	http://www.freedesktop.org/software/dbus/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	87f8cf7ffd114846d577e454ef3129aa
 Patch0:		%{name}-ac.patch
 URL:		http://www.freedesktop.org/software/dbus/
 License:	AFL/GPL
