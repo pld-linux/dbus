@@ -22,12 +22,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.23
-Release:	4
+Version:	0.31
+Release:	0.1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	56a6a06144bd349f21afbd4cc386a60f
+# Source0-md5:	26620cacfbbacf2f40a2729f3c642ca5
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -427,7 +427,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
-%attr(755,root,root) %{_bindir}/dbus-daemon-1
+%attr(755,root,root) %{_bindir}/dbus-daemon
 # dbus-launch R: XFree86-libs
 %attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-send
@@ -441,7 +441,7 @@ fi
 %dir %{_datadir}/dbus-1/services
 %dir %{_localstatedir}/lib/dbus-1
 %{_mandir}/man1/dbus-cleanup-sockets.1*
-%{_mandir}/man1/dbus-daemon-1.1*
+%{_mandir}/man1/dbus-daemon*
 %{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-send.1*
 
@@ -454,6 +454,7 @@ fi
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.{html,txt}
+%attr(755,root,root) %{_bindir}/dbus-binding-tool
 %attr(755,root,root) %{_libdir}/libdbus-1.so
 %{_libdir}/libdbus-1.la
 %{_libdir}/dbus-*/include
@@ -473,7 +474,6 @@ fi
 
 %files glib-devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/dbus-glib-tool
 %attr(755,root,root) %{_libdir}/libdbus-glib-1.so
 %{_libdir}/libdbus-glib-1.la
 %{_includedir}/dbus*/dbus/dbus-glib*.h
@@ -503,7 +503,7 @@ fi
 
 %files -n dotnet-%{name}-sharp-devel
 %defattr(644,root,root,755)
-%{_libdir}/monodoc/sources/*
+%{_libdir}/monodoc/sources/
 %dir %{_libdir}/mono/dbus-sharp
 %{_libdir}/mono/dbus-sharp/*
 %{_pkgconfigdir}/dbus-sharp.pc
