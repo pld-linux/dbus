@@ -5,6 +5,8 @@
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	qt	# without qt support
+%bcond_without	gcj	# without Java support
+%bcond_without	python	# without python support
 #
 %if %{without glib}
 %undefine	with_gtk
@@ -32,10 +34,15 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+%{?with_gcj:BuildRequires:	libgcj-devel}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %{?with_qt:BuildRequires:	kdelibs-devel}
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
+%if %{with python}
+BuildRequires:	python-devel >= 2.2
+Buildrequires:	python-Pyrex
+%endif
 %{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
 PreReq:	rc-scripts
 Requires(post,preun):		/sbin/chkconfig
@@ -168,6 +175,58 @@ Static Qt-based library for using D-BUS.
 %description qt-static -l pl
 Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
 
+%package gcj
+Summary:	Java library for using D-BUS
+Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Javê
+Group:		Libraries
+Requires:	%{name} = %{version}
+
+%description gcj
+D-BUS add-on library to integrate the standard D-BUS library with
+Java.
+
+%description gcj -l pl
+Dodatkowa biblioteka D-BUS do integracji standardowej biblioteki D-BUS
+z Jav±.
+
+%package gcj-devel
+Summary:	Header files for Java-based library for using D-BUS
+Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Javê
+Group:		Development/Libraries
+Requires:	%{name}-gcj = %{version}
+
+%description gcj-devel
+Header files for Java-based library for using D-BUS.
+
+%description gcj-devel -l pl
+Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Javê.
+
+%package gcj-static
+Summary:	Static Java-based library for using D-BUS
+Summary(pl):	Statyczna biblioteka do u¿ywania D-BUS oparta o Javê
+Group:		Development/Libraries
+Requires:	%{name}-gcj-devel = %{version}
+
+%description gcj-static
+Static Java-based library for using D-BUS.
+
+%description gcj-static -l pl
+Statyczna biblioteka do u¿ywania D-BUS oparta o Javê.
+
+%package -n python-dbus
+Summary:	Python library for using D-BUS
+Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Pythona
+Group:		Libraries
+Requires:	%{name} = %{version}
+
+%description -n python-dbus
+D-BUS add-on library to integrate the standard D-BUS library with
+Python.
+
+%description -n python-dbus -l pl
+Dodatkowa biblioteka D-BUS do integracji standardowej biblioteki D-BUS
+z Pythonem.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -184,6 +243,9 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
 	%{!?with_glib:--disable-glib} \
 	%{!?with_gtk:--disable-gtk} \
 	%{!?with_qt:--disable-qt} \
+	%{!?with_python:--disable-python} \
+	%{!?with_gcj:--disable-gcj} \
+	%{?with_gcj:--enable-gcj} \
 	--disable-tests \
 	--disable-verbose-mode \
 	--disable-asserts
@@ -240,6 +302,9 @@ fi
 
 %post   qt -p /sbin/ldconfig
 %postun qt -p /sbin/ldconfig
+
+%post   gcj -p /sbin/ldconfig
+%postun gcj -p /sbin/ldconfig
 
 ##  -f %{gettext_package}.lang
 %files
@@ -318,4 +383,27 @@ fi
 %files qt-static
 %defattr(644,root,root,755)
 %{_libdir}/libdbus-qt-1.a
+%endif
+
+%if %{with gcj}
+%files gcj
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*gcj*.so.*.*.*
+
+%files gcj-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*gcj*.so
+%{_libdir}/lib*gcj*.la
+%{_datadir}/java/*.jar
+
+%files gcj-static
+%defattr(644,root,root,755)
+%{_libdir}/lib*gcj*.a
+%endif
+
+%if %{with python}
+%files -n python-dbus
+%defattr(644,root,root,755)
+%attr(755,root,root) %{py_sitedir}/*.so
+%{py_sitedir}/*.py[co]
 %endif
