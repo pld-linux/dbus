@@ -17,11 +17,12 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.20
-Release:	1
+Release:	2
 License:	AFL v2.0 or GPL v2
 Group:		Libraries
 Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	8ebff3cb4beec993e9160ff844e0411c
+Source1:	messagebus.init
 Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 # NOTE: it's not directory, don't add /
@@ -36,8 +37,10 @@ BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %{?with_qt:BuildRequires:	qt-devel    >= %{qt_version}}
-#PreReq:	rc-scripts
-#Requires(post,preun):	/sbin/chkconfig
+PreReq:	rc-scripts
+Requires(post,preun):		/sbin/chkconfig
+Requires(post,postun):	/sbin/ldconfig
+Requires(post,postun):	/usr/sbin/useradd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -189,31 +192,49 @@ Statyczna biblioteka do u¿ywania D-BUS oparta o Qt.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 
 ## %find_lang %{gettext_package}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-#%pre
+%pre
 # Add the "messagebus" user
-#/usr/sbin/useradd -c 'System message bus' -u 81 \
-#	-s /sbin/nologin -r -d '/' messagebus 2> /dev/null || :
+/usr/sbin/useradd -c 'System message bus' -u 81 \
+	-s /bin/false -r -d '/' messagebus 2> /dev/null || :
 
-%post	-p /sbin/ldconfig
-#/sbin/chkconfig --add messagebus
+%post
+/sbin/ldconfig
 
-#%preun
-#if [ $1 = 0 ]; then
-#    service messagebus stop > /dev/null 2>&1
-#    /sbin/chkconfig --del messagebus
-#fi
+/sbin/chkconfig --add messagebus
 
-%postun	-p /sbin/ldconfig
+if [ -f /var/lock/subsys/messagebus ]; then
+	/etc/rc.d/init.d/messagebus restart >&2
+else
+	echo "Run \"/etc/rc.d/init.d/messagebus start\" to start D-Bus daemon."
+fi
 
+%preun
+if [ "$1" = "0" ];then
+	if [ -f /var/lock/subsys/messagebus ]; then
+		/etc/rc.d/init.d/messagebus stop >&2
+	fi
+	/sbin/chkconfig --del messagebus
+fi
+
+%postun
+/sbin/ldconfig
+
+if [ "$1" = "0" ]; then
+	/usr/sbin/userdel messagebus
+fi
+		
 %post   glib -p /sbin/ldconfig
 %postun glib -p /sbin/ldconfig
 
@@ -233,7 +254,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/dbus-*
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
-#/etc/rc.d/init.d/*
+%attr(754,root,root) /etc/rc.d/init.d/*
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
