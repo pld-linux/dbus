@@ -33,6 +33,7 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+%{?with_gcj:BuildRequires:	gcc-java-tools}
 %{?with_gcj:BuildRequires:	libgcj-devel}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %{?with_qt:BuildRequires:	kdelibs-devel}
