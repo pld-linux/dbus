@@ -26,7 +26,7 @@ Version:	0.22
 Release:	13
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
-Source0:	http://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.gz
+Source0:	http://www.freedesktop.org/software/dbus/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	6b1c2476ea8b82dd9fb7f29ef857cb9f
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
@@ -57,7 +57,7 @@ BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %if %{with python}
 BuildRequires:	python-devel >= 2.2
-Buildrequires:	python-Pyrex >= 0.9.3
+BuildRequires:	python-Pyrex >= 0.9.3
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 BuildRequires:	rpmbuild(macros) >= 1.159
