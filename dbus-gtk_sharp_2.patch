@@ -1,0 +1,31 @@
+diff -aurN dbus-0.23.4.orig/mono/example/Makefile.am dbus-0.23.4/mono/example/Makefile.am
+--- dbus-0.23.4.orig/mono/example/Makefile.am	2005-01-12 23:52:34.000000000 +0100
++++ dbus-0.23.4/mono/example/Makefile.am	2005-04-20 22:43:48.000000000 +0200
+@@ -4,13 +4,13 @@
+ all: $(NOINST_EXES)
+ 
+ echo-server.exe: EchoServer.cs Echoer.cs
+-	$(CSC) --debug --target exe -L .. -r:../dbus-sharp.dll -pkg:gtk-sharp -o echo-server.exe $(srcdir)/EchoServer.cs $(srcdir)/Echoer.cs
++	$(CSC) --debug --target exe -L .. -r:../dbus-sharp.dll -pkg:gtk-sharp-2.0 -o echo-server.exe $(srcdir)/EchoServer.cs $(srcdir)/Echoer.cs
+ 
+ echo-client.exe: EchoClient.cs Echoer.cs
+ 	$(CSC) --debug --target exe -L .. -r:../dbus-sharp.dll -o echo-client.exe $(srcdir)/EchoClient.cs $(srcdir)/Echoer.cs
+ 
+ bus-listener.exe: BusListener.cs
+-	$(CSC) --debug --target exe -L .. -r:../dbus-sharp.dll -pkg:gtk-sharp -o bus-listener.exe $(srcdir)/BusListener.cs
++	$(CSC) --debug --target exe -L .. -r:../dbus-sharp.dll -pkg:gtk-sharp-2.0 -o bus-listener.exe $(srcdir)/BusListener.cs
+ 
+ 
+ clean:
+diff -aurN dbus-0.23.4.orig/mono/Makefile.am dbus-0.23.4/mono/Makefile.am
+--- dbus-0.23.4.orig/mono/Makefile.am	2005-02-11 00:31:27.000000000 +0100
++++ dbus-0.23.4/mono/Makefile.am	2005-04-20 22:43:37.000000000 +0200
+@@ -54,7 +54,7 @@
+ 	$(CSC) --debug --unsafe --target library -o dbus-sharp.dll $(DBUS_SHARP_FILES) AssemblyInfo.cs
+ 
+ test-dbus-sharp.exe: $(TEST_DBUS_SHARP_FILES)
+-	$(CSC) --debug --unsafe --target exe -L . -r dbus-sharp.dll -pkg:gtk-sharp -o test-dbus-sharp.exe $(TEST_DBUS_SHARP_FILES)
++	$(CSC) --debug --unsafe --target exe -L . -r dbus-sharp.dll -pkg:gtk-sharp-2.0 -o test-dbus-sharp.exe $(TEST_DBUS_SHARP_FILES)
+ 
+ clean:
+ 	rm -f $(TARGET) $(TARGET).mdb $(NOINST_EXES) $(NOINST_EXES:%=%.mdb)
