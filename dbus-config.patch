@@ -1,5 +1,6 @@
---- dbus-0.23.4/bus/session.conf.in.orig	2005-03-03 00:30:41.000000000 +0100
-+++ dbus-0.23.4/bus/session.conf.in	2005-03-24 23:46:51.000000000 +0100
+diff -ur dbus-0.33-orig/bus/session.conf.in dbus-0.33/bus/session.conf.in
+--- dbus-0.33-orig/bus/session.conf.in	2004-10-25 20:48:58.000000000 +0200
++++ dbus-0.33/bus/session.conf.in	2005-04-26 11:22:10.969586536 +0200
 @@ -10,7 +10,7 @@
  
    <listen>unix:tmpdir=@DBUS_SESSION_SOCKET_DIR@</listen>
@@ -9,10 +10,10 @@
  
    <policy context="default">
      <!-- Allow everything to be sent -->
-@@ -19,6 +19,10 @@
-     <allow eavesdrop="true"/>
-     <!-- Allow anyone to own anything -->
+@@ -21,6 +21,10 @@
      <allow own="*"/>
+     <!-- Allow any user to connect -->
+     <allow user="*"/>
 +    <!-- Added by PLD -->
 +    <!-- valid replies are always allowed -->
 +    <allow send_requested_reply="true"/>
