@@ -5,7 +5,7 @@
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	qt	# without qt support
-%bcond_without	gcj	# with Java support
+%bcond_with	gcj	# with Java support
 %bcond_without	python	# without python support
 %bcond_without	dotnet	# without .net support
 #
@@ -20,7 +20,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.23.4
-Release:	4.2
+Release:	5
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -56,7 +56,6 @@ BuildRequires:	python-Pyrex >= 0.9.3
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 BuildRequires:	rpmbuild(macros) >= 1.202
-BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
 PreReq:	rc-scripts
 Requires:	%{name}-libs = %{version}-%{release}
@@ -310,7 +309,6 @@ z Pythonem.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p0
-sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 
 %build
 %{__libtoolize}
@@ -330,7 +328,6 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 	%{!?with_dotnet:--disable-mono-docs} \
 	%{?debug:--enable-verbose-mode} \
 	--disable-tests \
-	--enable-verbose-mode \
 	--disable-asserts \
 	--with-xml=expat \
 	--enable-abstract-sockets \
