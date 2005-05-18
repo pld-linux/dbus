@@ -8,17 +8,10 @@
 %bcond_with	gcj	# with Java support
 %bcond_without	python	# without python support
 %bcond_without	dotnet	# without .net support
+%bcond_with	dotnet2	# with mono 2.0 / gtk# 2.0 support
 #
 %if %{without glib}
 %undefine	with_gtk
-%endif
-%ifarch alpha
-# mono still broken
-%undefine	with_dotnet
-%endif
-%ifarch amd64
-# mcs segfaults while building dotnet-gtk-sharp on amd64 builder
-%undefine	with_dotnet
 %endif
 
 %define		expat_version	1.95.5
@@ -28,7 +21,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.23.4
-Release:	3
+Release:	5
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -41,6 +34,7 @@ Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-mint.patch
+Patch4:		%{name}-gtk_sharp_2.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
@@ -52,6 +46,7 @@ BuildRequires:	doxygen
 %{?with_gcj:BuildRequires:	libgcj-devel}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %{?with_qt:BuildRequires:	kdelibs-devel}
+# just gtk-sharp for examples
 %{?with_dotnet:BuildRequires:	dotnet-gtk-sharp-devel}
 %{?with_dotnet:BuildRequires:	mono-csharp >= 0.95}
 %{?with_dotnet:BuildRequires:	monodoc >= 0.16}
@@ -62,7 +57,7 @@ BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-Pyrex >= 0.9.3
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	xmlto
 PreReq:	rc-scripts
 Requires:	%{name}-libs = %{version}-%{release}
@@ -316,6 +311,7 @@ z Pythonem.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p0
+%{?with_dotnet2:%patch4 -p1}
 
 %build
 %{__libtoolize}
@@ -335,7 +331,6 @@ z Pythonem.
 	%{!?with_dotnet:--disable-mono-docs} \
 	%{?debug:--enable-verbose-mode} \
 	--disable-tests \
-	--enable-verbose-mode \
 	--disable-asserts \
 	--with-xml=expat \
 	--enable-abstract-sockets \
@@ -377,23 +372,8 @@ rm -f $RPM_BUILD_ROOT%{py_sitedir}/*.{py,la,a}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid messagebus`" ]; then
-	if [ "`/usr/bin/getgid messagebus`" != 122 ]; then
-		echo "Error: group messagebus doesn't have gid=122. Correct this before installing dbus." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 122 messagebus 1>&2
-fi
-if [ -n "`/bin/id -u messagebus 2>/dev/null`" ]; then
-	if [ "`/bin/id -u messagebus`" != 122 ]; then
-		echo "Error: user messagebus doesn't have uid=122. Correct this before installing dbus." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 122 -d /usr/share/empty -s /bin/false \
-		-c "System message bus" -g messagebus messagebus 1>&2
-fi
+%groupadd -g 122 messagebus
+%useradd -u 122 -d /usr/share/empty -s /bin/false -c "System message bus" -g messagebus messagebus
 
 %post
 /sbin/chkconfig --add messagebus
