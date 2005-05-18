@@ -8,6 +8,7 @@
 %bcond_with	gcj	# with Java support
 %bcond_without	python	# without python support
 %bcond_without	dotnet	# without .net support
+%bcond_with	dotnet2	# with mono 2.0 / gtk# 2.0 support
 #
 %if %{without glib}
 %undefine	with_gtk
@@ -33,6 +34,7 @@ Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-mint.patch
+Patch4:		%{name}-gtk_sharp_2.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
@@ -309,6 +311,7 @@ z Pythonem.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p0
+%{?with_dotnet2:%patch4 -p1}
 
 %build
 %{__libtoolize}
