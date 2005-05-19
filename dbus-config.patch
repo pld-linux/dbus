@@ -9,10 +9,10 @@
  
    <policy context="default">
      <!-- Allow everything to be sent -->
-@@ -19,6 +19,10 @@
-     <allow eavesdrop="true"/>
-     <!-- Allow anyone to own anything -->
+@@ -21,6 +21,10 @@
      <allow own="*"/>
+     <!-- Allow any user to connect -->
+     <allow user="*"/>
 +    <!-- Added by PLD -->
 +    <!-- valid replies are always allowed -->
 +    <allow send_requested_reply="true"/>
