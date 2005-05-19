@@ -34,7 +34,7 @@ case "$1" in
 	if [ ! -f /var/lock/subsys/messagebus ]; then
 		# show "Starting %s service" messagebus
 		msg_starting messagebus
-		daemon dbus-daemon-1 --system
+		daemon dbus-daemon --system
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/messagebus
 	else
@@ -64,7 +64,7 @@ case "$1" in
 	if [ -f /var/lock/subsys/messagebus ]; then
 		# show "Reload %s service" messagebus
 		msg_reloading messagebus
-		killproc dbus-daemon-1 -HUP
+		killproc dbus-daemon -HUP
 		RETVAL=$?
 	else
 		# show "%s service is not running." messagebus
