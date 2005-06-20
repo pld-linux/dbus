@@ -42,6 +42,7 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	doxygen
+%{?with_gcj:BuildRequires:	fastjar}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gcj:BuildRequires:	gcc-java-tools}
 %{?with_gcj:BuildRequires:	libgcj-devel}
