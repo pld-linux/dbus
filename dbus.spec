@@ -4,10 +4,10 @@
 # Conditional build:
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
-%bcond_without	qt	# without qt support
-%bcond_without	gcj	# with Java support
-%bcond_without	python	# without python support
-%bcond_without	dotnet	# without .net support
+%bcond_without	qt	# without Qt support
+%bcond_without	gcj	# without Java support
+%bcond_without	python	# without Python support
+%bcond_without	dotnet	# without .NET support
 #
 %if %{without glib}
 %undefine	with_gtk
@@ -42,10 +42,8 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	doxygen
-%{?with_gcj:BuildRequires:	fastjar}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
-%{?with_gcj:BuildRequires:	gcc-java-tools}
-%{?with_gcj:BuildRequires:	libgcj-devel}
+%{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %{?with_qt:BuildRequires:	kdelibs-devel}
 # just gtk-sharp for examples
