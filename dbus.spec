@@ -19,12 +19,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.33
-Release:	0.3
+Version:	0.34
+Release:	0.1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	23db7f95dbb1fcae6e1d43fcc17857aa
+# Source0-md5:	fd25c4ee2374f6c3ef9e236290667242
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -33,9 +33,6 @@ Patch0:		%{name}-ac.patch
 Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-mint.patch
-Patch4:		%{name}-deadlock-fix.patch
-Patch5:		%{name}-print_child_pid.patch
-Patch6:		%{name}-types.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
@@ -312,9 +309,6 @@ z Pythonem.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p0
-%patch4 -p0
-%patch5 -p1
-%patch6 -p1
 sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 
 %build
@@ -535,6 +529,7 @@ fi
 %if %{with python}
 %files -n python-dbus
 %defattr(644,root,root,755)
-%attr(755,root,root) %{py_sitedir}/*.so
-%{py_sitedir}/*.py[co]
+%dir %{py_sitedir}/%{name}/
+%attr(755,root,root) %{py_sitedir}/%{name}/*.so
+%{py_sitedir}/%{name}/*.py[co]
 %endif
