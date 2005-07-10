@@ -370,7 +370,7 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/dbus
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/dbus.sh
 
 %if %{with python}
-rm -f $RPM_BUILD_ROOT%{py_sitedir}/*.{py,la,a}
+rm -f $RPM_BUILD_ROOT%{py_sitedir}/%{name}/*.{py,la,a}
 %endif
 
 %clean
