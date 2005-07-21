@@ -1,5 +1,5 @@
---- dbus-0.34/python/dbus_bindings.pyx.in~	2005-05-19 22:27:19.000000000 +0200
-+++ dbus-0.34/python/dbus_bindings.pyx.in	2005-07-01 11:34:26.369756328 +0200
+--- dbus-0.34/python/dbus_bindings.pyx.orig	2005-05-19 22:27:19.000000000 +0200
++++ dbus-0.34/python/dbus_bindings.pyx		2005-07-01 11:34:26.369756328 +0200
 @@ -1246,7 +1246,12 @@
          return dbus_message_set_destination(self.msg, destination)
  
