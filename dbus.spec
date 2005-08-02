@@ -36,6 +36,7 @@ Patch1:		%{name}-nolibs.patch
 Patch2:		%{name}-config.patch
 Patch3:		%{name}-mint.patch
 Patch4:		%{name}-python_fixes.patch
+Patch5:		%{name}-python_types.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
@@ -313,6 +314,7 @@ z Pythonem.
 %patch2 -p1
 %patch3 -p0
 %patch4 -p1
+%patch5 -p1
 sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 
 %build
