@@ -1,5 +1,7 @@
 #
-# TODO: SELinux support
+# TODO:
+# - separte X11 depended utilieties (like dbus-launch)
+# - SELinux support
 #
 # Conditional build:
 %bcond_without	glib	# without glib support
