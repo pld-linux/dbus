@@ -60,6 +60,7 @@ BuildRequires:	python-Pyrex >= 0.9.3
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sed >= 4.0
+BuildRequires:	libselinux-devel >= 1.17.13
 BuildRequires:	xmlto
 PreReq:	rc-scripts
 Requires:	%{name}-libs = %{version}-%{release}
@@ -343,7 +344,6 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
 	--with-system-socket=%{_localstatedir}/lib/dbus-1/system_bus_socket \
 	--enable-selinux
-	
 %{__make} \
 	pythondir=%{py_sitedir}
 
