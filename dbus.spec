@@ -56,7 +56,6 @@ BuildRequires:	python-Pyrex >= 0.9.3
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sed >= 4.0
-BuildRequires:	libselinux-devel >= 1.17.13
 BuildRequires:	xmlto
 Requires:	rc-scripts
 Requires:	%{name}-libs = %{version}-%{release}
@@ -333,25 +332,24 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 %{__automake}
 %configure \
 	QTDIR=/usr \
-	%{!?with_glib:--disable-glib} \
-	%{!?with_gtk:--disable-gtk} \
-	%{!?with_qt:--disable-qt} \
-	%{!?with_python:--disable-python} \
-	%{!?with_gcj:--disable-gcj} \
-	%{?with_gcj:--enable-gcj} \
+	%{?debug:--enable-verbose-mode} \
 	%{!?with_dotnet:--disable-mono} \
 	%{!?with_dotnet:--disable-mono-docs} \
-	%{?debug:--enable-verbose-mode} \
-	--disable-tests \
-	--enable-verbose-mode \
-	--enable-selinux \
+	%{!?with_gcj:--disable-gcj} \
+	%{?with_gcj:--enable-gcj} \
+	%{!?with_glib:--disable-glib} \
+	%{!?with_gtk:--disable-gtk} \
+	%{!?with_python:--disable-python} \
+	%{!?with_qt:--disable-qt} \
 	--disable-asserts \
-	--with-xml=expat \
+	--disable-tests \
 	--enable-abstract-sockets \
+	--enable-selinux \
+	--enable-verbose-mode \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
-	--with-system-socket=%{_localstatedir}/lib/dbus-1/system_bus_socket \
-	--enable-selinux
+	--with-system-socket=%{_localstatedir}/lib/dbus-1/system_bus_socket
+	--with-xml=expat
 %{__make} \
 	pythondir=%{py_sitedir}
 
