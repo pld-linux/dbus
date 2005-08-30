@@ -18,7 +18,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.36.2
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -45,7 +45,7 @@ BuildRequires:	doxygen
 # just gtk-sharp for examples
 %{?with_dotnet:BuildRequires:	dotnet-gtk-sharp-devel}
 %{?with_dotnet:BuildRequires:	mono-csharp >= 0.95}
-%{?with_dotnet:BuildRequires:	monodoc >= 0.16}
+%{?with_dotnet:BuildRequires:	monodoc >= 1.0.7-2}
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
