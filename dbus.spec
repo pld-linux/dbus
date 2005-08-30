@@ -1,15 +1,11 @@
 #
-# TODO:
-# - separte X11 depended utilieties (like dbus-launch)
-# - SELinux support
-#
 # Conditional build:
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	qt	# without Qt support
-%bcond_without	gcj	# without Java support
 %bcond_without	python	# without Python support
 %bcond_without	dotnet	# without .NET support
+%bcond_with	gcj	# with Java support
 #
 %if %{without glib}
 %undefine	with_gtk
@@ -21,12 +17,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.36.1
-Release:	0.1
+Version:	0.36.2
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	48bcfc0806bb7bc914cc5cd2f7d40d69
+# Source0-md5:	45468e46967d3e70f082d0d0e6049225
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -50,6 +46,7 @@ BuildRequires:	doxygen
 %{?with_dotnet:BuildRequires:	dotnet-gtk-sharp-devel}
 %{?with_dotnet:BuildRequires:	mono-csharp >= 0.95}
 %{?with_dotnet:BuildRequires:	monodoc >= 0.16}
+BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %if %{with python}
@@ -61,7 +58,7 @@ BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sed >= 4.0
 BuildRequires:	libselinux-devel >= 1.17.13
 BuildRequires:	xmlto
-PreReq:	rc-scripts
+Requires:	rc-scripts
 Requires:	%{name}-libs = %{version}-%{release}
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
@@ -71,7 +68,6 @@ Requires(post,preun):	/sbin/chkconfig
 Requires(post,postun):	/sbin/ldconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
-Requires:	xinitrc
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -187,6 +183,19 @@ GTK+-based graphical D-BUS frontend utility.
 
 %description gtk -l pl
 Oparte na GTK+ graficzne narzêdzie do D-BUS.
+
+%package X11
+Summary:	X11 D-BUS utilities
+Summary(pl):	Narzêdzia X11 D-BUSa
+Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
+Requires:	xinitrc
+
+%description X11
+X11 D-BUS utilities.
+
+%description X11 -l pl
+Narzêdzia X11 D-BUSa.
 
 %package -n dotnet-%{name}-sharp
 Summary:	.NET library for using D-BUS
@@ -323,7 +332,7 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 %{__autoheader}
 %{__automake}
 %configure \
-	QTDIR=/usr \
+QTDIR=%{_prefix} \
 	%{!?with_glib:--disable-glib} \
 	%{!?with_gtk:--disable-gtk} \
 	%{!?with_qt:--disable-qt} \
@@ -335,6 +344,7 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 	%{?debug:--enable-verbose-mode} \
 	--disable-tests \
 	--enable-verbose-mode \
+	--enable-selinux \
 	--disable-asserts \
 	--with-xml=expat \
 	--enable-abstract-sockets \
@@ -350,7 +360,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
-install -d $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1
 %if %{with dotnet}
@@ -364,7 +374,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/dbus
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d/dbus.sh
+install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d/dbus.sh
 
 %if %{with python}
 rm -f $RPM_BUILD_ROOT%{py_sitedir}/%{name}/*.{py,la,a}
@@ -401,7 +411,7 @@ fi
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
-		
+
 %post	glib -p /sbin/ldconfig
 %postun	glib -p /sbin/ldconfig
 
@@ -415,22 +425,18 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
 %attr(755,root,root) %{_bindir}/dbus-daemon
-# dbus-launch R: XFree86-libs
-%attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-send
 %dir %{_sysconfdir}/dbus-1
-%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/dbus-1/*.conf
-%config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/dbus
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dbus-1/*.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/dbus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
-%attr(755,root,root) /etc/X11/xinit/xinitrc.d/dbus.sh
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_datadir}/dbus-1
 %dir %{_datadir}/dbus-1/services
 %dir %{_localstatedir}/lib/dbus-1
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
-%{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-send.1*
 
 %files libs
@@ -482,6 +488,12 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-viewer
 %endif
+
+%files X11
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dbus-launch
+%attr(755,root,root) %{_sysconfdir}/X11/xinit/xinitrc.d/dbus.sh
+%{_mandir}/man1/dbus-launch.1*
 
 %if %{with dotnet}
 %files -n dotnet-%{name}-sharp
