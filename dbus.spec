@@ -348,7 +348,7 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 	--enable-verbose-mode \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
-	--with-system-socket=%{_localstatedir}/lib/dbus-1/system_bus_socket
+	--with-system-socket=%{_localstatedir}/lib/dbus-1/system_bus_socket \
 	--with-xml=expat
 %{__make} \
 	pythondir=%{py_sitedir}
