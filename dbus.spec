@@ -332,7 +332,7 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 %{__autoheader}
 %{__automake}
 %configure \
-QTDIR=%{_prefix} \
+	QTDIR=/usr \
 	%{!?with_glib:--disable-glib} \
 	%{!?with_gtk:--disable-gtk} \
 	%{!?with_qt:--disable-qt} \
