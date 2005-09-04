@@ -11,6 +11,10 @@
 %undefine	with_gtk
 %endif
 
+%ifnarch %{ix86} %{x8664} arm hppa ppc s390 s390x
+%undefine with_dotnet
+%endif
+
 %define		expat_version	1.95.5
 %define		glib2_version	2.2.0
 %define		qt_version	3.1.0
@@ -18,7 +22,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.36.2
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
