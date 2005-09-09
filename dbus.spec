@@ -1,4 +1,6 @@
 #
+%include        /usr/lib/rpm/macros.mono
+#
 # Conditional build:
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
