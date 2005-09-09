@@ -1,5 +1,5 @@
 #
-%include        /usr/lib/rpm/macros.mono
+%include	/usr/lib/rpm/macros.mono
 #
 # Conditional build:
 %bcond_without	glib	# without glib support
