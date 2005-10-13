@@ -24,7 +24,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.50
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -352,7 +352,6 @@ sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
 	--enable-verbose-mode \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
-	--with-system-socket=%{_localstatedir}/lib/dbus-1/system_bus_socket \
 	--with-xml=expat
 %{__make} \
 	pythondir=%{py_sitedir}
@@ -364,7 +363,7 @@ install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
-install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/dbus-1
+install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 %if %{with dotnet}
 install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
 %endif
@@ -436,7 +435,7 @@ fi
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_datadir}/dbus-1
 %dir %{_datadir}/dbus-1/services
-%dir %{_localstatedir}/lib/dbus-1
+%dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
 %{_mandir}/man1/dbus-send.1*
