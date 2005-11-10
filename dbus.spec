@@ -426,6 +426,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
 %attr(755,root,root) %{_bindir}/dbus-daemon
+%attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-send
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dbus-1/*.conf
@@ -492,7 +493,6 @@ fi
 
 %files X11
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_sysconfdir}/X11/xinit/xinitrc.d/dbus.sh
 %{_mandir}/man1/dbus-launch.1*
 
