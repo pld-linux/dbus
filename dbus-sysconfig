@@ -2,5 +2,6 @@
 # start D-BUS session daemon while login to system
 SESSION_BUS_PROFILE_D="no"
 
-# start D-BUS session daemon while start X session
+# Start D-BUS session daemon while start X session
+# This option need installed package dbus-X11
 SESSION_BUS_X_SESSION="yes"
