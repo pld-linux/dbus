@@ -1,5 +1,4 @@
 #
-%include	/usr/lib/rpm/macros.mono
 #
 # Conditional build:
 %bcond_without	glib	# without glib support
@@ -13,7 +12,7 @@
 %undefine	with_gtk
 %endif
 
-%ifnarch %{ix86} %{x8664} arm hppa ppc s390 s390x
+%ifarch i386 alpha sparc sparc64
 %undefine with_dotnet
 %endif
 
@@ -24,7 +23,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.50
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -46,11 +45,13 @@ BuildRequires:	doxygen
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
-%{?with_qt:BuildRequires:	kdelibs-devel}
+%if %{with dotnet}
+%include	/usr/lib/rpm/macros.mono
 # just gtk-sharp for examples
-%{?with_dotnet:BuildRequires:	dotnet-gtk-sharp-devel}
-%{?with_dotnet:BuildRequires:	mono-csharp >= 0.95}
-%{?with_dotnet:BuildRequires:	monodoc >= 1.0.7-2}
+BuildRequires:	dotnet-gtk-sharp-devel
+BuildRequires:	mono-csharp >= 0.95
+BuildRequires:	monodoc >= 1.0.7-2
+%endif
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
@@ -247,7 +248,6 @@ Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o Qt
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	%{name}-qt = %{version}-%{release}
-Requires:	kdelibs-devel
 
 %description qt-devel
 Header files for Qt-based library for using D-BUS.
