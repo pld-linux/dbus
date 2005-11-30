@@ -1,4 +1,5 @@
 #
+%include	/usr/lib/rpm/macros.mono
 #
 # Conditional build:
 %bcond_without	glib	# without glib support
@@ -46,7 +47,6 @@ BuildRequires:	doxygen
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %if %{with dotnet}
-%include	/usr/lib/rpm/macros.mono
 # just gtk-sharp for examples
 BuildRequires:	dotnet-gtk-sharp-devel
 BuildRequires:	mono-csharp >= 0.95
