@@ -1,6 +1,4 @@
 #
-%include	/usr/lib/rpm/macros.mono
-#
 # Conditional build:
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
@@ -9,6 +7,8 @@
 %bcond_without	dotnet	# without .NET support
 %bcond_with	gcj	# with Java support
 #
+%{?with_dotnet:%include	/usr/lib/rpm/macros.mono}
+
 %if %{without glib}
 %undefine	with_gtk
 %endif
