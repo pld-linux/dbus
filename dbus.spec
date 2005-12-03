@@ -37,6 +37,7 @@ Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-mint.patch
 Patch3:		%{name}-python_fixes.patch
+Patch4:		%{name}-monodir.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
@@ -49,7 +50,7 @@ BuildRequires:	doxygen
 %if %{with dotnet}
 # just gtk-sharp for examples
 BuildRequires:	dotnet-gtk-sharp-devel
-BuildRequires:	mono-csharp >= 0.95
+BuildRequires:	mono-csharp >= 1.1.7
 BuildRequires:	monodoc >= 1.0.7-2
 %endif
 BuildRequires:	libselinux-devel
@@ -207,7 +208,7 @@ Summary:	.NET library for using D-BUS
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	mono
+Requires:	mono >= 1.1.7
 
 %description -n dotnet-%{name}-sharp
 .NET library for using D-BUS.
@@ -326,7 +327,9 @@ z Pythonem.
 %patch1 -p1
 %patch2 -p0
 %patch3 -p1
+%patch4 -p1
 sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
+sed -i -e 's/DBUS_QT_LIBS=.*/DBUS_QT_LIBS="-lqt-mt"/' configure.in
 
 %build
 %{__libtoolize}
@@ -364,9 +367,6 @@ install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
 install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
-%if %{with dotnet}
-install -d $RPM_BUILD_ROOT%{_libdir}/monodoc/sources
-%endif
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -499,14 +499,12 @@ fi
 %if %{with dotnet}
 %files -n dotnet-%{name}-sharp
 %defattr(644,root,root,755)
-%dir %{_libdir}/mono/gac/dbus-sharp
-%{_libdir}/mono/gac/dbus-sharp/*
+%{_prefix}/lib/mono/gac/dbus-sharp
 
 %files -n dotnet-%{name}-sharp-devel
 %defattr(644,root,root,755)
+%{_prefix}/lib/mono/dbus-sharp
 %{_libdir}/monodoc/sources/*
-%dir %{_libdir}/mono/dbus-sharp
-%{_libdir}/mono/dbus-sharp/*
 %{_pkgconfigdir}/dbus-sharp.pc
 %endif
 
