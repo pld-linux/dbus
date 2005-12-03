@@ -42,6 +42,7 @@ URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
+%{?with_python:BuildRequires:	cpp}
 BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	doxygen
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
