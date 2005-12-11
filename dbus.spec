@@ -62,6 +62,7 @@ BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-Pyrex >= 0.9.3
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
+%{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
