@@ -1,11 +1,14 @@
 #
+# TODO:
+# - qt4 bindings
+#
 # Conditional build:
+%bcond_without	dotnet	# without .NET support
+%bcond_without	gcj	# without Java support
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
-%bcond_without	qt	# without Qt support
 %bcond_without	python	# without Python support
-%bcond_without	dotnet	# without .NET support
-%bcond_with	gcj	# with Java support
+%bcond_without	qt	# without Qt support
 #
 %{?with_dotnet:%include	/usr/lib/rpm/macros.mono}
 
@@ -23,12 +26,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.50
-Release:	4
+Version:	0.60
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	1addd5b600a8a4550766005d1f59401b
+# Source0-md5:	da9561b5e579cedddc34f53427e99a93
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -350,7 +353,7 @@ sed -i -e 's/DBUS_QT_LIBS=.*/DBUS_QT_LIBS="-lqt-mt"/' configure.in
 	%{!?with_glib:--disable-glib} \
 	%{!?with_gtk:--disable-gtk} \
 	%{!?with_python:--disable-python} \
-	%{!?with_qt:--disable-qt} \
+	%{?with_qt:--enable-qt3} \
 	--disable-asserts \
 	--disable-tests \
 	--enable-abstract-sockets \
