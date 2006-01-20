@@ -346,8 +346,8 @@ sed -i -e 's/DBUS_QT_LIBS=.*/DBUS_QT_LIBS="-lqt-mt"/' configure.in
 %configure \
 	QTDIR=/usr \
 	%{?debug:--enable-verbose-mode} \
-	%{!?with_dotnet:--disable-mono} \
-	%{!?with_dotnet:--disable-mono-docs} \
+	%{?with_dotnet:--enable-mono} \
+	%{?with_dotnet:--enable-mono-docs} \
 	%{!?with_gcj:--disable-gcj} \
 	%{?with_gcj:--enable-gcj} \
 	%{!?with_glib:--disable-glib} \
