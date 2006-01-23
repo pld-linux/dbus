@@ -41,6 +41,7 @@ Patch1:		%{name}-config.patch
 Patch2:		%{name}-mint.patch
 Patch3:		%{name}-python_fixes.patch
 Patch4:		%{name}-monodir.patch
+Patch5:		%{name}-gcj.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
@@ -334,8 +335,8 @@ z Pythonem.
 %patch2 -p0
 %patch3 -p1
 %patch4 -p1
-sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
-sed -i -e 's/DBUS_QT_LIBS=.*/DBUS_QT_LIBS="-lqt-mt"/' configure.in
+%patch5 -p1
+sed -i -e 's/DBUS_QT3_LIBS=.*/DBUS_QT3_LIBS="-lqt-mt"/' configure.in
 
 %build
 %{__libtoolize}
@@ -344,6 +345,7 @@ sed -i -e 's/DBUS_QT_LIBS=.*/DBUS_QT_LIBS="-lqt-mt"/' configure.in
 %{__autoheader}
 %{__automake}
 %configure \
+	GCJFLAGS="%{rpmcflags}" \
 	QTDIR=/usr \
 	%{?debug:--enable-verbose-mode} \
 	%{?with_dotnet:--enable-mono} \
@@ -549,7 +551,7 @@ fi
 %if %{with python}
 %files -n python-dbus
 %defattr(644,root,root,755)
-%dir %{py_sitedir}/%{name}/
+%dir %{py_sitedir}/%{name}
 %attr(755,root,root) %{py_sitedir}/%{name}/*.so
 %{py_sitedir}/dbus.pth
 %{py_sitedir}/%{name}/*.py[co]
