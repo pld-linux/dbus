@@ -54,7 +54,7 @@ BuildRequires:	doxygen
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %if %{with dotnet}
 # just gtk-sharp for examples
-BuildRequires:	dotnet-gtk-sharp-devel
+#BuildRequires:	dotnet-gtk-sharp-devel
 BuildRequires:	mono-csharp >= 1.1.7
 BuildRequires:	monodoc >= 1.0.7-2
 %endif
@@ -337,6 +337,8 @@ z Pythonem.
 %patch4 -p1
 %patch5 -p1
 sed -i -e 's/DBUS_QT3_LIBS=.*/DBUS_QT3_LIBS="-lqt-mt"/' configure.in
+# don't build dotnet-gtk-sharp based examples
+sed -i -e 's/example//' mono/Makefile.am
 
 %build
 %{__libtoolize}
