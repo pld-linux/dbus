@@ -43,7 +43,7 @@ case "$1" in
 	if [ -f /var/lock/subsys/messagebus ]; then
 		# Stop daemons.
 		msg_stopping messagebus
-		killproc --pidfile dbus.pid
+		killproc --pidfile dbus.pid dbus-daemon
 		rm -f /var/lock/subsys/messagebus
 		rm -f /var/run/dbus.pid
 	else
@@ -75,7 +75,7 @@ case "$1" in
 	exit $?
 	;;
   status)
-	status messagebus
+	status messagebus dbus-daemon
 	RETVAL=$?
 	;;
   *)
