@@ -27,7 +27,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.60
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -43,7 +43,8 @@ Patch3:		%{name}-python_fixes.patch
 Patch4:		%{name}-monodir.patch
 Patch5:		%{name}-gcj.patch
 URL:		http://www.freedesktop.org/Software/dbus
-BuildRequires:	XFree86-devel
+BuildRequires:	xorg-lib-libSM-devel
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 %{?with_python:BuildRequires:	cpp}
