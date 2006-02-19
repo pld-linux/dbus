@@ -27,7 +27,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.60
-Release:	3
+Release:	3.1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -363,7 +363,7 @@ sed -i -e 's/example//' mono/Makefile.am
 	--disable-tests \
 	--enable-abstract-sockets \
 	--enable-selinux \
-	--enable-verbose-mode \
+	--with-console-auth-dir=%{_localstatedir}/lock/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
 	--with-xml=expat
