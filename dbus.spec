@@ -43,10 +43,10 @@ BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 %{?with_python:BuildRequires:	cpp}
-BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	doxygen
-%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
+%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
 %if %{with dotnet}
 # just gtk-sharp for examples
@@ -58,23 +58,23 @@ BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %if %{with python}
-BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-Pyrex >= 0.9.3
+BuildRequires:	python-devel >= 2.2
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= 6:%{qt_version}}
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
-Requires:	rc-scripts
-Requires:	%{name}-libs = %{version}-%{release}
+Requires(post,postun):	/sbin/ldconfig
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun):	/sbin/chkconfig
-Requires(post,postun):	/sbin/ldconfig
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	rc-scripts
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -221,8 +221,8 @@ Biblioteka .NET do u¿ywania D-BUS.
 Summary:	.NET library for using D-BUS with API documentation
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacjê API
 Group:		Development/Libraries
-Requires:	dotnet-%{name}-sharp = %{version}-%{release}
 Requires:	%{name} = %{version}-%{release}
+Requires:	dotnet-%{name}-sharp = %{version}-%{release}
 
 %description -n dotnet-%{name}-sharp-devel
 .NET library for using D-BUS, with API documentation.
