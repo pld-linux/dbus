@@ -44,7 +44,7 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 %{?with_python:BuildRequires:	cpp}
 BuildRequires:	doxygen
-BuildRequires:	expat-devel >= %{expat_version}
+BuildRequires:	expat-devel >= 1:%{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
 %{?with_glib:BuildRequires:	glib2-devel >= 1:%{glib2_version}}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= 2:%{glib2_version}}
