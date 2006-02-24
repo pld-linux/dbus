@@ -47,10 +47,10 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 %{?with_python:BuildRequires:	cpp}
 BuildRequires:	doxygen
-BuildRequires:	expat-devel >= %{expat_version}
+BuildRequires:	expat-devel >= 1:%{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
-%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
-%{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
+%{?with_glib:BuildRequires:	glib2-devel >= 1:%{glib2_version}}
+%{?with_gtk:BuildRequires:	gtk+2-devel >= 2:%{glib2_version}}
 BuildRequires:	xorg-lib-libSM-devel
 BuildRequires:	xorg-lib-libX11-devel
 %if %{with dotnet}
@@ -135,7 +135,7 @@ Summary:	GLib-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	glib2 >= %{glib2_version}
+Requires:	glib2 >= 1:%{glib2_version}
 
 %description glib
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -151,7 +151,7 @@ Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	%{name}-glib = %{version}-%{release}
-Requires:	glib2-devel >= %{glib2_version}
+Requires:	glib2-devel >= 1:%{glib2_version}
 
 %description glib-devel
 Header files for GLib-based library for using D-BUS.
