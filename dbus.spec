@@ -62,7 +62,7 @@ BuildRequires:	python-Pyrex >= 0.9.3
 BuildRequires:	python-devel >= 2.2
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= 6:%{qt_version}}
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
 Requires(post,postun):	/sbin/ldconfig
@@ -391,17 +391,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add messagebus
-if [ -f /var/lock/subsys/messagebus ]; then
-	/etc/rc.d/init.d/messagebus restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/messagebus start\" to start D-Bus daemon."
-fi
+%service messagebus restart "D-Bus daemon"
 
 %preun
 if [ "$1" = "0" ];then
-	if [ -f /var/lock/subsys/messagebus ]; then
-		/etc/rc.d/init.d/messagebus stop >&2
-	fi
+	%service messagebus stop
 	/sbin/chkconfig --del messagebus
 fi
 
