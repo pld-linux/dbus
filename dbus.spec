@@ -43,16 +43,16 @@ Patch3:		%{name}-python_fixes.patch
 Patch4:		%{name}-monodir.patch
 Patch5:		%{name}-gcj.patch
 URL:		http://www.freedesktop.org/Software/dbus
-BuildRequires:	xorg-lib-libSM-devel
-BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 %{?with_python:BuildRequires:	cpp}
-BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	doxygen
-%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
+%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{glib2_version}}
+BuildRequires:	xorg-lib-libSM-devel
+BuildRequires:	xorg-lib-libX11-devel
 %if %{with dotnet}
 # just gtk-sharp for examples
 #BuildRequires:	dotnet-gtk-sharp-devel
@@ -63,24 +63,24 @@ BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 %if %{with python}
-BuildRequires:	python-devel >= 2.2
 BuildRequires:	python-Pyrex >= 0.9.3
+BuildRequires:	python-devel >= 2.2
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 %{?with_python:BuildRequires:	rpm-pythonprov}
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
-Requires:	rc-scripts
-Requires:	%{name}-libs = %{version}-%{release}
+Requires(post,postun):	/sbin/ldconfig
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun):	/sbin/chkconfig
-Requires(post,postun):	/sbin/ldconfig
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
+Requires:	%{name}-libs = %{version}-%{release}
+Requires:	rc-scripts
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -189,8 +189,8 @@ Summary:	GTK+-based graphical D-BUS frontend utility
 Summary(pl):	Oparte na GTK+ graficzne narzêdzie do D-BUS
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
-Requires:	%{name}-glib = %{version}-%{release}
 Requires:	%{name}-X11 = %{version}-%{release}
+Requires:	%{name}-glib = %{version}-%{release}
 
 %description gtk
 GTK+-based graphical D-BUS frontend utility.
@@ -228,8 +228,8 @@ Biblioteka .NET do u¿ywania D-BUS.
 Summary:	.NET library for using D-BUS with API documentation
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacjê API
 Group:		Development/Libraries
-Requires:	dotnet-%{name}-sharp = %{version}-%{release}
 Requires:	%{name} = %{version}-%{release}
+Requires:	dotnet-%{name}-sharp = %{version}-%{release}
 
 %description -n dotnet-%{name}-sharp-devel
 .NET library for using D-BUS, with API documentation.
@@ -401,17 +401,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add messagebus
-if [ -f /var/lock/subsys/messagebus ]; then
-	/etc/rc.d/init.d/messagebus restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/messagebus start\" to start D-Bus daemon."
-fi
+%service messagebus restart "D-Bus daemon"
 
 %preun
 if [ "$1" = "0" ];then
-	if [ -f /var/lock/subsys/messagebus ]; then
-		/etc/rc.d/init.d/messagebus stop >&2
-	fi
+	%service messagebus stop
 	/sbin/chkconfig --del messagebus
 fi
 
