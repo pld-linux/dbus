@@ -66,7 +66,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-Pyrex >= 0.9.3
 BuildRequires:	python-devel >= 2.2
 %endif
-%{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
+%{?with_qt:BuildRequires:	qt-devel >= 6:%{qt_version}}
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
