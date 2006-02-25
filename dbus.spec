@@ -20,18 +20,20 @@
 %undefine with_dotnet
 %endif
 
-%define		expat_version	1.95.5
-%define		glib2_version	2.2.0
-%define		qt_version	3.1.0
+%define		expat_version	1:1.95.5
+%define		glib2_version	1:2.2.0
+%define		gtk2_version	2:2.4.0
+%define		qt_version	6:3.1.0
+
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.60
-Release:	4
+Version:	0.61
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	da9561b5e579cedddc34f53427e99a93
+# Source0-md5:	cfd4f26004e4304e0dace4d82894e50b
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -47,15 +49,13 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 %{?with_python:BuildRequires:	cpp}
 BuildRequires:	doxygen
-BuildRequires:	expat-devel >= 1:%{expat_version}
+BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
-%{?with_glib:BuildRequires:	glib2-devel >= 1:%{glib2_version}}
-%{?with_gtk:BuildRequires:	gtk+2-devel >= 2:%{glib2_version}}
+%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+%{?with_gtk:BuildRequires:	gtk+2-devel >= %{gtk2_version}}
 BuildRequires:	xorg-lib-libSM-devel
 BuildRequires:	xorg-lib-libX11-devel
 %if %{with dotnet}
-# just gtk-sharp for examples
-#BuildRequires:	dotnet-gtk-sharp-devel
 BuildRequires:	mono-csharp >= 1.1.7
 BuildRequires:	monodoc >= 1.0.7-2
 %endif
@@ -66,7 +66,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-Pyrex >= 0.9.3
 BuildRequires:	python-devel >= 2.2
 %endif
-%{?with_qt:BuildRequires:	qt-devel >= 6:%{qt_version}}
+%{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
@@ -135,7 +135,7 @@ Summary:	GLib-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	glib2 >= 1:%{glib2_version}
+Requires:	glib2 >= %{glib2_version}
 
 %description glib
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -151,7 +151,7 @@ Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	%{name}-glib = %{version}-%{release}
-Requires:	glib2-devel >= 1:%{glib2_version}
+Requires:	glib2-devel >= %{glib2_version}
 
 %description glib-devel
 Header files for GLib-based library for using D-BUS.
@@ -338,7 +338,9 @@ z Pythonem.
 %patch4 -p1
 %patch5 -p1
 sed -i -e 's/DBUS_QT3_LIBS=.*/DBUS_QT3_LIBS="-lqt-mt"/' configure.in
+
 # don't build dotnet-gtk-sharp based examples
+# (depends on old gtk-sharp)
 sed -i -e 's/example//' mono/Makefile.am
 
 %build
@@ -368,6 +370,7 @@ sed -i -e 's/example//' mono/Makefile.am
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
 	--with-xml=expat
 %{__make} \
+	JAR=fastjar \
 	pythondir=%{py_sitedir}
 
 %install
@@ -381,6 +384,7 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	JAR=fastjar \
 	pythondir=%{py_sitedir}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
