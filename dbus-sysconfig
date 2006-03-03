@@ -7,5 +7,5 @@ SESSION_BUS_PROFILE_D="no"
 SESSION_BUS_X_SESSION="yes"
 
 # Don't restart messagebus service on package
-# upgrade - kills all ruinning dbus services
+# upgrade - kills all running dbus services
 RPM_SKIP_AUTO_RESTART=yes
