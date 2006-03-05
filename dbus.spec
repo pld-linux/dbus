@@ -8,7 +8,8 @@
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	python	# without Python support
-%bcond_without	qt	# without Qt support
+%bcond_without	qt	# without Qt 3.x support
+%bcond_with	qt4	# with Qt 4.x support (broken)
 #
 %{?with_dotnet:%include	/usr/lib/rpm/macros.mono}
 
@@ -53,7 +54,6 @@ BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{gtk2_version}}
-BuildRequires:	xorg-lib-libSM-devel
 BuildRequires:	xorg-lib-libX11-devel
 %if %{with dotnet}
 BuildRequires:	mono-csharp >= 1.1.7
@@ -71,6 +71,12 @@ BuildRequires:	python-devel >= 2.2
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
+%if %{with qt4}
+BuildRequires:	QtCore-devel >= 4.1
+BuildRequires:	QtTest-devel >= 4.1
+BuildRequires:	QtXml-devel >= 4.1
+BuildRequires:	qt4-build
+%endif
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -360,7 +366,8 @@ sed -i -e 's/example//' mono/Makefile.am
 	%{!?with_glib:--disable-glib} \
 	%{!?with_gtk:--disable-gtk} \
 	%{!?with_python:--disable-python} \
-	%{?with_qt:--enable-qt3} \
+	%{?with_qt:--enable-qt3 --with-qt3-moc=/usr/bin/moc} \
+	%{?with_qt4:--enable-qt --with-qt-moc=%{_libdir}/qt4/bin/moc}%{!?with_qt4:--with-qt-moc=/NOWHERE} \
 	--disable-asserts \
 	--disable-tests \
 	--enable-abstract-sockets \
@@ -435,6 +442,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
 %attr(755,root,root) %{_bindir}/dbus-daemon
+# R: libX11
 %attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-send
 %dir %{_sysconfdir}/dbus-1
@@ -448,6 +456,7 @@ fi
 %dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
+%{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-send.1*
 
 %files libs
@@ -503,7 +512,6 @@ fi
 %files X11
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sysconfdir}/X11/xinit/xinitrc.d/dbus.sh
-%{_mandir}/man1/dbus-launch.1*
 
 %if %{with dotnet}
 %files -n dotnet-%{name}-sharp
