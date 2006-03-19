@@ -30,7 +30,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.61
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -326,6 +326,7 @@ Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Pythona
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 %pyrequires_eq	python
+Requires:	python-libxml2
 
 %description -n python-dbus
 D-BUS add-on library to integrate the standard D-BUS library with
