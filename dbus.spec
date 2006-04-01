@@ -3,29 +3,30 @@
 # - qt4 bindings
 #
 # Conditional build:
+#
+%bcond_with	gcj	# without Java support
+%bcond_with	qt4	# with Qt 4.x support (broken)
 %bcond_without	dotnet	# without .NET support
-%bcond_without	gcj	# without Java support
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	python	# without Python support
 %bcond_without	qt	# without Qt 3.x support
-%bcond_with	qt4	# with Qt 4.x support (broken)
 #
 %{?with_dotnet:%include	/usr/lib/rpm/macros.mono}
-
+#
 %if %{without glib}
 %undefine	with_gtk
 %endif
-
+#
 %ifarch i386 alpha sparc sparc64
 %undefine with_dotnet
 %endif
-
+#
 %define		expat_version	1:1.95.5
 %define		glib2_version	1:2.2.0
 %define		gtk2_version	2:2.4.0
 %define		qt_version	6:3.1.0
-
+#
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
@@ -54,7 +55,7 @@ BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{gtk2_version}}
-BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	X11-devel
 %if %{with dotnet}
 BuildRequires:	mono-csharp >= 1.1.7
 BuildRequires:	monodoc >= 1.0.7-2
