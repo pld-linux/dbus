@@ -221,7 +221,7 @@ Narzêdzia X11 D-BUSa.
 Summary:	.NET library for using D-BUS
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	mono >= 1.1.7
 
 %description -n dotnet-%{name}-sharp
@@ -234,7 +234,6 @@ Biblioteka .NET do u¿ywania D-BUS.
 Summary:	.NET library for using D-BUS with API documentation
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacjê API
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
 Requires:	dotnet-%{name}-sharp = %{version}-%{release}
 
 %description -n dotnet-%{name}-sharp-devel
