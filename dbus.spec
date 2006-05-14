@@ -4,7 +4,7 @@
 #
 # Conditional build:
 %bcond_without	dotnet	# without .NET support
-%bcond_without	gcj	# without Java support
+%bcond_with	gcj	# without Java support
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
 %bcond_without	python	# without Python support
@@ -30,7 +30,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.61
-Release:	3
+Release:	4
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -51,7 +51,7 @@ BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 %{?with_python:BuildRequires:	cpp}
 BuildRequires:	doxygen
-BuildRequires:	expat-devel >= 1:%{expat_version}
+BuildRequires:	expat-devel >= %{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
 %{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
 %{?with_gtk:BuildRequires:	gtk+2-devel >= %{gtk2_version}}
@@ -66,7 +66,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-Pyrex >= 0.9.3
 BuildRequires:	python-devel >= 2.2
 %endif
-%{?with_qt:BuildRequires:	qt-devel >= 6:%{qt_version}}
+%{?with_qt:BuildRequires:	qt-devel >= %{qt_version}}
 %{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
@@ -141,7 +141,7 @@ Summary:	GLib-based library for using D-BUS
 Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o GLib
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	glib2 >= 1:%{glib2_version}
+Requires:	glib2 >= %{glib2_version}
 
 %description glib
 D-BUS add-on library to integrate the standard D-BUS library with the
@@ -157,7 +157,7 @@ Summary(pl):	Pliki nag³ówkowe biblioteki do u¿ywania D-BUS opartej o GLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	%{name}-glib = %{version}-%{release}
-Requires:	glib2-devel >= 1:%{glib2_version}
+Requires:	glib2-devel >= %{glib2_version}
 
 %description glib-devel
 Header files for GLib-based library for using D-BUS.
