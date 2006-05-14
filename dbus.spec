@@ -1,11 +1,15 @@
 #
+# TODO:
+# - qt4 bindings
+#
 # Conditional build:
+%bcond_without	dotnet	# without .NET support
+%bcond_without	gcj	# without Java support
 %bcond_without	glib	# without glib support
 %bcond_without	gtk	# without GTK+ programs
-%bcond_without	qt	# without Qt support
 %bcond_without	python	# without Python support
-%bcond_without	dotnet	# without .NET support
-%bcond_with	gcj	# with Java support
+%bcond_without	qt	# without Qt 3.x support
+%bcond_with	qt4	# with Qt 4.x support (broken)
 #
 %{?with_dotnet:%include	/usr/lib/rpm/macros.mono}
 
@@ -17,18 +21,20 @@
 %undefine with_dotnet
 %endif
 
-%define		expat_version	1.95.5
-%define		glib2_version	2.2.0
-%define		qt_version	3.1.0
+%define		expat_version	1:1.95.5
+%define		glib2_version	1:2.2.0
+%define		gtk2_version	2:2.4.0
+%define		qt_version	6:3.1.0
+
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.50
-Release:	6
+Version:	0.61
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	1addd5b600a8a4550766005d1f59401b
+# Source0-md5:	cfd4f26004e4304e0dace4d82894e50b
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -38,6 +44,7 @@ Patch1:		%{name}-config.patch
 Patch2:		%{name}-mint.patch
 Patch3:		%{name}-python_fixes.patch
 Patch4:		%{name}-monodir.patch
+Patch5:		%{name}-gcj.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	XFree86-devel
 BuildRequires:	autoconf >= 2.52
@@ -46,11 +53,9 @@ BuildRequires:	automake
 BuildRequires:	doxygen
 BuildRequires:	expat-devel >= 1:%{expat_version}
 %{?with_gcj:BuildRequires:	gcc-java >= 5:4.0}
-%{?with_glib:BuildRequires:	glib2-devel >= 1:%{glib2_version}}
-%{?with_gtk:BuildRequires:	gtk+2-devel >= 2:%{glib2_version}}
+%{?with_glib:BuildRequires:	glib2-devel >= %{glib2_version}}
+%{?with_gtk:BuildRequires:	gtk+2-devel >= %{gtk2_version}}
 %if %{with dotnet}
-# just gtk-sharp for examples
-BuildRequires:	dotnet-gtk-sharp-devel
 BuildRequires:	mono-csharp >= 1.1.7
 BuildRequires:	monodoc >= 1.0.7-2
 %endif
@@ -62,9 +67,16 @@ BuildRequires:	python-Pyrex >= 0.9.3
 BuildRequires:	python-devel >= 2.2
 %endif
 %{?with_qt:BuildRequires:	qt-devel >= 6:%{qt_version}}
+%{?with_python:BuildRequires:	rpm-pythonprov}
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
+%if %{with qt4}
+BuildRequires:	QtCore-devel >= 4.1
+BuildRequires:	QtTest-devel >= 4.1
+BuildRequires:	QtXml-devel >= 4.1
+BuildRequires:	qt4-build
+%endif
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -183,6 +195,7 @@ Summary:	GTK+-based graphical D-BUS frontend utility
 Summary(pl):	Oparte na GTK+ graficzne narzêdzie do D-BUS
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-X11 = %{version}-%{release}
 Requires:	%{name}-glib = %{version}-%{release}
 
 %description gtk
@@ -208,7 +221,7 @@ Narzêdzia X11 D-BUSa.
 Summary:	.NET library for using D-BUS
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 Requires:	mono >= 1.1.7
 
 %description -n dotnet-%{name}-sharp
@@ -313,6 +326,7 @@ Summary(pl):	Biblioteka do u¿ywania D-BUS oparta o Pythona
 Group:		Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 %pyrequires_eq	python
+Requires:	python-libxml2
 
 %description -n python-dbus
 D-BUS add-on library to integrate the standard D-BUS library with
@@ -329,8 +343,12 @@ z Pythonem.
 %patch2 -p0
 %patch3 -p1
 %patch4 -p1
-sed -i 's:JAR.*=.*jar:JAR=fastjar:g' gcj/Makefile.{am,in}
-sed -i -e 's/DBUS_QT_LIBS=.*/DBUS_QT_LIBS="-lqt-mt"/' configure.in
+%patch5 -p1
+sed -i -e 's/DBUS_QT3_LIBS=.*/DBUS_QT3_LIBS="-lqt-mt"/' configure.in
+
+# don't build dotnet-gtk-sharp based examples
+# (depends on old gtk-sharp)
+sed -i -e 's/example//' mono/Makefile.am
 
 %build
 %{__libtoolize}
@@ -339,25 +357,28 @@ sed -i -e 's/DBUS_QT_LIBS=.*/DBUS_QT_LIBS="-lqt-mt"/' configure.in
 %{__autoheader}
 %{__automake}
 %configure \
+	GCJFLAGS="%{rpmcflags}" \
 	QTDIR=/usr \
 	%{?debug:--enable-verbose-mode} \
-	%{!?with_dotnet:--disable-mono} \
-	%{!?with_dotnet:--disable-mono-docs} \
+	%{?with_dotnet:--enable-mono} \
+	%{?with_dotnet:--enable-mono-docs} \
 	%{!?with_gcj:--disable-gcj} \
 	%{?with_gcj:--enable-gcj} \
 	%{!?with_glib:--disable-glib} \
 	%{!?with_gtk:--disable-gtk} \
 	%{!?with_python:--disable-python} \
-	%{!?with_qt:--disable-qt} \
+	%{?with_qt:--enable-qt3 --with-qt3-moc=/usr/bin/moc} \
+	%{?with_qt4:--enable-qt --with-qt-moc=%{_libdir}/qt4/bin/moc}%{!?with_qt4:--with-qt-moc=/NOWHERE} \
 	--disable-asserts \
 	--disable-tests \
 	--enable-abstract-sockets \
 	--enable-selinux \
-	--enable-verbose-mode \
+	--with-console-auth-dir=%{_localstatedir}/lock/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
 	--with-xml=expat
 %{__make} \
+	JAR=fastjar \
 	pythondir=%{py_sitedir}
 
 %install
@@ -371,6 +392,7 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
+	JAR=fastjar \
 	pythondir=%{py_sitedir}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
@@ -421,6 +443,7 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
 %attr(755,root,root) %{_bindir}/dbus-daemon
+# R: libX11
 %attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-send
 %dir %{_sysconfdir}/dbus-1
@@ -434,6 +457,7 @@ fi
 %dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
+%{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-send.1*
 
 %files libs
@@ -489,7 +513,6 @@ fi
 %files X11
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sysconfdir}/X11/xinit/xinitrc.d/dbus.sh
-%{_mandir}/man1/dbus-launch.1*
 
 %if %{with dotnet}
 %files -n dotnet-%{name}-sharp
@@ -538,7 +561,7 @@ fi
 %if %{with python}
 %files -n python-dbus
 %defattr(644,root,root,755)
-%dir %{py_sitedir}/%{name}/
+%dir %{py_sitedir}/%{name}
 %attr(755,root,root) %{py_sitedir}/%{name}/*.so
 %{py_sitedir}/dbus.pth
 %{py_sitedir}/%{name}/*.py[co]
