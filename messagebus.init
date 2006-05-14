@@ -1,0 +1,89 @@
+#!/bin/sh
+#
+# messagebus	The D-BUS systemwide message bus
+#
+# chkconfig:	345 22 85
+#
+# description:	This is a daemon which broadcasts notifications of system
+#		events and other messages.
+#
+# pidfile:      /var/run/dbus.pid
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network ]; then
+		msg_network_down messagebus
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/messagebus ]; then
+		msg_starting messagebus
+		daemon dbus-daemon --system
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/messagebus
+	else
+		msg_already_running messagebus
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/messagebus ]; then
+		# Stop daemons.
+		msg_stopping messagebus
+		killproc --pidfile dbus.pid dbus-daemon
+		rm -f /var/lock/subsys/messagebus
+		rm -f /var/run/dbus.pid
+	else
+		msg_not_running messagebus
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  reload)
+	if [ -f /var/lock/subsys/messagebus ]; then
+		msg_reloading messagebus
+		killproc dbus-daemon -HUP
+		RETVAL=$?
+	else
+		msg_not_running messagebus >&2
+		RETVAL=7
+	fi
+	;;
+  force-reload)
+	# if program allows reloading without stopping
+	$0 reload
+
+	# or if it doesn't
+	$0 restart
+
+	exit $?
+	;;
+  status)
+	status messagebus dbus-daemon
+	RETVAL=$?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL
+
+# This must be last line !
+# vi:syntax=sh:tw=78:ts=8:sw=4
