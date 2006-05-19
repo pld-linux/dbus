@@ -30,7 +30,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.61
-Release:	4
+Release:	5
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -234,7 +234,6 @@ Biblioteka .NET do u¿ywania D-BUS.
 Summary:	.NET library for using D-BUS with API documentation
 Summary(pl):	Biblioteka .NET do u¿ywania D-BUS, zawiera dokumentacjê API
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
 Requires:	dotnet-%{name}-sharp = %{version}-%{release}
 
 %description -n dotnet-%{name}-sharp-devel
