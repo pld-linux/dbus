@@ -1,0 +1,2 @@
+- --as-needed support, dropped X11 subpackage (session can be started
+  even without questionable deps), rel.2
