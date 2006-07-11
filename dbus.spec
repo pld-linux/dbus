@@ -30,7 +30,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.62
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -38,7 +38,6 @@ Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
-Source4:	%{name}-xinitrc.sh
 Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-mint.patch
@@ -89,6 +88,7 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
 Provides:	group(messagebus)
 Provides:	user(messagebus)
+Obsoletes:	dbus-X11
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -203,19 +203,6 @@ GTK+-based graphical D-BUS frontend utility.
 
 %description gtk -l pl
 Oparte na GTK+ graficzne narzêdzie do D-BUS.
-
-%package X11
-Summary:	X11 D-BUS utilities
-Summary(pl):	Narzêdzia X11 D-BUSa
-Group:		X11/Applications
-Requires:	%{name} = %{version}-%{release}
-Requires:	xinitrc
-
-%description X11
-X11 D-BUS utilities.
-
-%description X11 -l pl
-Narzêdzia X11 D-BUSa.
 
 %package -n dotnet-%{name}-sharp
 Summary:	.NET library for using D-BUS
@@ -355,6 +342,7 @@ sed -i -e 's/example//' mono/Makefile.am
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+LDFLAGS="%{rpmldflags} -Wl,--as-needed"
 %configure \
 	GCJFLAGS="%{rpmcflags}" \
 	QTDIR=/usr \
@@ -385,7 +373,6 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
 install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 
@@ -397,7 +384,6 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/dbus
-install %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/X11/xinit/xinitrc.d/dbus.sh
 
 %if %{with python}
 rm -f $RPM_BUILD_ROOT%{py_sitedir}/%{name}/*.{py,la,a}
@@ -508,10 +494,6 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-viewer
 %endif
-
-%files X11
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_sysconfdir}/X11/xinit/xinitrc.d/dbus.sh
 
 %if %{with dotnet}
 %files -n dotnet-%{name}-sharp
