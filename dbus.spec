@@ -30,7 +30,7 @@ Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
 Version:	0.62
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
@@ -38,6 +38,7 @@ Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
+Source4:	%{name}-xinitrc.sh
 Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-mint.patch
@@ -370,9 +371,10 @@ LDFLAGS="%{rpmldflags} -Wl,--as-needed"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/profile.d
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
+install -d $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
 install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 
@@ -384,6 +386,7 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/dbus
+install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 
 %if %{with python}
 rm -f $RPM_BUILD_ROOT%{py_sitedir}/%{name}/*.{py,la,a}
@@ -436,6 +439,8 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/dbus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
+%attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
+
 %dir %{_sysconfdir}/dbus-1/system.d
 %dir %{_datadir}/dbus-1
 %dir %{_datadir}/dbus-1/services
