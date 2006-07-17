@@ -196,7 +196,6 @@ Summary:	GTK+-based graphical D-BUS frontend utility
 Summary(pl):	Oparte na GTK+ graficzne narzêdzie do D-BUS
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
-Requires:	%{name}-X11 = %{version}-%{release}
 Requires:	%{name}-glib = %{version}-%{release}
 
 %description gtk
