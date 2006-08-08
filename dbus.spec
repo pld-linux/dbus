@@ -41,6 +41,7 @@ Requires:	rc-scripts
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-X11
+Obsoletes:	dbus-glib-tools
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -193,8 +194,6 @@ fi
 %{_libdir}/dbus-*/include
 %{_pkgconfigdir}/dbus-1.pc
 %{_includedir}/dbus*
-%{?with_glib:%exclude %{_includedir}/dbus*/dbus/dbus-glib*.h}
-%{?with_qt:%exclude %{_includedir}/dbus*/dbus/dbus-qt.h}
 
 %files static
 %defattr(644,root,root,755)
