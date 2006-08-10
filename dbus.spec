@@ -54,6 +54,17 @@ D-BUS to system przesy³ania komunikatów pomiêdzy aplikacjami. Jest
 u¿ywany zarówno jako ogólnosystemowa us³uga magistrali komunikatów jak
 i mo¿liwo¶æ przesy³ania komunikatów w ramach jednej sesji u¿ytkownika.
 
+%package libs
+Summary:	D-BUS libraries
+Summary(pl):	Biblioteki D-BUS
+Group:		Libraries
+
+%description libs
+D-BUS libraries.
+
+%description libs -l pl
+Biblioteki D-BUS.
+
 %package devel
 Summary:	Header files for D-BUS
 Summary(pl):	Pliki nag³ówkowe D-BUS
@@ -65,17 +76,6 @@ Header files for D-BUS.
 
 %description devel -l pl
 Pliki nag³ówkowe D-BUS.
-
-%package libs
-Summary:	D-BUS libraries
-Summary(pl):	Biblioteki D-BUS
-Group:		Libraries
-
-%description libs
-D-BUS libraries.
-
-%description libs -l pl
-Biblioteki D-BUS.
 
 %package static
 Summary:	Static D-BUS libraries
