@@ -4,12 +4,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.91
+Version:	0.92
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	3f641bf73bcc538d3871622799ce2cd0
+# Source0-md5:	ea2be58c80a80631ba5b3c92cffd335c
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -126,7 +126,7 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/dbus
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 
 %clean
@@ -155,6 +155,16 @@ fi
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
+%triggerpostun -- %{name} < 0.92
+%banner %{name} << EOF
+WARNING!!!
+configuration file /etc/sysconfig/dbus has been moved to /etc/sysconfig/messagebus!
+EOF
+
+if [ -f /etc/sysconfig/dbus ]; then
+    mv /etc/sysconfig/dbus /etc/sysconfig/messagebus
+fi
+
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
@@ -165,7 +175,7 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-send
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dbus-1/*.conf
-%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/dbus
+%config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
