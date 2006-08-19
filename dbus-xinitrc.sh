@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # Get configuration
-. /etc/sysconfig/dbus
+. /etc/sysconfig/messagebus
 
 # Taken from rc-scripts
 is_yes()
