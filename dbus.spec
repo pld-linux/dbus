@@ -42,6 +42,8 @@ Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-X11
 Obsoletes:	dbus-glib-tools
+# not available for dbus 0.9x yet(?)
+#Obsoletes:	dbus-gtk dbus-gcj dbus-gcj-devel dbus-gcj-static
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
