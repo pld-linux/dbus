@@ -163,9 +163,8 @@ WARNING!!!
 configuration file /etc/sysconfig/dbus has been moved to /etc/sysconfig/messagebus!
 EOF
 
-if [ -f /etc/sysconfig/dbus ]; then
-    mv /etc/sysconfig/dbus /etc/sysconfig/messagebus
-fi
+mv -f /etc/sysconfig/messagebus{,.rpmnew}
+mv -f /etc/sysconfig/{dbus,messagebus}
 
 %files
 %defattr(644,root,root,755)
