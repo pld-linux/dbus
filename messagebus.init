@@ -61,7 +61,7 @@ case "$1" in
 		killproc dbus-daemon -HUP
 		RETVAL=$?
 	else
-		msg_not_running messagebus >&2
+		msg_not_running messagebus
 		RETVAL=7
 	fi
 	;;
