@@ -25,10 +25,7 @@ else
 	exit 0
 fi
 
-
-# See how we were called.
-case "$1" in
-  start)
+start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/messagebus ]; then
 		msg_starting messagebus
@@ -38,8 +35,9 @@ case "$1" in
 	else
 		msg_already_running messagebus
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	if [ -f /var/lock/subsys/messagebus ]; then
 		# Stop daemons.
 		msg_stopping messagebus
@@ -49,13 +47,21 @@ case "$1" in
 	else
 		msg_not_running messagebus
 	fi
+}
+
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
 	;;
   restart)
-	$0 stop
-	$0 start
-	exit $?
+	stop
+	start
 	;;
-  reload)
+  reload|force-reload)
 	if [ -f /var/lock/subsys/messagebus ]; then
 		msg_reloading messagebus
 		killproc dbus-daemon -HUP
@@ -64,15 +70,6 @@ case "$1" in
 		msg_not_running messagebus
 		RETVAL=7
 	fi
-	;;
-  force-reload)
-	# if program allows reloading without stopping
-	$0 reload
-
-	# or if it doesn't
-	$0 restart
-
-	exit $?
 	;;
   status)
 	status messagebus dbus-daemon
@@ -86,4 +83,3 @@ esac
 exit $RETVAL
 
 # This must be last line !
-# vi:syntax=sh:tw=78:ts=8:sw=4
