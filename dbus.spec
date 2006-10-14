@@ -4,12 +4,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.93
+Version:	0.94
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
-Source0:	http://dbus.freedesktop.org/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	0770dce874c76f7364d055e4648900fb
+Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
+# Source0-md5:	85653cafbcfc7edfbad9639459758ed3
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -141,6 +141,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add messagebus
 %service messagebus restart "D-Bus daemon"
+%{_bindir}/dbus-uuidgen --ensure
 
 %preun
 if [ "$1" = "0" ];then
@@ -170,6 +171,7 @@ mv -f /etc/sysconfig/{dbus,messagebus}
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
 %attr(755,root,root) %{_bindir}/dbus-daemon
+%attr(755,root,root) %{_bindir}/dbus-uuidgen
 # R: libX11
 %attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-monitor
@@ -187,6 +189,7 @@ mv -f /etc/sysconfig/{dbus,messagebus}
 %dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
+%{_mandir}/man1/dbus-uuidgen.1*
 %{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-send.1*
