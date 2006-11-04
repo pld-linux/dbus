@@ -4,12 +4,12 @@
 Summary:	D-BUS message bus
 Summary(pl):	Magistrala przesy³ania komunikatów D-BUS
 Name:		dbus
-Version:	0.94
+Version:	0.95
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	85653cafbcfc7edfbad9639459758ed3
+# Source0-md5:	c660e2c6345cbe5edc5e2486570148af
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -141,7 +141,6 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add messagebus
 %service messagebus restart "D-Bus daemon"
-%{_bindir}/dbus-uuidgen --ensure
 
 %preun
 if [ "$1" = "0" ];then
@@ -187,6 +186,7 @@ mv -f /etc/sysconfig/{dbus,messagebus}
 %dir %{_datadir}/dbus-1
 %dir %{_datadir}/dbus-1/services
 %dir %{_localstatedir}/run/dbus
+%dir /var/lib/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
 %{_mandir}/man1/dbus-uuidgen.1*
