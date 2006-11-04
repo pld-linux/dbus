@@ -1,15 +1,6 @@
 diff -urN dbus-0.36.2.org/bus/session.conf.in dbus-0.36.2/bus/session.conf.in
 --- dbus-0.36.2.org/bus/session.conf.in	2005-08-29 20:40:15.000000000 +0200
 +++ dbus-0.36.2/bus/session.conf.in	2005-08-30 21:05:05.900734296 +0200
-@@ -10,7 +10,7 @@
- 
-   <listen>unix:tmpdir=@DBUS_SESSION_SOCKET_DIR@</listen>
- 
--  <servicedir>@EXPANDED_DATADIR@/dbus-1/services</servicedir>
-+  <servicedir>@datadir@/dbus-1/services</servicedir>
- 
-   <policy context="default">
-     <!-- Allow everything to be sent -->
 @@ -19,6 +19,10 @@
      <allow eavesdrop="true"/>
      <!-- Allow anyone to own anything -->
