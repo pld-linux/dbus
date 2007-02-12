@@ -2,7 +2,7 @@
 %define		expat_version	1:1.95.5
 #
 Summary:	D-BUS message bus
-Summary(pl.UTF-8):   Magistrala przesyłania komunikatów D-BUS
+Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.0.2
 Release:	1
@@ -58,7 +58,7 @@ i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
 
 %package libs
 Summary:	D-BUS libraries
-Summary(pl.UTF-8):   Biblioteki D-BUS
+Summary(pl.UTF-8):	Biblioteki D-BUS
 Group:		Libraries
 
 %description libs
@@ -69,7 +69,7 @@ Biblioteki D-BUS.
 
 %package devel
 Summary:	Header files for D-BUS
-Summary(pl.UTF-8):   Pliki nagłówkowe D-BUS
+Summary(pl.UTF-8):	Pliki nagłówkowe D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -81,7 +81,7 @@ Pliki nagłówkowe D-BUS.
 
 %package static
 Summary:	Static D-BUS libraries
-Summary(pl.UTF-8):   Statyczne biblioteki D-BUS
+Summary(pl.UTF-8):	Statyczne biblioteki D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
