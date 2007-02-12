@@ -2,7 +2,7 @@
 %define		expat_version	1:1.95.5
 #
 Summary:	D-BUS message bus
-Summary(pl):	Magistrala przesy砤nia komunikat體 D-BUS
+Summary(pl.UTF-8):   Magistrala przesy艂ania komunikat贸w D-BUS
 Name:		dbus
 Version:	1.0.2
 Release:	1
@@ -51,44 +51,44 @@ D-BUS is a system for sending messages between applications. It is
 used both for the systemwide message bus service, and as a
 per-user-login-session messaging facility.
 
-%description -l pl
-D-BUS to system przesy砤nia komunikat體 pomi阣zy aplikacjami. Jest
-u縴wany zar體no jako og髄nosystemowa us硊ga magistrali komunikat體 jak
-i mo縧iwo舵 przesy砤nia komunikat體 w ramach jednej sesji u縴tkownika.
+%description -l pl.UTF-8
+D-BUS to system przesy艂ania komunikat贸w pomi臋dzy aplikacjami. Jest
+u偶ywany zar贸wno jako og贸lnosystemowa us艂uga magistrali komunikat贸w jak
+i mo偶liwo艣膰 przesy艂ania komunikat贸w w ramach jednej sesji u偶ytkownika.
 
 %package libs
 Summary:	D-BUS libraries
-Summary(pl):	Biblioteki D-BUS
+Summary(pl.UTF-8):   Biblioteki D-BUS
 Group:		Libraries
 
 %description libs
 D-BUS libraries.
 
-%description libs -l pl
+%description libs -l pl.UTF-8
 Biblioteki D-BUS.
 
 %package devel
 Summary:	Header files for D-BUS
-Summary(pl):	Pliki nag丑wkowe D-BUS
+Summary(pl.UTF-8):   Pliki nag艂贸wkowe D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 Header files for D-BUS.
 
-%description devel -l pl
-Pliki nag丑wkowe D-BUS.
+%description devel -l pl.UTF-8
+Pliki nag艂贸wkowe D-BUS.
 
 %package static
 Summary:	Static D-BUS libraries
-Summary(pl):	Statyczne biblioteki D-BUS
+Summary(pl.UTF-8):   Statyczne biblioteki D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static D-BUS libraries.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczne biblioteki D-BUS.
 
 %prep
