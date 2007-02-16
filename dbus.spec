@@ -5,7 +5,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.0.2
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -40,6 +40,7 @@ Requires:	%{name}-libs = %{version}-%{release}
 Requires:	rc-scripts
 Provides:	group(messagebus)
 Provides:	user(messagebus)
+Conflicts:	pam < 0.99.7.1
 Obsoletes:	dbus-X11
 Obsoletes:	dbus-glib-tools
 # not available for dbus 0.9x yet(?)
@@ -108,7 +109,7 @@ Statyczne biblioteki D-BUS.
 	--disable-tests \
 	--enable-abstract-sockets \
 	--enable-selinux \
-	--with-console-auth-dir=%{_localstatedir}/lock/console/ \
+	--with-console-auth-dir=%{_localstatedir}/run/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
 	--with-xml=expat
