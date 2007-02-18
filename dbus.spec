@@ -5,7 +5,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.0.2
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -164,8 +164,13 @@ WARNING!!!
 configuration file /etc/sysconfig/dbus has been moved to /etc/sysconfig/messagebus!
 EOF
 
-mv -f /etc/sysconfig/messagebus{,.rpmnew}
-mv -f /etc/sysconfig/{dbus,messagebus}
+if [ -f /etc/sysconfig/dbus ]; then
+	mv -f /etc/sysconfig/messagebus{,.rpmnew}
+	mv -f /etc/sysconfig/{dbus,messagebus}
+elif [ -f /etc/sysconfig/dbus.rpmsave ]; then
+	mv -f /etc/sysconfig/messagebus{,.rpmnew}
+	mv -f /etc/sysconfig/{dbus.rpmsave,messagebus}
+fi
 
 %files
 %defattr(644,root,root,755)
