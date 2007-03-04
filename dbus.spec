@@ -5,7 +5,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.0.2
-Release:	4
+Release:	5
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -139,7 +139,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 %groupadd -g 122 messagebus
-%useradd -u 122 -d /usr/share/empty -s /bin/false -c "System message bus" -g messagebus messagebus
+%useradd -u 122 -d /usr/share/empty -s /bin/false -c "System message bus" -g 122 messagebus
 
 %post
 /sbin/chkconfig --add messagebus
