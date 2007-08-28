@@ -4,12 +4,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.0.2
-Release:	5
+Version:	1.1.2
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	0552a9b54beb4a044951b7cdbc8fc855
+# Source0-md5:	e33d96a4c4605536127835a70b14d5b9
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -191,6 +191,7 @@ fi
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
 
 %dir %{_sysconfdir}/dbus-1/system.d
+%dir %{_sysconfdir}/dbus-1/session.d
 %dir %{_datadir}/dbus-1
 %dir %{_datadir}/dbus-1/services
 %dir %{_localstatedir}/run/dbus
