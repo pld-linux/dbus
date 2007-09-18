@@ -1,11 +1,14 @@
 #
+# TODO:
+#	- fix .la files so we don't need to explicitly R: libcap-devel in devel package
+#
 %define		expat_version	1:1.95.5
 #
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.1.2
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -18,10 +21,12 @@ Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
 URL:		http://www.freedesktop.org/Software/dbus
+BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.52
 BuildRequires:	automake
 BuildRequires:	doxygen
 BuildRequires:	expat-devel >= %{expat_version}
+BuildRequires:	libcap-devel
 BuildRequires:	libselinux-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
@@ -74,6 +79,8 @@ Summary:	Header files for D-BUS
 Summary(pl.UTF-8):	Pliki nagłówkowe D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	audit-libs-devel
+Requires:	libcap-devel
 
 %description devel
 Header files for D-BUS.
