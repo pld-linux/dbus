@@ -1,14 +1,9 @@
-#
-# TODO:
-#	- fix .la files so we don't need to explicitly R: libcap-devel in devel package
-#
 %define		expat_version	1:1.95.5
-#
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.1.2
-Release:	3
+Release:	4
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -44,6 +39,7 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-libs = %{version}-%{release}
+Requires:	expat >= %{expat_version}
 Requires:	rc-scripts
 Provides:	group(messagebus)
 Provides:	user(messagebus)
@@ -80,8 +76,6 @@ Summary:	Header files for D-BUS
 Summary(pl.UTF-8):	Pliki nagłówkowe D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Requires:	audit-libs-devel
-Requires:	libcap-devel
 
 %description devel
 Header files for D-BUS.
@@ -192,18 +186,19 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-monitor
 %attr(755,root,root) %{_bindir}/dbus-send
+%attr(4754,root,messagebus) %{_libdir}/dbus-daemon-launch-helper
+%dir %{_libdir}/dbus-1
+%dir %{_datadir}/dbus-1
+%dir %{_datadir}/dbus-1/services
+%dir %{_datadir}/dbus-1/system-services
 %dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dbus-1/*.conf
+%dir %{_sysconfdir}/dbus-1/system.d
+%dir %{_sysconfdir}/dbus-1/session.d
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 %attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
-
-%dir %{_sysconfdir}/dbus-1/system.d
-%dir %{_sysconfdir}/dbus-1/session.d
-%dir %{_datadir}/dbus-1
-%dir %{_datadir}/dbus-1/services
-%dir %{_datadir}/dbus-1/system-services
 %dir %{_localstatedir}/run/dbus
 %dir /var/lib/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
@@ -217,16 +212,17 @@ fi
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
 %attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
-%dir %{_libdir}/dbus-*
+%attr(755,root,root) %ghost %{_libdir}/libdbus-1.so.3
 
 %files devel
 %defattr(644,root,root,755)
 %doc doc/*.{html,txt}
 %attr(755,root,root) %{_libdir}/libdbus-1.so
 %{_libdir}/libdbus-1.la
-%{_libdir}/dbus-*/include
+%dir %{_libdir}/dbus-1.0
+%{_libdir}/dbus-1.0/include
 %{_pkgconfigdir}/dbus-1.pc
-%{_includedir}/dbus*
+%{_includedir}/dbus-1.0
 
 %files static
 %defattr(644,root,root,755)
