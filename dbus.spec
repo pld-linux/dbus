@@ -3,7 +3,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.1.2
-Release:	4
+Release:	5
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -126,7 +126,7 @@ install -d $RPM_BUILD_ROOT/etc/profile.d
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT/etc/sysconfig
 install -d $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
-install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/services
+install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces}
 install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 
 %{__make} install \
@@ -189,6 +189,7 @@ fi
 %attr(4754,root,messagebus) %{_libdir}/dbus-daemon-launch-helper
 %dir %{_libdir}/dbus-1
 %dir %{_datadir}/dbus-1
+%dir %{_datadir}/dbus-1/interfaces
 %dir %{_datadir}/dbus-1/services
 %dir %{_datadir}/dbus-1/system-services
 %dir %{_sysconfdir}/dbus-1
