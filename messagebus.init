@@ -59,7 +59,7 @@ condrestart() {
 		stop
 		start
 	else
-		msg_not_running cpqarrayd
+		msg_not_running messagebus
 		RETVAL=$1
 	fi
 }
@@ -100,5 +100,3 @@ case "$1" in
 esac
 
 exit $RETVAL
-
-# This must be last line !
