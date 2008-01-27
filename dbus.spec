@@ -1,13 +1,9 @@
-#
-# Hint:
-#  If You have problem with messagebus service try : sudo modprobe capability
-#  For example on kernel-desktop you need to add capability to /etc/modules
 %define		expat_version	1:1.95.5
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.1.4
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
