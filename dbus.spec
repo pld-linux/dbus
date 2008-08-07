@@ -2,12 +2,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.2.1
-Release:	3
+Version:	1.2.3
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	b57aa1ba0834cbbb1e7502dc2cbfacc2
+# Source0-md5:	f71641385768e99361bd298568207cee
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -42,9 +42,9 @@ Requires:	expat >= %{expat_version}
 Requires:	rc-scripts
 Provides:	group(messagebus)
 Provides:	user(messagebus)
-Conflicts:	pam < 0.99.7.1
 Obsoletes:	dbus-X11
 Obsoletes:	dbus-glib-tools
+Conflicts:	pam < 0.99.7.1
 # not available for dbus 0.9x yet(?)
 #Obsoletes:	dbus-gtk dbus-gcj dbus-gcj-devel dbus-gcj-static
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
