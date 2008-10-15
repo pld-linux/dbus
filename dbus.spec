@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	selinux		# build without SELinux support
+#
 %define		expat_version	1:1.95.5
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
@@ -22,7 +26,7 @@ BuildRequires:	automake
 BuildRequires:	doxygen
 BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	libcap-devel
-BuildRequires:	libselinux-devel
+%{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
@@ -111,7 +115,7 @@ Statyczne biblioteki D-BUS.
 	--disable-asserts \
 	--disable-tests \
 	--enable-abstract-sockets \
-	--enable-selinux \
+	%{?with_selinux:--enable-selinux} \
 	--with-console-auth-dir=%{_localstatedir}/run/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
