@@ -34,8 +34,7 @@ start() {
 			modprobe -s capability
 		fi
 		dbus-uuidgen --ensure
-		rm -f /var/run/dbus.pid
-		daemon /usr/bin/dbus-daemon --system
+		daemon --pidfile dbus.pid /usr/bin/dbus-daemon --system
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/messagebus
 	else
