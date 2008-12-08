@@ -1,0 +1,32 @@
+--- a/bus/system.conf.in
++++ b/bus/system.conf.in
+@@ -50,6 +50,9 @@
+          even if they aren't in here -->
+     <allow send_destination="org.freedesktop.DBus"/>
+     <allow receive_sender="org.freedesktop.DBus"/>
++    <!-- Introspection and Peer methods are always allowed -->
++    <allow send_interface="org.freedesktop.DBus.Introspectable"/>
++    <allow send_interface="org.freedesktop.DBus.Peer"/>
+     <!-- allow sending valid replies -->
+     <allow send_requested_reply="true" send_type="method_return"/>
+     <allow send_requested_reply="true" send_type="error"/>
+--- a/test/name-test/tmp-session-like-system.conf
++++ b/test/name-test/tmp-session-like-system.conf
+@@ -25,10 +25,13 @@
+     <!-- But allow all users to connect -->
+     <allow user="*"/>
+     <!-- Allow anyone to talk to the message bus -->
+-    <!-- FIXME I think currently these eallow rules are always implicit 
++    <!-- FIXME I think currently these allow rules are always implicit 
+          even if they aren't in here -->
+     <allow send_destination="org.freedesktop.DBus"/>
+     <allow receive_sender="org.freedesktop.DBus"/>
++    <!-- Introspection and Peer methods are always allowed -->
++    <allow send_interface="org.freedesktop.DBus.Introspectable"/>
++    <allow send_interface="org.freedesktop.DBus.Peer"/>
+     <!-- valid replies are always allowed -->
+     <allow send_requested_reply="true" send_type="method_return"/>
+     <allow send_requested_reply="true" send_type="error"/>
+-- 
+1.6.0.4
+
