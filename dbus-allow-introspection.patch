@@ -7,9 +7,9 @@
 +    <!-- Introspection and Peer methods are always allowed -->
 +    <allow send_interface="org.freedesktop.DBus.Introspectable"/>
 +    <allow send_interface="org.freedesktop.DBus.Peer"/>
+     <!-- Allow all signals to be sent by default -->
+     <allow send_type="signal"/>
      <!-- allow sending valid replies -->
-     <allow send_requested_reply="true" send_type="method_return"/>
-     <allow send_requested_reply="true" send_type="error"/>
 --- a/test/name-test/tmp-session-like-system.conf
 +++ b/test/name-test/tmp-session-like-system.conf
 @@ -25,10 +25,13 @@
@@ -24,9 +24,6 @@
 +    <!-- Introspection and Peer methods are always allowed -->
 +    <allow send_interface="org.freedesktop.DBus.Introspectable"/>
 +    <allow send_interface="org.freedesktop.DBus.Peer"/>
+     <!-- Allow all signals to be sent by default -->
+     <allow send_type="signal"/>
      <!-- valid replies are always allowed -->
-     <allow send_requested_reply="true" send_type="method_return"/>
-     <allow send_requested_reply="true" send_type="error"/>
--- 
-1.6.0.4
-
