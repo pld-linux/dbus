@@ -6,12 +6,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.2.8
+Version:	1.2.10
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	f8559a7a3b7cf5ec7e3eb80cfe44efe4
+# Source0-md5:	ae740e0792313c8bb6e2a92ee0b70616
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -140,9 +140,9 @@ install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 
 # upstart (/sbin/init) requires libdbus so it must be in /lib(64)
-mv -f $RPM_BUILD_ROOT%{_libdir}/lib*.so.* $RPM_BUILD_ROOT/%{_lib}
-ln -sf /%{_lib}/`(cd $RPM_BUILD_ROOT/%{_lib}; echo lib*.so.*.*)` \
-	$RPM_BUILD_ROOT%{_libdir}/libdbus*.so
+mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
+ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/libdbus-1.so.*.*.*) \
+	$RPM_BUILD_ROOT%{_libdir}/libdbus-1.so
 
 %clean
 rm -rf $RPM_BUILD_ROOT
