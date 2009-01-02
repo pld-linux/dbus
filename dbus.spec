@@ -44,7 +44,7 @@ Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
-Requires:	rc-scripts
+Requires:	rc-scripts >= 0.4.1.23
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-X11
