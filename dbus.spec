@@ -7,7 +7,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.2.12
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -42,6 +42,7 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
 Requires:	rc-scripts >= 0.4.1.23
@@ -63,6 +64,17 @@ per-user-login-session messaging facility.
 D-BUS to system przesyłania komunikatów pomiędzy aplikacjami. Jest
 używany zarówno jako ogólnosystemowa usługa magistrali komunikatów jak
 i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
+
+%package dirs
+Summary:	D-BUS directories
+Summary(pl.UTF-8):	Katalogi D-BUS
+Group:		Libraries
+
+%description dirs
+D-BUS directories.
+
+%description dirs -l pl.UTF-8
+Katalogi D-BUS.
 
 %package libs
 Summary:	D-BUS libraries
@@ -126,10 +138,10 @@ Statyczne biblioteki D-BUS.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d}
-install -d $RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces}
-install -d $RPM_BUILD_ROOT%{_localstatedir}/run/dbus
-install -d $RPM_BUILD_ROOT/%{_lib}
+install -d $RPM_BUILD_ROOT/etc/{profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
+	$RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces} \
+	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus \
+	$RPM_BUILD_ROOT/%{_lib}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -199,10 +211,7 @@ fi
 %dir %{_datadir}/dbus-1/interfaces
 %dir %{_datadir}/dbus-1/services
 %dir %{_datadir}/dbus-1/system-services
-%dir %{_sysconfdir}/dbus-1
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dbus-1/*.conf
-%dir %{_sysconfdir}/dbus-1/system.d
-%dir %{_sysconfdir}/dbus-1/session.d
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
@@ -215,6 +224,12 @@ fi
 %{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-send.1*
+
+%files dirs
+%defattr(644,root,root,755)
+%dir %{_sysconfdir}/dbus-1
+%dir %{_sysconfdir}/dbus-1/system.d
+%dir %{_sysconfdir}/dbus-1/session.d
 
 %files libs
 %defattr(644,root,root,755)
