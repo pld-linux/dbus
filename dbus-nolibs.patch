@@ -1,15 +1,13 @@
 --- dbus-1.1.2/configure.in.orig	2007-07-27 22:45:49.000000000 +0200
 +++ dbus-1.1.2/configure.in	2007-10-31 18:40:18.011991524 +0100
-@@ -554,8 +554,8 @@
- fi
+@@ -387,7 +387,7 @@
  
  #### Various functions
--AC_CHECK_LIB(socket,socket)
+ AC_SEARCH_LIBS(socket,[socket network])
 -AC_CHECK_FUNC(gethostbyname,,[AC_CHECK_LIB(nsl,gethostbyname)])
-+AC_SEARCH_LIBS(socket,socket)
 +AC_CHECK_FUNC(gethostbyname,,[AC_SEARCH_LIBS(gethostbyname,nsl)])
  
- AC_CHECK_FUNCS(vsnprintf vasprintf nanosleep usleep poll setenv unsetenv socketpair getgrouplist fpathconf setrlimit)
+ AC_CHECK_FUNCS(vsnprintf vasprintf nanosleep usleep setenv clearenv unsetenv socketpair getgrouplist fpathconf setrlimit poll)
  
 @@ -946,9 +946,11 @@
  
