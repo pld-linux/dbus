@@ -7,7 +7,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.2.16
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -128,7 +128,7 @@ Statyczne biblioteki D-BUS.
 	%{?debug:--enable-verbose-mode} \
 	--disable-asserts \
 	--disable-tests \
-	--enable-abstract-sockets \
+	--enable-abstract-sockets=auto \
 	%{?with_selinux:--enable-selinux} \
 	--with-console-auth-dir=%{_localstatedir}/run/console/ \
 	--with-session-socket-dir=/tmp \
