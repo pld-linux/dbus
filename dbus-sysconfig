@@ -3,10 +3,8 @@
 SESSION_BUS_PROFILE_D="no"
 
 # Start D-BUS session daemon while start X session
-# This option need installed package dbus-X11
 SESSION_BUS_X_SESSION="yes"
 
 # Don't restart messagebus service on package
 # upgrade - kills all running dbus services
-RPM_SKIP_AUTO_RESTART=yes
-
+RPM_SKIP_AUTO_RESTART="yes"
