@@ -7,7 +7,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.2.16
-Release:	4
+Release:	5
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -20,6 +20,7 @@ Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
 Patch3:		%{name}-allow-introspection.patch
+Patch4:		%{name}-broken-timeout.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.52
@@ -117,6 +118,7 @@ Statyczne biblioteki D-BUS.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 %{__libtoolize}
