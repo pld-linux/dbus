@@ -78,39 +78,39 @@ D-BUS directories.
 Katalogi D-BUS.
 
 %package libs
-Summary:	D-BUS libraries
-Summary(pl.UTF-8):	Biblioteki D-BUS
+Summary:	D-BUS library
+Summary(pl.UTF-8):	Biblioteka D-BUS
 Group:		Libraries
 
 %description libs
-D-BUS libraries.
+D-BUS library.
 
 %description libs -l pl.UTF-8
-Biblioteki D-BUS.
+Biblioteka D-BUS.
 
 %package devel
-Summary:	Header files for D-BUS
-Summary(pl.UTF-8):	Pliki nagłówkowe D-BUS
+Summary:	Header files for D-BUS library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
-Header files for D-BUS.
+Header files for D-BUS library.
 
 %description devel -l pl.UTF-8
-Pliki nagłówkowe D-BUS.
+Pliki nagłówkowe biblioteki D-BUS.
 
 %package static
-Summary:	Static D-BUS libraries
-Summary(pl.UTF-8):	Statyczne biblioteki D-BUS
+Summary:	Static D-BUS library
+Summary(pl.UTF-8):	Statyczna biblioteka D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-Static D-BUS libraries.
+Static D-BUS library.
 
 %description static -l pl.UTF-8
-Statyczne biblioteki D-BUS.
+Statyczna biblioteka D-BUS.
 
 %prep
 %setup -q
