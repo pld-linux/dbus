@@ -1,5 +1,6 @@
---- dbus-1.1.2/configure.in.orig	2007-07-27 22:45:49.000000000 +0200
-+++ dbus-1.1.2/configure.in	2007-10-31 18:40:18.011991524 +0100
+diff -urN dbus-1.2.20/configure.in dbus-1.2.20.new/configure.in
+--- dbus-1.2.20/configure.in	2010-02-03 18:09:08.000000000 +0100
++++ dbus-1.2.20.new/configure.in	2010-02-07 14:58:43.761263087 +0100
 @@ -387,7 +387,7 @@
  
  #### Various functions
@@ -9,20 +10,7 @@
  
  AC_CHECK_FUNCS(vsnprintf vasprintf nanosleep usleep setenv clearenv unsetenv socketpair getgrouplist fpathconf setrlimit poll)
  
-@@ -946,9 +946,11 @@
- 
- AM_CONDITIONAL(HAVE_LIBAUDIT, test x$have_libaudit = xyes)
- 
-+AC_SUBST(CAP_LIBS)
-+CAP_LIBS=
- if test x$have_libaudit = xyes ; then
-     SELINUX_LIBS="$SELINUX_LIBS -laudit"
--    LIBS="-lcap $LIBS"
-+    CAP_LIBS="-lcap"
-     AC_DEFINE(HAVE_LIBAUDIT,1,[audit daemon SELinux support])
- fi
- 
-@@ -988,7 +990,7 @@
+@@ -917,7 +917,7 @@
  
  if test x$enable_x11 = xyes ; then
     AC_DEFINE(DBUS_BUILD_X11,1,[Build X11-dependent code])
@@ -31,13 +19,3 @@
     DBUS_X_CFLAGS="$X_CFLAGS"
  else
     DBUS_X_LIBS=
---- dbus-1.1.2/dbus/Makefile.am.orig	2007-06-15 22:03:54.000000000 +0200
-+++ dbus-1.1.2/dbus/Makefile.am	2007-10-31 18:50:16.870118503 +0100
-@@ -176,6 +176,7 @@
- libdbus_1_la_LDFLAGS= -export-symbols-regex "^[^_].*" -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -no-undefined @R_DYNAMIC_LDFLAG@
- 
- libdbus_convenience_la_LDFLAGS=@R_DYNAMIC_LDFLAG@
-+libdbus_convenience_la_LIBADD=$(CAP_LIBS)
- 
- ## note that TESTS has special meaning (stuff to use in make check)
- ## so if adding tests not to be run in make check, don't add them to 
