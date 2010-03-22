@@ -1,13 +1,13 @@
 #
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
-#
+
 %define		expat_version	1:1.95.5
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.2.22
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -45,7 +45,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
-Requires:	rc-scripts >= 0.4.1.23
+Requires:	rc-scripts >= 0.4.1.26
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-X11

@@ -91,7 +91,7 @@ case "$1" in
 	fi
 	;;
   status)
-	status messagebus dbus-daemon
+	status --pidfile /var/run/dbus.pid messagebus dbus-daemon
 	RETVAL=$?
 	;;
   *)
