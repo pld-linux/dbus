@@ -6,12 +6,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.2.22
-Release:	2
+Version:	1.2.24
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	54c5f3c79a1f852d2256aca07163813c
+# Source0-md5:	565346cecd9cfecf1463540c6086cc2c
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -126,6 +126,7 @@ Statyczna biblioteka D-BUS.
 %{__automake}
 %configure \
 	%{?debug:--enable-verbose-mode} \
+	--disable-silent-rules \
 	--disable-asserts \
 	--disable-tests \
 	--enable-abstract-sockets=auto \
