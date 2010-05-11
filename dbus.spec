@@ -7,7 +7,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.2.24
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -16,6 +16,7 @@ Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
 Source4:	%{name}-xinitrc.sh
+Source5:	messagebus.upstart
 Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
@@ -30,7 +31,7 @@ BuildRequires:	libcap-ng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.561
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
 BuildRequires:	xorg-lib-libX11-devel
@@ -64,6 +65,19 @@ per-user-login-session messaging facility.
 D-BUS to system przesyłania komunikatów pomiędzy aplikacjami. Jest
 używany zarówno jako ogólnosystemowa usługa magistrali komunikatów jak
 i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
+
+%package upstart
+Summary:	Upstart job description for system message bus
+Summary(pl.UTF-8):	Opis zadania Upstart dla magistrali systemowej DBus
+Group:		Daemons
+Requires:	%{name} = %{version}-%{release}
+Requires:	upstart >= 0.6
+
+%description upstart
+Upstart job description for system message bus.
+
+%description upstart -l pl.UTF-8
+Opis zadania Upstart dla magistrali systemowej DBus.
 
 %package dirs
 Summary:	D-BUS directories
@@ -139,7 +153,7 @@ Statyczna biblioteka D-BUS.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
+install -d $RPM_BUILD_ROOT/etc/{init,profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
 	$RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces} \
 	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus \
 	$RPM_BUILD_ROOT/%{_lib}
@@ -151,6 +165,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
 
 # upstart (/sbin/init) requires libdbus so it must be in /lib(64)
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
@@ -179,6 +194,12 @@ if [ "$1" = "0" ]; then
 	%userremove messagebus
 	%groupremove messagebus
 fi
+
+%post upstart
+%upstart_post messagebus
+
+%postun upstart
+%upstart_postun messagebus
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
@@ -225,6 +246,10 @@ fi
 %{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-send.1*
+
+%files upstart
+%defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) /etc/init/messagebus.conf
 
 %files dirs
 %defattr(644,root,root,755)

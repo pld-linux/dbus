@@ -32,6 +32,7 @@ start() {
 		return
 	fi
 
+	emit starting messagebus
 	msg_starting "D-BUS Message bus"
 	# if capability is modular, load it
 	if modinfo capability >/dev/null 2>&1; then
@@ -40,7 +41,10 @@ start() {
 	dbus-uuidgen --ensure
 	daemon --pidfile dbus.pid /usr/bin/dbus-daemon --system
 	RETVAL=$?
-	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/messagebus
+	if [ $RETVAL -eq 0 ] ; then
+		touch /var/lock/subsys/messagebus
+		emit --no-wait started messagebus
+	fi
 }
 
 stop() {
@@ -50,9 +54,11 @@ stop() {
 	fi
 
 	# Stop daemons.
+	emit stopping messagebus
 	msg_stopping "D-BUS Message bus"
 	killproc --pidfile dbus.pid dbus-daemon
 	rm -f /var/lock/subsys/messagebus /var/run/dbus.pid
+	emit --no-wait stopped messagebus
 }
 
 condrestart() {
@@ -77,6 +83,8 @@ reload() {
 	killproc --pidfile dbus.pid dbus-daemon -HUP
 	RETVAL=$?
 }
+
+upstart_controlled
 
 RETVAL=0
 # See how we were called.
