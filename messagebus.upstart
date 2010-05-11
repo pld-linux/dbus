@@ -10,7 +10,13 @@ pre-start script
 	dbus-uuidgen --ensure
 end script
 
+respawn
 exec /usr/bin/dbus-daemon --system --fork
+
+post-stop script
+	rm -f /var/run/dbus.pid || :
+end script
+
 expect fork
 
 # vi: ft=upstart
