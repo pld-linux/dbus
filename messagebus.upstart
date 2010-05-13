@@ -1,6 +1,6 @@
 description "The D-BUS systemwide message bus"
 
-start on started SERVICE=syslog-ng
+start on pld.sysinit-done
 stop on pld.shutdown-started
 
 pre-start script
