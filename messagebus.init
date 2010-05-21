@@ -32,7 +32,7 @@ start() {
 		return
 	fi
 
-	emit starting messagebus
+	emit starting JOB=messagebus
 	msg_starting "D-BUS Message bus"
 	# if capability is modular, load it
 	if modinfo capability >/dev/null 2>&1; then
@@ -43,7 +43,7 @@ start() {
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ] ; then
 		touch /var/lock/subsys/messagebus
-		emit --no-wait started messagebus
+		emit --no-wait started JOB=messagebus
 	fi
 }
 
@@ -54,11 +54,11 @@ stop() {
 	fi
 
 	# Stop daemons.
-	emit stopping messagebus
+	emit stopping JOB=messagebus
 	msg_stopping "D-BUS Message bus"
 	killproc --pidfile dbus.pid dbus-daemon
 	rm -f /var/lock/subsys/messagebus /var/run/dbus.pid
-	emit --no-wait stopped messagebus
+	emit --no-wait stopped JOB=messagebus
 }
 
 condrestart() {
