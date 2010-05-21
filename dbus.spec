@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
+%bcond_without	X11		# build without X11 support
 
 %define		expat_version	1:1.95.5
 Summary:	D-BUS message bus
@@ -34,7 +35,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.561
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
-BuildRequires:	xorg-lib-libX11-devel
+%{?with_X11:BuildRequires:	xorg-lib-libX11-devel}
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -148,7 +149,8 @@ Statyczna biblioteka D-BUS.
 	--with-console-auth-dir=%{_localstatedir}/run/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
-	--with-xml=expat
+	--with-xml=expat \
+	%{!?with_X11:--without-x}
 %{__make}
 
 %install
