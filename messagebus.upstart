@@ -13,6 +13,11 @@ end script
 respawn
 exec /usr/bin/dbus-daemon --system --fork
 
+post-start script
+	# ask Upstart to reconnect to the bus
+	kill -USR1 1
+end script
+
 post-stop script
 	rm -f /var/run/dbus.pid || :
 end script
