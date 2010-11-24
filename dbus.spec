@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.4.0
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -249,9 +249,11 @@ fi
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-send.1*
 
+%if "%{pld_release}" != "ti"
 %files upstart
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/init/messagebus.conf
+%endif
 
 %files dirs
 %defattr(644,root,root,755)
