@@ -197,11 +197,13 @@ if [ "$1" = "0" ]; then
 	%groupremove messagebus
 fi
 
+%if 0
 %post upstart
 %upstart_post messagebus
 
 %postun upstart
 %upstart_postun messagebus
+%endif
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
