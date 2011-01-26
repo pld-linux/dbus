@@ -16,10 +16,14 @@ exec /usr/bin/dbus-daemon --system --fork
 post-start script
 	# ask Upstart to reconnect to the bus
 	kill -USR1 1
+	# lockfile for hald
+	touch /var/lock/subsys/messagebus
 end script
 
 post-stop script
 	rm -f /var/run/dbus.pid || :
+	# lockfile for hald
+	rm -f /var/lock/subsys/messagebus || :
 end script
 
 expect fork
