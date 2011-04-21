@@ -1,21 +1,20 @@
-diff -urN dbus-1.2.20/configure.in dbus-1.2.20.new/configure.in
---- dbus-1.2.20/configure.in	2010-02-03 18:09:08.000000000 +0100
-+++ dbus-1.2.20.new/configure.in	2010-02-07 14:58:43.761263087 +0100
-@@ -387,7 +387,7 @@
+--- dbus-1.4.8/configure.ac.orig	2011-04-08 15:29:57.000000000 +0200
++++ dbus-1.4.8/configure.ac	2011-04-21 19:19:14.669374081 +0200
+@@ -457,7 +457,7 @@
  
  #### Various functions
  AC_SEARCH_LIBS(socket,[socket network])
 -AC_CHECK_FUNC(gethostbyname,,[AC_CHECK_LIB(nsl,gethostbyname)])
 +AC_CHECK_FUNC(gethostbyname,,[AC_SEARCH_LIBS(gethostbyname,nsl)])
  
- AC_CHECK_FUNCS(vsnprintf vasprintf nanosleep usleep setenv clearenv unsetenv socketpair getgrouplist fpathconf setrlimit poll)
+ AC_CHECK_FUNCS(vsnprintf vasprintf nanosleep usleep setenv clearenv unsetenv socketpair getgrouplist fpathconf setrlimit poll setlocale localeconv strtoll strtoull)
  
-@@ -917,7 +917,7 @@
- 
- if test x$enable_x11 = xyes ; then
-    AC_DEFINE(DBUS_BUILD_X11,1,[Build X11-dependent code])
--   DBUS_X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
-+   DBUS_X_LIBS="$X_LIBS -lX11 $X_EXTRA_LIBS"
-    DBUS_X_CFLAGS="$X_CFLAGS"
- else
-    DBUS_X_LIBS=
+@@ -1086,7 +1086,7 @@
+         have_x11=no
+     else
+         have_x11=yes
+-        DBUS_X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
++        DBUS_X_LIBS="$X_LIBS -lX11 $X_EXTRA_LIBS"
+         DBUS_X_CFLAGS="$X_CFLAGS"
+     fi
+ fi

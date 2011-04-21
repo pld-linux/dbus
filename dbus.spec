@@ -7,12 +7,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.4.6
+Version:	1.4.8
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	99b165f727dd8a5c4b7e2c20a8bf5db6
+# Source0-md5:	e30253e15f0f4e6c5ee9e6f0eba5046c
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -24,13 +24,13 @@ Patch2:		%{name}-no_fatal_checks.patch
 Patch3:		%{name}-allow-introspection.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	audit-libs-devel
-BuildRequires:	autoconf >= 2.52
-BuildRequires:	automake >= 1:1.9
+BuildRequires:	autoconf >= 2.63
+BuildRequires:	automake >= 1:1.10
 BuildRequires:	doxygen
 BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	libcap-ng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:2.0
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.561
 BuildRequires:	sed >= 4.0
@@ -173,6 +173,8 @@ install %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
 ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/libdbus-1.so.*.*.*) \
 	$RPM_BUILD_ROOT%{_libdir}/libdbus-1.so
+
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/dbus/api
 
 %clean
 rm -rf $RPM_BUILD_ROOT
