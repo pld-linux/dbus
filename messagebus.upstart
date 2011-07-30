@@ -17,7 +17,7 @@ post-start script
 	# ask Upstart to reconnect to the bus
 	kill -USR1 1
 	# lockfile for hald
-	touch /var/lock/subsys/messagebus
+	touch /var/lock/subsys/messagebus || :
 end script
 
 post-stop script
