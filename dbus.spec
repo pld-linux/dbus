@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.4.10
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -163,11 +163,11 @@ install -d $RPM_BUILD_ROOT/etc/{init,profile.d,rc.d/init.d,sysconfig,X11/xinit/x
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
+install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
+install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
+cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
 
 # upstart (/sbin/init) requires libdbus so it must be in /lib(64)
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}

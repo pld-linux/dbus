@@ -12,6 +12,8 @@
 # Source function library
 . /etc/rc.d/init.d/functions
 
+upstart_controlled
+
 # Get network config
 . /etc/sysconfig/network
 
@@ -83,8 +85,6 @@ reload() {
 	killproc --pidfile dbus.pid dbus-daemon -HUP
 	RETVAL=$?
 }
-
-upstart_controlled
 
 RETVAL=0
 # See how we were called.
