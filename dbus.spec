@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.4.14
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -51,7 +51,6 @@ Requires:	expat >= %{expat_version}
 Requires:	rc-scripts >= 0.4.1.26
 Provides:	group(messagebus)
 Provides:	user(messagebus)
-Obsoletes:	dbus-X11
 Obsoletes:	dbus-glib-tools
 Conflicts:	pam < 0.99.7.1
 # not available for dbus 0.9x yet(?)
@@ -126,6 +125,16 @@ Static D-BUS library.
 
 %description static -l pl.UTF-8
 Statyczna biblioteka D-BUS.
+
+%package x11
+Summary:	X11-requiring add-ons for D-BUS
+Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	dbus-X11
+
+%description x11
+D-BUS contains some tools that require Xlib to be installed, those are
+in this separate package so server systems need not install X.
 
 %prep
 %setup -q
@@ -230,8 +239,6 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-cleanup-sockets
 %attr(755,root,root) %{_bindir}/dbus-daemon
 %attr(755,root,root) %{_bindir}/dbus-uuidgen
-# R: libX11
-%attr(755,root,root) %{_bindir}/dbus-launch
 %attr(755,root,root) %{_bindir}/dbus-monitor
 %attr(755,root,root) %{_bindir}/dbus-send
 %attr(4754,root,messagebus) %{_libdir}/dbus-daemon-launch-helper
@@ -239,17 +246,15 @@ fi
 %dir %{_datadir}/dbus-1/interfaces
 %dir %{_datadir}/dbus-1/services
 %dir %{_datadir}/dbus-1/system-services
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/dbus-1/*.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/*.conf
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
-%attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
 %dir %{_localstatedir}/run/dbus
 %dir /var/lib/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
 %{_mandir}/man1/dbus-uuidgen.1*
-%{_mandir}/man1/dbus-launch.1*
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-send.1*
 
@@ -261,9 +266,9 @@ fi
 
 %files dirs
 %defattr(644,root,root,755)
-%dir %{_sysconfdir}/dbus-1
-%dir %{_sysconfdir}/dbus-1/system.d
-%dir %{_sysconfdir}/dbus-1/session.d
+%dir /etc/dbus-1
+%dir /etc/dbus-1/system.d
+%dir /etc/dbus-1/session.d
 
 %files libs
 %defattr(644,root,root,755)
@@ -284,3 +289,9 @@ fi
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libdbus-1.a
+
+%files x11
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dbus-launch
+%{_mandir}/man1/dbus-launch.1*
+%attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
