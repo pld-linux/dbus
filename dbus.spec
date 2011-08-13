@@ -127,14 +127,19 @@ Static D-BUS library.
 Statyczna biblioteka D-BUS.
 
 %package x11
-Summary:	X11-requiring add-ons for D-BUS
+Summary:	X11 session support for D-BUS
+Summary(pl.UTF-8):	Obsługa sesji X11 dla D-BUS
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	dbus-X11
 
 %description x11
-D-BUS contains some tools that require Xlib to be installed, those are
-in this separate package so server systems need not install X.
+This package contains D-BUS utilities to start D-BUS service together
+with user X11 session.
+
+%description x11 -l pl.UTF-8
+Ten pakiet zawiera narzędzia D-BUS pozwalające na uruchomienie usługi
+D-BUS wraz z sesją X11 użytkownika.
 
 %prep
 %setup -q
@@ -151,8 +156,8 @@ in this separate package so server systems need not install X.
 %{__automake}
 %configure \
 	%{?debug:--enable-verbose-mode} \
-	--disable-silent-rules \
 	--disable-asserts \
+	--disable-silent-rules \
 	--disable-tests \
 	--enable-abstract-sockets=auto \
 	%{?with_selinux:--enable-selinux} \
@@ -283,8 +288,8 @@ fi
 %{_libdir}/libdbus-1.la
 %dir %{_libdir}/dbus-1.0
 %{_libdir}/dbus-1.0/include
-%{_pkgconfigdir}/dbus-1.pc
 %{_includedir}/dbus-1.0
+%{_pkgconfigdir}/dbus-1.pc
 
 %files static
 %defattr(644,root,root,755)
@@ -294,4 +299,4 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/dbus-launch
 %{_mandir}/man1/dbus-launch.1*
-%attr(755,root,root) /etc/X11/xinit/xinitrc.d/*.sh
+%attr(755,root,root) /etc/X11/xinit/xinitrc.d/dbus-xinitrc.sh
