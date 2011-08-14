@@ -11,6 +11,7 @@ pre-start script
 end script
 
 respawn
+expect fork
 exec /usr/bin/dbus-daemon --system --fork
 
 post-start script
@@ -25,7 +26,3 @@ post-stop script
 	# lockfile for hald
 	rm -f /var/lock/subsys/messagebus || :
 end script
-
-expect fork
-
-# vi: ft=upstart
