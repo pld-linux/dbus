@@ -48,7 +48,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
-Requires:	rc-scripts >= 0.4.1.26
+Requires:	rc-scripts >= 0.4.3.0
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-glib-tools
