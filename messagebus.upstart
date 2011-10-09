@@ -1,28 +1,28 @@
-description "The D-BUS systemwide message bus"
+# dbus - D-Bus system message bus
+#
+# The D-Bus system message bus allows system daemons and user applications
+# to communicate.
+
+description "D-Bus system message bus"
 
 start on pld.sysinit-done
 stop on pld.shutdown-started
+
+expect fork
+respawn
 
 pre-start script
 	if modinfo capability >/dev/null 2>&1; then
 		modprobe -s capability
 	fi
-	dbus-uuidgen --ensure
+	exec dbus-uuidgen --ensure
 end script
 
-respawn
-expect fork
 exec /usr/bin/dbus-daemon --system --fork
 
-post-start script
-	# ask Upstart to reconnect to the bus
-	kill -USR1 1
-	# lockfile for hald
-	touch /var/lock/subsys/messagebus || :
-end script
+# ask Upstart to reconnect to the bus
+post-start exec kill -USR1 1
 
 post-stop script
 	rm -f /var/run/dbus.pid || :
-	# lockfile for hald
-	rm -f /var/lock/subsys/messagebus || :
 end script
