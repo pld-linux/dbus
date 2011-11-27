@@ -200,7 +200,7 @@ ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/libdbus-1.so.*.*.*) \
 
 ln -s dbus.service $RPM_BUILD_ROOT/lib/systemd/system/messagebus.service
 
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/dbus/api
+%{__rm} -rf $RPM_BUILD_ROOT%{_docdir}/dbus/api
 
 %clean
 rm -rf $RPM_BUILD_ROOT
