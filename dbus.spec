@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.4.16
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -66,6 +66,14 @@ per-user-login-session messaging facility.
 D-BUS to system przesyłania komunikatów pomiędzy aplikacjami. Jest
 używany zarówno jako ogólnosystemowa usługa magistrali komunikatów jak
 i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
+
+%package systemd
+Summary:	systemd units for system message bus
+Group:		Daemons
+Requires:	%{name} = %{version}-%{release}
+
+%description systemd
+systemd units for system message bus.
 
 %package upstart
 Summary:	Upstart job description for system message bus
@@ -165,6 +173,7 @@ D-BUS wraz z sesją X11 użytkownika.
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
 	--with-xml=expat \
+	--with-systemdsystemunitdir=/lib/systemd/system \
 	%{!?with_X11:--without-x}
 %{__make}
 
@@ -188,6 +197,8 @@ cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
 ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/libdbus-1.so.*.*.*) \
 	$RPM_BUILD_ROOT%{_libdir}/libdbus-1.so
+
+ln -s dbus.service $RPM_BUILD_ROOT/lib/systemd/system/messagebus.service
 
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/dbus/api
 
@@ -262,6 +273,15 @@ fi
 %{_mandir}/man1/dbus-uuidgen.1*
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-send.1*
+
+%files systemd
+%defattr(644,root,root,755)
+/lib/systemd/system/dbus.service
+/lib/systemd/system/dbus.socket
+/lib/systemd/system/dbus.target.wants/dbus.socket
+/lib/systemd/system/messagebus.service
+/lib/systemd/system/multi-user.target.wants/dbus.service
+/lib/systemd/system/sockets.target.wants/dbus.socket
 
 %if "%{pld_release}" != "ti"
 %files upstart
