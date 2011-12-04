@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.4.16
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -33,7 +33,7 @@ BuildRequires:	libcap-ng-devel
 BuildRequires:	libtool >= 2:2.0
 BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.561
+BuildRequires:	rpmbuild(macros) >= 1.626
 BuildRequires:	sed >= 4.0
 BuildRequires:	xmlto
 %{?with_X11:BuildRequires:	xorg-lib-libX11-devel}
@@ -71,6 +71,7 @@ i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
 Summary:	systemd units for system message bus
 Group:		Daemons
 Requires:	%{name} = %{version}-%{release}
+Requires:	systemd-units >= 37-0.10
 
 %description systemd
 systemd units for system message bus.
@@ -173,7 +174,7 @@ D-BUS wraz z sesją X11 użytkownika.
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
 	--with-xml=expat \
-	--with-systemdsystemunitdir=/lib/systemd/system \
+	--with-systemdsystemunitdir=%{systemdunitdir} \
 	%{!?with_X11:--without-x}
 %{__make}
 
@@ -198,7 +199,7 @@ mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
 ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/libdbus-1.so.*.*.*) \
 	$RPM_BUILD_ROOT%{_libdir}/libdbus-1.so
 
-ln -s dbus.service $RPM_BUILD_ROOT/lib/systemd/system/messagebus.service
+ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
 
 %{__rm} -rf $RPM_BUILD_ROOT%{_docdir}/dbus/api
 
@@ -232,6 +233,12 @@ fi
 %postun upstart
 %upstart_postun messagebus
 %endif
+
+%post systemd
+%systemd_reload
+
+%postun systemd
+%systemd_reload
 
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
@@ -276,12 +283,12 @@ fi
 
 %files systemd
 %defattr(644,root,root,755)
-/lib/systemd/system/dbus.service
-/lib/systemd/system/dbus.socket
-/lib/systemd/system/dbus.target.wants/dbus.socket
-/lib/systemd/system/messagebus.service
-/lib/systemd/system/multi-user.target.wants/dbus.service
-/lib/systemd/system/sockets.target.wants/dbus.socket
+%{systemdunitdir}/dbus.service
+%{systemdunitdir}/dbus.socket
+%{systemdunitdir}/dbus.target.wants/dbus.socket
+%{systemdunitdir}/messagebus.service
+%{systemdunitdir}/multi-user.target.wants/dbus.service
+%{systemdunitdir}/sockets.target.wants/dbus.socket
 
 %if "%{pld_release}" != "ti"
 %files upstart
