@@ -18,6 +18,7 @@ Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
 Source4:	%{name}-xinitrc.sh
 Source5:	messagebus.upstart
+Source6:	%{name}.tmpfiles
 Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
@@ -183,7 +184,8 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{init,profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
 	$RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces} \
 	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus \
-	$RPM_BUILD_ROOT/%{_lib}
+	$RPM_BUILD_ROOT/%{_lib} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -193,6 +195,8 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
+
+install %{SOURCE6} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 # upstart (/sbin/init) requires libdbus so it must be in /lib(64)
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
@@ -273,6 +277,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
+/usr/lib/tmpfiles.d/%{name}.conf
 %dir %{_localstatedir}/run/dbus
 %dir /var/lib/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
