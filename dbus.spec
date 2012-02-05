@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.4.16
-Release:	4
+Release:	5
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -50,6 +50,7 @@ Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
 Requires:	rc-scripts >= 0.4.3.0
+Requires:	systemd-units >= 37-0.10
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-glib-tools
@@ -67,15 +68,6 @@ per-user-login-session messaging facility.
 D-BUS to system przesyłania komunikatów pomiędzy aplikacjami. Jest
 używany zarówno jako ogólnosystemowa usługa magistrali komunikatów jak
 i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
-
-%package systemd
-Summary:	systemd units for system message bus
-Group:		Daemons
-Requires:	%{name} = %{version}-%{release}
-Requires:	systemd-units >= 37-0.10
-
-%description systemd
-systemd units for system message bus.
 
 %package upstart
 Summary:	Upstart job description for system message bus
@@ -217,6 +209,8 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add messagebus
 %service messagebus restart "D-Bus daemon"
+export NORESTART="yes"
+%systemd_post messagebus.service
 
 %preun
 if [ "$1" = "0" ];then
@@ -229,6 +223,17 @@ if [ "$1" = "0" ]; then
 	%userremove messagebus
 	%groupremove messagebus
 fi
+%systemd_reload
+
+%triggerpostun -- dbus < 1.4.16-5
+%systemd_trigger messagebus.service
+if [ -f /etc/sysconfig/dbus ]; then
+	mv -f /etc/sysconfig/messagebus{,.rpmnew}
+	mv -f /etc/sysconfig/{dbus,messagebus}
+elif [ -f /etc/sysconfig/dbus.rpmsave ]; then
+	mv -f /etc/sysconfig/messagebus{,.rpmnew}
+	mv -f /etc/sysconfig/{dbus.rpmsave,messagebus}
+fi
 
 %if 0
 %post upstart
@@ -238,28 +243,8 @@ fi
 %upstart_postun messagebus
 %endif
 
-%post systemd
-%systemd_reload
-
-%postun systemd
-%systemd_reload
-
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
-
-%triggerpostun -- %{name} < 0.92
-%banner %{name} << EOF
-WARNING!!!
-configuration file /etc/sysconfig/dbus has been moved to /etc/sysconfig/messagebus!
-EOF
-
-if [ -f /etc/sysconfig/dbus ]; then
-	mv -f /etc/sysconfig/messagebus{,.rpmnew}
-	mv -f /etc/sysconfig/{dbus,messagebus}
-elif [ -f /etc/sysconfig/dbus.rpmsave ]; then
-	mv -f /etc/sysconfig/messagebus{,.rpmnew}
-	mv -f /etc/sysconfig/{dbus.rpmsave,messagebus}
-fi
 
 %files
 %defattr(644,root,root,755)
@@ -286,8 +271,6 @@ fi
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-send.1*
 
-%files systemd
-%defattr(644,root,root,755)
 %{systemdunitdir}/dbus.service
 %{systemdunitdir}/dbus.socket
 %{systemdunitdir}/dbus.target.wants/dbus.socket
