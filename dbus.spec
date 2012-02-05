@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.4.16
-Release:	5
+Release:	6
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -54,6 +54,7 @@ Requires:	systemd-units >= 37-0.10
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-glib-tools
+Obsoletes:	dbus-systemd
 Conflicts:	pam < 0.99.7.1
 # not available for dbus 0.9x yet(?)
 #Obsoletes:	dbus-gtk dbus-gcj dbus-gcj-devel dbus-gcj-static
