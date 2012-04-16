@@ -7,12 +7,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.4.18
+Version:	1.4.20
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	5944f93b194ce93d4c88142fc0e6b94b
+# Source0-md5:	79eca2f2c1894ac347acce128314428b
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -177,6 +177,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{init,profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
 	$RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces} \
 	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus \
+	$RPM_BUILD_ROOT%{_localstatedir}/lib/dbus \
 	$RPM_BUILD_ROOT/%{_lib} \
 	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
@@ -261,11 +262,11 @@ fi
 %dir %{_datadir}/dbus-1/system-services
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/*.conf
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
-%attr(754,root,root) /etc/rc.d/init.d/*
+%attr(754,root,root) /etc/rc.d/init.d/messagebus
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
 /usr/lib/tmpfiles.d/%{name}.conf
+%dir %{_localstatedir}/lib/dbus
 %dir %{_localstatedir}/run/dbus
-%dir /var/lib/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
 %{_mandir}/man1/dbus-daemon.1*
 %{_mandir}/man1/dbus-uuidgen.1*
