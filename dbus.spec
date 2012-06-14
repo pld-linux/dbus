@@ -7,12 +7,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.4.20
-Release:	2
+Version:	1.6.0
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	79eca2f2c1894ac347acce128314428b
+# Source0-md5:	16dcae2dd0c76e398381601ac9acdec4
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -36,6 +36,7 @@ BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.626
 BuildRequires:	sed >= 4.0
+BuildRequires:	systemd-devel >= 32
 BuildRequires:	xmlto
 %{?with_X11:BuildRequires:	xorg-lib-libX11-devel}
 Requires(post,postun):	/sbin/ldconfig
