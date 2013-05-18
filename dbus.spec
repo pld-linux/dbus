@@ -7,12 +7,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.6.8
-Release:	2
+Version:	1.6.10
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	3bf059c7dd5eda5f539a1b7cfe7a14a2
+# Source0-md5:	de4970c20629aeb958a12132415b3630
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -176,12 +176,12 @@ D-BUS wraz z sesją X11 użytkownika.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{init,profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/{init,profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
 	$RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces} \
 	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus \
 	$RPM_BUILD_ROOT%{_localstatedir}/lib/dbus \
 	$RPM_BUILD_ROOT/%{_lib} \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -192,7 +192,7 @@ cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
 
-install %{SOURCE6} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+install %{SOURCE6} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 # upstart (/sbin/init) requires libdbus so it must be in /lib(64)
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
@@ -266,7 +266,7 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/messagebus
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/%{name}.conf
 %dir %{_localstatedir}/lib/dbus
 %dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
