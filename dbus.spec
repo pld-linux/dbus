@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.6.12
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -212,7 +212,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add messagebus
-%service messagebus restart "D-Bus daemon"
+%service -n messagebus restart "D-Bus daemon"
 export NORESTART="yes"
 %systemd_post messagebus.service
 
