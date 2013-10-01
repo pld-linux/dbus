@@ -7,12 +7,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.6.12
-Release:	2
+Version:	1.6.14
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	a70edc50524f258eaf5c9a9994ed8748
+# Source0-md5:	1c22aebdf952e92908800f1ec2aeb0c4
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -48,7 +48,6 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(post,preun,postun):	systemd-units >= 38
-Requires:	%{name}-dirs = %{version}-%{release}
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
 Requires:	rc-scripts >= 0.4.3.0
@@ -85,21 +84,11 @@ Upstart job description for system message bus.
 %description upstart -l pl.UTF-8
 Opis zadania Upstart dla magistrali systemowej DBus.
 
-%package dirs
-Summary:	D-BUS directories
-Summary(pl.UTF-8):	Katalogi D-BUS
-Group:		Libraries
-
-%description dirs
-D-BUS directories.
-
-%description dirs -l pl.UTF-8
-Katalogi D-BUS.
-
 %package libs
 Summary:	D-BUS library
 Summary(pl.UTF-8):	Biblioteka D-BUS
 Group:		Libraries
+Obsoletes:	dbus-dirs
 
 %description libs
 D-BUS library.
@@ -258,8 +247,6 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-monitor
 %attr(755,root,root) %{_bindir}/dbus-send
 %attr(4754,root,messagebus) %{_libdir}/dbus-daemon-launch-helper
-%dir %{_datadir}/dbus-1
-%dir %{_datadir}/dbus-1/interfaces
 %dir %{_datadir}/dbus-1/services
 %dir %{_datadir}/dbus-1/system-services
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/*.conf
@@ -288,17 +275,18 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/init/messagebus.conf
 %endif
 
-%files dirs
-%defattr(644,root,root,755)
-%dir /etc/dbus-1
-%dir /etc/dbus-1/system.d
-%dir /etc/dbus-1/session.d
-
 %files libs
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
 %attr(755,root,root) /%{_lib}/libdbus-1.so.*.*.*
 %attr(755,root,root) %ghost /%{_lib}/libdbus-1.so.3
+%dir /etc/dbus-1
+%dir /etc/dbus-1/system.d
+%dir /etc/dbus-1/session.d
+%dir %{_datadir}/dbus-1
+# interfaces is basically devel thing, but keep dir here
+# in case something uses it at runtime
+%dir %{_datadir}/dbus-1/interfaces
 
 %files devel
 %defattr(644,root,root,755)
