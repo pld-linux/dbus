@@ -1,4 +1,3 @@
-# TODO: do something with docs (user and api/devel) installed in /usr/share/doc/dbus
 #
 # Conditional build:
 %bcond_without	selinux		# build without SELinux support
@@ -121,6 +120,19 @@ Static D-BUS library.
 %description static -l pl.UTF-8
 Statyczna biblioteka D-BUS.
 
+%package apidocs
+Summary:	D-BUS API documentation
+Summary(pl.UTF-8):	Dokumentacja API D-BUS
+Group:		Documentation
+# dbus.devhelp refers also to common docs packaged in -devel
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description apidocs
+D-BUS API documentation.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API D-BUS.
+
 %package x11
 Summary:	X11 session support for D-BUS
 Summary(pl.UTF-8):	Obsługa sesji X11 dla D-BUS
@@ -190,8 +202,6 @@ ln -sf /%{_lib}/$(basename $RPM_BUILD_ROOT/%{_lib}/libdbus-1.so.*.*.*) \
 	$RPM_BUILD_ROOT%{_libdir}/libdbus-1.so
 
 ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
-
-%{__rm} -rf $RPM_BUILD_ROOT%{_docdir}/dbus/api
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -291,17 +301,27 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/*.{html,txt}
 %attr(755,root,root) %{_libdir}/libdbus-1.so
 %{_libdir}/libdbus-1.la
 %dir %{_libdir}/dbus-1.0
 %{_libdir}/dbus-1.0/include
 %{_includedir}/dbus-1.0
 %{_pkgconfigdir}/dbus-1.pc
+%dir %{_docdir}/dbus
+%{_docdir}/dbus/*.html
+%{_docdir}/dbus/*.png
+%{_docdir}/dbus/*.svg
+%{_docdir}/dbus/*.txt
+
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libdbus-1.a
+
+%files apidocs
+%defattr(644,root,root,755)
+%{_docdir}/dbus/api
+%{_docdir}/dbus/dbus.devhelp
 
 %files x11
 %defattr(644,root,root,755)
