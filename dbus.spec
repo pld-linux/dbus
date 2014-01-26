@@ -7,12 +7,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.6.18
+Version:	1.8.0
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	b02e9c95027a416987b81f9893831061
+# Source0-md5:	059fbe84e39fc99c67a14f15b1f39dff
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -171,7 +171,6 @@ D-BUS wraz z sesją X11 użytkownika.
 	--with-console-auth-dir=%{_localstatedir}/run/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
-	--with-xml=expat \
 	--with-systemdsystemunitdir=%{systemdunitdir} \
 	%{!?with_X11:--without-x}
 %{__make}
@@ -256,6 +255,7 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-daemon
 %attr(755,root,root) %{_bindir}/dbus-uuidgen
 %attr(755,root,root) %{_bindir}/dbus-monitor
+%attr(755,root,root) %{_bindir}/dbus-run-session
 %attr(755,root,root) %{_bindir}/dbus-send
 %attr(4754,root,messagebus) %{_libdir}/dbus-daemon-launch-helper
 %dir %{_datadir}/dbus-1/services
@@ -271,6 +271,7 @@ fi
 %{_mandir}/man1/dbus-daemon.1*
 %{_mandir}/man1/dbus-uuidgen.1*
 %{_mandir}/man1/dbus-monitor.1*
+%{_mandir}/man1/dbus-run-session.1*
 %{_mandir}/man1/dbus-send.1*
 
 %{systemdunitdir}/dbus.service
