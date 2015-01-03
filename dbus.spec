@@ -27,6 +27,7 @@ URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.10
+BuildRequires:	docbook-dtd44-xml
 BuildRequires:	doxygen
 BuildRequires:	expat-devel >= %{expat_version}
 BuildRequires:	libcap-ng-devel
