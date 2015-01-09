@@ -7,12 +7,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.8.12
+Version:	1.8.14
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	0ca23fc84c09cb3d29b9c27811ff4475
+# Source0-md5:	dfb810eda8780cf9debf7169b3ca5fe1
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -194,7 +194,7 @@ cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
 
-install %{SOURCE6} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cp -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 # upstart (/sbin/init) requires libdbus so it must be in /lib(64)
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
