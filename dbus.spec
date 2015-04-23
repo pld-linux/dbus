@@ -8,7 +8,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.8.16
-Release:	2
+Release:	3
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -17,8 +17,7 @@ Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
 Source4:	%{name}-xinitrc.sh
-Source5:	messagebus.upstart
-Source6:	%{name}.tmpfiles
+Source5:	%{name}.tmpfiles
 Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
@@ -71,19 +70,6 @@ per-user-login-session messaging facility.
 D-BUS to system przesyłania komunikatów pomiędzy aplikacjami. Jest
 używany zarówno jako ogólnosystemowa usługa magistrali komunikatów jak
 i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
-
-%package upstart
-Summary:	Upstart job description for system message bus
-Summary(pl.UTF-8):	Opis zadania Upstart dla magistrali systemowej DBus
-Group:		Daemons
-Requires:	%{name} = %{version}-%{release}
-Requires:	upstart >= 0.6
-
-%description upstart
-Upstart job description for system message bus.
-
-%description upstart -l pl.UTF-8
-Opis zadania Upstart dla magistrali systemowej DBus.
 
 %package libs
 Summary:	D-BUS library
@@ -178,7 +164,7 @@ D-BUS wraz z sesją X11 użytkownika.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/{init,profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/{profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
 	$RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces} \
 	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus \
 	$RPM_BUILD_ROOT%{_localstatedir}/lib/dbus \
@@ -192,9 +178,8 @@ install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
-cp -p %{SOURCE5} $RPM_BUILD_ROOT/etc/init/messagebus.conf
 
-cp -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cp -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 # upstart (/sbin/init) requires libdbus so it must be in /lib(64)
 mv -f $RPM_BUILD_ROOT%{_libdir}/libdbus-1.so.* $RPM_BUILD_ROOT/%{_lib}
@@ -239,14 +224,6 @@ elif [ -f /etc/sysconfig/dbus.rpmsave ]; then
 	mv -f /etc/sysconfig/{dbus.rpmsave,messagebus}
 fi
 
-%if 0
-%post upstart
-%upstart_post messagebus
-
-%postun upstart
-%upstart_postun messagebus
-%endif
-
 %post	libs -p /sbin/ldconfig
 %postun	libs -p /sbin/ldconfig
 
@@ -281,12 +258,6 @@ fi
 %{systemdunitdir}/messagebus.service
 %{systemdunitdir}/multi-user.target.wants/dbus.service
 %{systemdunitdir}/sockets.target.wants/dbus.socket
-
-%if "%{pld_release}" != "ti"
-%files upstart
-%defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) /etc/init/messagebus.conf
-%endif
 
 %files libs
 %defattr(644,root,root,755)
