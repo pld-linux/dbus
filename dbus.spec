@@ -113,6 +113,9 @@ Summary(pl.UTF-8):	Dokumentacja API D-BUS
 Group:		Documentation
 # dbus.devhelp refers also to common docs packaged in -devel
 Requires:	%{name}-devel = %{version}-%{release}
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 D-BUS API documentation.
