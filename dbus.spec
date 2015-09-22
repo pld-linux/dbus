@@ -1,18 +1,23 @@
+# TODO:
+# - enable ducktype-docs when it works
+# - move /etc/dbus-1 from -libs to base after external packages transition to /usr/share/dbus-1
 #
 # Conditional build:
-%bcond_without	selinux		# build without SELinux support
-%bcond_without	X11		# build without X11 support
+%bcond_without	apparmor	# AppArmor support
+%bcond_without	selinux		# SELinux support
+%bcond_without	systemd		# systemd at_console support
+%bcond_without	X11		# X11 support
 
 %define		expat_version	1:1.95.5
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.8.20
-Release:	2
+Version:	1.10.0
+Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	b49890bbabedab3a1c3f4f73c7ff8b2b
+# Source0-md5:	5af6297348107a906c8449817a728b3b
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -25,20 +30,23 @@ Patch3:		%{name}-allow-introspection.patch
 URL:		http://www.freedesktop.org/Software/dbus
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.63
-BuildRequires:	automake >= 1:1.10
+BuildRequires:	automake >= 1:1.13
 BuildRequires:	docbook-dtd44-xml
 BuildRequires:	doxygen
 BuildRequires:	expat-devel >= %{expat_version}
+%{?with_apparmor:BuildRequires:	libapparmor-devel >= 1:2.8.95}
 BuildRequires:	libcap-ng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel}
 BuildRequires:	libtool >= 2:2.0
 BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
+#BuildRequires:	python3-ducktype
 BuildRequires:	rpmbuild(macros) >= 1.626
 BuildRequires:	sed >= 4.0
-BuildRequires:	systemd-devel >= 32
+%{?with_systemd:BuildRequires:	systemd-devel >= 32}
 BuildRequires:	xmlto
 %{?with_X11:BuildRequires:	xorg-lib-libX11-devel}
+BuildRequires:	yelp-tools
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -152,12 +160,14 @@ D-BUS wraz z sesją X11 użytkownika.
 %{__autoheader}
 %{__automake}
 %configure \
-	%{?debug:--enable-verbose-mode} \
+	%{!?with_apparmor:--disable-apparmor} \
 	--disable-asserts \
+	--disable-ducktype-docs \
+	%{?debug:--enable-verbose-mode} \
+	%{!?with_selinux:--disable-selinux} \
 	--disable-silent-rules \
+	%{!?with_systemd:--disable-systemd} \
 	--disable-tests \
-	--enable-abstract-sockets=auto \
-	%{?with_selinux:--enable-selinux} \
 	--with-console-auth-dir=%{_localstatedir}/run/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
@@ -185,6 +195,9 @@ install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
+
+# for local configuration in dbus 1.10+
+install -d $RPM_BUILD_ROOT/etc/dbus-1/{session.d,system.d}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -233,10 +246,15 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-monitor
 %attr(755,root,root) %{_bindir}/dbus-run-session
 %attr(755,root,root) %{_bindir}/dbus-send
+%attr(755,root,root) %{_bindir}/dbus-test-tool
+%attr(755,root,root) %{_bindir}/dbus-update-activation-environment
 %attr(4754,root,messagebus) %{_libdir}/dbus-daemon-launch-helper
 %dir %{_datadir}/dbus-1/services
 %dir %{_datadir}/dbus-1/system-services
-%config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/*.conf
+%{_datadir}/dbus-1/session.conf
+%{_datadir}/dbus-1/system.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/session.conf
+%config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.conf
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/messagebus
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
@@ -249,6 +267,8 @@ fi
 %{_mandir}/man1/dbus-monitor.1*
 %{_mandir}/man1/dbus-run-session.1*
 %{_mandir}/man1/dbus-send.1*
+%{_mandir}/man1/dbus-test-tool.1*
+%{_mandir}/man1/dbus-update-activation-environment.1*
 
 %{systemdunitdir}/dbus.service
 %{systemdunitdir}/dbus.socket
@@ -262,13 +282,17 @@ fi
 %doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
 %attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libdbus-1.so.3
-%dir /etc/dbus-1
-%dir /etc/dbus-1/system.d
-%dir /etc/dbus-1/session.d
 %dir %{_datadir}/dbus-1
+%dir %{_datadir}/dbus-1/session.d
+%dir %{_datadir}/dbus-1/system.d
 # interfaces is basically devel thing, but keep dir here
 # in case something uses it at runtime
 %dir %{_datadir}/dbus-1/interfaces
+# TODO: now it's only for local configuration - move to base dbus package
+#       after all packages place constant configuration in %{_datadir}/dbus-1
+%dir /etc/dbus-1
+%dir /etc/dbus-1/session.d
+%dir /etc/dbus-1/system.d
 
 %files devel
 %defattr(644,root,root,755)
@@ -283,7 +307,6 @@ fi
 %{_docdir}/dbus/*.png
 %{_docdir}/dbus/*.svg
 %{_docdir}/dbus/*.txt
-
 
 %files static
 %defattr(644,root,root,755)
