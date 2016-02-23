@@ -16,7 +16,7 @@ Version:	1.10.6
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
-Source0:	http://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
+Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
 # Source0-md5:	26d0cf3a1c9782cb0e342101f0450440
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
@@ -27,7 +27,7 @@ Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
 Patch3:		%{name}-allow-introspection.patch
-URL:		http://www.freedesktop.org/Software/dbus
+URL:		https://www.freedesktop.org/Software/dbus
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.13
@@ -83,6 +83,7 @@ i możliwość przesyłania komunikatów w ramach jednej sesji użytkownika.
 Summary:	D-BUS library
 Summary(pl.UTF-8):	Biblioteka D-BUS
 Group:		Libraries
+%{?with_systemd:Requires:	systemd-libs >= 32}
 Obsoletes:	dbus-dirs
 
 %description libs
@@ -96,6 +97,7 @@ Summary:	Header files for D-BUS library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki D-BUS
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
+%{?with_systemd:Requires:	systemd-devel >= 32}
 
 %description devel
 Header files for D-BUS library.
