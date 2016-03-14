@@ -12,12 +12,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.10.6
+Version:	1.10.8
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	26d0cf3a1c9782cb0e342101f0450440
+# Source0-md5:	e912e930f249454752512aa7ac864d43
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
