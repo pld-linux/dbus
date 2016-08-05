@@ -1,5 +1,7 @@
 #! /bin/sh
 
+[ -x /usr/bin/dbus-launch -a -f /var/run/dbus.pid ] || return
+
 # Get configuration
 . /etc/sysconfig/messagebus
 
@@ -19,12 +21,8 @@ is_yes()
 	esac
 }
 
-if is_yes "${SESSION_BUS_X_SESSION}"; then
-    if  [ -f /usr/bin/dbus-launch ]; then
-	if [ -f /var/run/dbus.pid ]; then
-	    if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-		eval `dbus-launch --sh-syntax --exit-with-session`
-	    fi    
-	fi
-    fi
+if [ -z "$DBUS_SESSION_BUS_ADDRESS" ] && is_yes "${SESSION_BUS_X_SESSION}"; then
+	eval `dbus-launch --sh-syntax --exit-with-session`
 fi
+
+unset -f is_yes
