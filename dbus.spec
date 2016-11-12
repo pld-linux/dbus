@@ -12,12 +12,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.10.10
+Version:	1.10.12
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	495676d240eb982921b3ad1343526849
+# Source0-md5:	bacef77336bbe588efa3124102d5fcdb
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -170,6 +170,7 @@ D-BUS wraz z sesją X11 użytkownika.
 	--disable-silent-rules \
 	%{!?with_systemd:--disable-systemd} \
 	--disable-tests \
+	--enable-user-session \
 	--with-console-auth-dir=%{_localstatedir}/run/console/ \
 	--with-session-socket-dir=/tmp \
 	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
@@ -278,6 +279,9 @@ fi
 %{systemdunitdir}/messagebus.service
 %{systemdunitdir}/multi-user.target.wants/dbus.service
 %{systemdunitdir}/sockets.target.wants/dbus.socket
+%{systemduserunitdir}/dbus.service
+%{systemduserunitdir}/dbus.socket
+%{systemduserunitdir}/sockets.target.wants/dbus.socket
 
 %files libs
 %defattr(644,root,root,755)
