@@ -12,12 +12,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.10.24
+Version:	1.12.2
 Release:	1
 License:	AFL v2.1 or GPL v2
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	d548ae16f9a3268fe4650ccc86a3f06f
+# Source0-md5:	3361456cadb99aa6601bed5b48964254
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -202,6 +202,9 @@ ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
 # for local configuration in dbus 1.10+
 install -d $RPM_BUILD_ROOT/etc/dbus-1/{session.d,system.d}
 
+# we are creating messagebus user from rpm pre
+rm $RPM_BUILD_ROOT/usr/lib/sysusers.d/dbus.conf
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -256,6 +259,7 @@ fi
 %dir %{_datadir}/dbus-1/system-services
 %{_datadir}/dbus-1/session.conf
 %{_datadir}/dbus-1/system.conf
+%{_datadir}/xml/dbus-1
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/session.conf
 %config(noreplace) %verify(not md5 mtime size) /etc/dbus-1/system.conf
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
@@ -275,7 +279,6 @@ fi
 
 %{systemdunitdir}/dbus.service
 %{systemdunitdir}/dbus.socket
-%{systemdunitdir}/dbus.target.wants/dbus.socket
 %{systemdunitdir}/messagebus.service
 %{systemdunitdir}/multi-user.target.wants/dbus.service
 %{systemdunitdir}/sockets.target.wants/dbus.socket
@@ -302,6 +305,7 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
+%{_libdir}/cmake/DBus1
 %attr(755,root,root) %{_libdir}/libdbus-1.so
 %{_libdir}/libdbus-1.la
 %dir %{_libdir}/dbus-1.0
