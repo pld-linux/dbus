@@ -14,7 +14,7 @@ Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.12.2
 Release:	1
-License:	AFL v2.1 or GPL v2
+License:	AFL v2.1 or GPL v2+
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
 # Source0-md5:	3361456cadb99aa6601bed5b48964254
@@ -34,9 +34,9 @@ BuildRequires:	automake >= 1:1.13
 BuildRequires:	docbook-dtd44-xml
 BuildRequires:	doxygen
 BuildRequires:	expat-devel >= %{expat_version}
-%{?with_apparmor:BuildRequires:	libapparmor-devel >= 1:2.8.95}
+%{?with_apparmor:BuildRequires:	libapparmor-devel >= 1:2.10}
 BuildRequires:	libcap-ng-devel
-%{?with_selinux:BuildRequires:	libselinux-devel}
+%{?with_selinux:BuildRequires:	libselinux-devel >= 2.0.86}
 BuildRequires:	libtool >= 2:2.0
 BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
@@ -58,6 +58,8 @@ Requires(pre):	/usr/sbin/useradd
 Requires(post,preun,postun):	systemd-units >= 38
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
+%{?with_apparmor:Requires:	libapparmor >= 1:2.10}
+%{?with_selinux:Requires:	libselinux >= 2.0.86}
 Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 38
 Provides:	group(messagebus)
@@ -203,7 +205,7 @@ ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
 install -d $RPM_BUILD_ROOT/etc/dbus-1/{session.d,system.d}
 
 # we are creating messagebus user from rpm pre
-rm $RPM_BUILD_ROOT/usr/lib/sysusers.d/dbus.conf
+%{__rm} $RPM_BUILD_ROOT/usr/lib/sysusers.d/dbus.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -305,11 +307,11 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/cmake/DBus1
 %attr(755,root,root) %{_libdir}/libdbus-1.so
 %{_libdir}/libdbus-1.la
 %dir %{_libdir}/dbus-1.0
 %{_libdir}/dbus-1.0/include
+%{_libdir}/cmake/DBus1
 %{_includedir}/dbus-1.0
 %{_pkgconfigdir}/dbus-1.pc
 %dir %{_docdir}/dbus
