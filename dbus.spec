@@ -12,12 +12,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.12.6
+Version:	1.12.8
 Release:	1
 License:	AFL v2.1 or GPL v2+
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	32a607e47b82ab11702355bf02502f20
+# Source0-md5:	2764bf150e5aa8005b7bc0d6c388756a
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -257,8 +257,6 @@ fi
 %attr(755,root,root) %{_bindir}/dbus-test-tool
 %attr(755,root,root) %{_bindir}/dbus-update-activation-environment
 %attr(4754,root,messagebus) %{_libexecdir}/dbus-daemon-launch-helper
-%dir %{_datadir}/dbus-1/services
-%dir %{_datadir}/dbus-1/system-services
 %{_datadir}/dbus-1/session.conf
 %{_datadir}/dbus-1/system.conf
 %{_datadir}/xml/dbus-1
@@ -299,6 +297,8 @@ fi
 # interfaces is basically devel thing, but keep dir here
 # in case something uses it at runtime
 %dir %{_datadir}/dbus-1/interfaces
+%dir %{_datadir}/dbus-1/services
+%dir %{_datadir}/dbus-1/system-services
 # TODO: now it's only for local configuration - move to base dbus package
 #       after all packages place constant configuration in %{_datadir}/dbus-1
 %dir /etc/dbus-1
@@ -327,7 +327,7 @@ fi
 %files apidocs
 %defattr(644,root,root,755)
 %{_docdir}/dbus/api
-%{_docdir}/dbus/dbus.devhelp
+%{_docdir}/dbus/dbus.devhelp2
 
 %files x11
 %defattr(644,root,root,755)
