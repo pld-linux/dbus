@@ -1,0 +1,45 @@
+--- dbus-1.12.12/configure.ac.orig	2019-02-13 21:45:13.880746757 +0100
++++ dbus-1.12.12/configure.ac	2019-02-13 21:51:22.655415600 +0100
+@@ -12,6 +12,7 @@
+ 
+ m4_pattern_forbid([^AX_],
+   [Unexpanded AX_ macro found. Please install GNU autoconf-archive])
++m4_pattern_allow([AX_CHECK_GNU_MAKE_HEADLINE])
+ 
+ AC_CANONICAL_HOST
+ 
+--- dbus-1.12.12/Makefile.am.orig	2018-12-04 12:13:44.000000000 +0100
++++ dbus-1.12.12/Makefile.am	2019-02-13 22:16:52.360461810 +0100
+@@ -51,4 +51,4 @@
+ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ 
+ # Add rules for code-coverage testing, as defined by AX_CODE_COVERAGE
+-@CODE_COVERAGE_RULES@
++include $(top_srcdir)/aminclude_static.am
+--- dbus-1.12.12/dbus/Makefile.am.orig	2017-10-30 13:26:18.000000000 +0100
++++ dbus-1.12.12/dbus/Makefile.am	2019-02-13 22:17:08.080376648 +0100
+@@ -329,7 +329,7 @@
+ test_dbus_LDADD = libdbus-internal.la
+ 
+ # Add rules for code-coverage testing, as defined by AX_CODE_COVERAGE
+-@CODE_COVERAGE_RULES@
++include $(top_srcdir)/aminclude_static.am
+ 
+ clean-local:
+ 	$(AM_V_at)rm -fr ./.dbus-keyrings
+--- dbus-1.12.12/test/Makefile.am.orig	2018-02-23 11:25:17.000000000 +0100
++++ dbus-1.12.12/test/Makefile.am	2019-02-13 22:17:22.976962612 +0100
+@@ -672,4 +672,4 @@
+ 	) > $@.tmp && mv $@.tmp $@
+ 
+ # Add rules for code-coverage testing, as defined by AX_CODE_COVERAGE
+-@CODE_COVERAGE_RULES@
++include $(top_srcdir)/aminclude_static.am
+--- dbus-1.12.12/bus/Makefile.am.orig	2017-10-30 13:26:18.000000000 +0100
++++ dbus-1.12.12/bus/Makefile.am	2019-02-13 22:17:40.393534925 +0100
+@@ -306,4 +306,4 @@
+ endif
+ 
+ # Add rules for code-coverage testing, as defined by AX_CODE_COVERAGE
+-@CODE_COVERAGE_RULES@
++include $(top_srcdir)/aminclude_static.am
