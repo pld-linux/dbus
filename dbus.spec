@@ -160,6 +160,8 @@ D-BUS wraz z sesją X11 użytkownika.
 %patch3 -p1
 %patch4 -p1
 
+%{__sed} -i -e '1s,/usr/bin/env python,%{__python},' tools/GetAllMatchRules.py
+
 %build
 %{__libtoolize}
 %{__aclocal} -I m4
