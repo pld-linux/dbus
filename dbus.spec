@@ -204,13 +204,15 @@ install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 
 cp -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
+%if %{with systemd}
 ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
-
-# for local configuration in dbus 1.10+
-install -d $RPM_BUILD_ROOT/etc/dbus-1/{session.d,system.d}
 
 # we are creating messagebus user from rpm pre
 %{__rm} $RPM_BUILD_ROOT/usr/lib/sysusers.d/dbus.conf
+%endif
+
+# for local configuration in dbus 1.10+
+install -d $RPM_BUILD_ROOT/etc/dbus-1/{session.d,system.d}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -282,6 +284,7 @@ fi
 %{_mandir}/man1/dbus-test-tool.1*
 %{_mandir}/man1/dbus-update-activation-environment.1*
 
+%if %{with systemd}
 %{systemdunitdir}/dbus.service
 %{systemdunitdir}/dbus.socket
 %{systemdunitdir}/messagebus.service
@@ -290,6 +293,7 @@ fi
 %{systemduserunitdir}/dbus.service
 %{systemduserunitdir}/dbus.socket
 %{systemduserunitdir}/sockets.target.wants/dbus.socket
+%endif
 
 %files libs
 %defattr(644,root,root,755)
