@@ -43,6 +43,7 @@ BuildRequires:	libtool >= 2:2.0
 BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
 #BuildRequires:	python3-ducktype
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.626
 BuildRequires:	sed >= 4.0
 %{?with_systemd:BuildRequires:	systemd-devel >= 32}
@@ -127,9 +128,7 @@ Summary(pl.UTF-8):	Dokumentacja API D-BUS
 Group:		Documentation
 # dbus.devhelp refers also to common docs packaged in -devel
 Requires:	%{name}-devel = %{version}-%{release}
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 D-BUS API documentation.
