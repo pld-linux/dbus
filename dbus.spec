@@ -13,7 +13,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.12.20
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2+
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
@@ -44,7 +44,7 @@ BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
 #BuildRequires:	python3-ducktype
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 1.626
+BuildRequires:	rpmbuild(macros) >= 2.011
 BuildRequires:	sed >= 4.0
 %{?with_systemd:BuildRequires:	systemd-devel >= 32}
 BuildRequires:	xmlto
@@ -58,13 +58,13 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun,postun):	systemd-units >= 38
+Requires(post,preun,postun):	systemd-units >= 250.1
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
 %{?with_apparmor:Requires:	libapparmor >= 1:2.10}
 %{?with_selinux:Requires:	libselinux >= 2.0.86}
 Requires:	rc-scripts >= 0.4.3.0
-Requires:	systemd-units >= 38
+Requires:	systemd-units >= 250.1
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-glib-tools
@@ -225,12 +225,14 @@ rm -rf $RPM_BUILD_ROOT
 %service -n messagebus restart "D-Bus daemon"
 export NORESTART="yes"
 %systemd_post messagebus.service
+%systemd_user_post dbus.service dbus.socket
 
 %preun
 if [ "$1" = "0" ];then
 	%service messagebus stop
 	/sbin/chkconfig --del messagebus
 fi
+%systemd_user_preun dbus.service dbus.socket
 
 %postun
 if [ "$1" = "0" ]; then
