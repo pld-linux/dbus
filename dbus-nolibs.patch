@@ -1,15 +1,16 @@
---- dbus-1.4.8/configure.ac.orig	2011-04-08 15:29:57.000000000 +0200
-+++ dbus-1.4.8/configure.ac	2011-04-21 19:19:14.669374081 +0200
-@@ -457,7 +457,7 @@
+diff -urNp -x '*.orig' dbus-1.12.20.org/configure.ac dbus-1.12.20/configure.ac
+--- dbus-1.12.20.org/configure.ac	2020-07-02 12:09:52.000000000 +0200
++++ dbus-1.12.20/configure.ac	2022-01-08 14:11:46.166902428 +0100
+@@ -617,7 +617,7 @@ AC_DEFINE_UNQUOTED([DBUS_USE_SYNC], [$ha
  
  #### Various functions
  AC_SEARCH_LIBS(socket,[socket network])
 -AC_CHECK_FUNC(gethostbyname,,[AC_CHECK_LIB(nsl,gethostbyname)])
 +AC_CHECK_FUNC(gethostbyname,,[AC_SEARCH_LIBS(gethostbyname,nsl)])
  
- AC_CHECK_FUNCS(vsnprintf vasprintf nanosleep usleep setenv clearenv unsetenv socketpair getgrouplist fpathconf setrlimit poll setlocale localeconv strtoll strtoull)
+ AC_CHECK_FUNCS([vsnprintf vasprintf nanosleep usleep setenv clearenv unsetenv socketpair getgrouplist fpathconf setrlimit poll setlocale localeconv strtoll strtoull issetugid getresuid setresuid getrlimit prlimit])
  
-@@ -1086,7 +1086,7 @@
+@@ -1209,7 +1209,7 @@ else
          have_x11=no
      else
          have_x11=yes
