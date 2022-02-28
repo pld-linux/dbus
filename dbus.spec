@@ -58,13 +58,13 @@ Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun,postun):	systemd-units >= 250.1
+Requires(post,preun,postun):	systemd-units >= 1:250.1
 Requires:	%{name}-libs = %{version}-%{release}
 Requires:	expat >= %{expat_version}
 %{?with_apparmor:Requires:	libapparmor >= 1:2.10}
 %{?with_selinux:Requires:	libselinux >= 2.0.86}
 Requires:	rc-scripts >= 0.4.3.0
-Requires:	systemd-units >= 250.1
+Requires:	systemd-units >= 1:250.1
 Provides:	group(messagebus)
 Provides:	user(messagebus)
 Obsoletes:	dbus-glib-tools
