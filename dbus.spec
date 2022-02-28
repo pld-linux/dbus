@@ -67,8 +67,9 @@ Requires:	rc-scripts >= 0.4.3.0
 Requires:	systemd-units >= 1:250.1
 Provides:	group(messagebus)
 Provides:	user(messagebus)
-Obsoletes:	dbus-glib-tools
-Obsoletes:	dbus-systemd
+Obsoletes:	dbus-glib-tools < 0.91
+Obsoletes:	dbus-systemd < 1.4.16-5
+Obsoletes:	dbus-upstart < 1.8.16-3
 Conflicts:	pam < 0.99.7.1
 # not available for dbus 0.9x yet(?)
 #Obsoletes:	dbus-gtk dbus-gcj dbus-gcj-devel dbus-gcj-static
@@ -89,7 +90,7 @@ Summary:	D-BUS library
 Summary(pl.UTF-8):	Biblioteka D-BUS
 Group:		Libraries
 %{?with_systemd:Requires:	systemd-libs >= 32}
-Obsoletes:	dbus-dirs
+Obsoletes:	dbus-dirs < 1.6.14
 
 %description libs
 D-BUS library.
@@ -141,7 +142,7 @@ Summary:	X11 session support for D-BUS
 Summary(pl.UTF-8):	Obsługa sesji X11 dla D-BUS
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	dbus-X11
+Obsoletes:	dbus-X11 < 0.62-2
 
 %description x11
 This package contains D-BUS utilities to start D-BUS service together
