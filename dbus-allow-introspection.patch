@@ -10,8 +10,8 @@
  
      <!-- All messages may be received by default -->
      <allow receive_type="method_call"/>
---- dbus-1.2.10/test/name-test/tmp-session-like-system.conf.orig	2008-12-19 20:39:55.000000000 +0100
-+++ dbus-1.2.10/test/name-test/tmp-session-like-system.conf	2008-12-26 09:42:41.950513830 +0100
+--- dbus-1.2.10/test/data/valid-config-files-system/tmp-session-like-system.conf.in.orig	2008-12-19 20:39:55.000000000 +0100
++++ dbus-1.2.10/test/data/valid-config-files-system/tmp-session-like-system.conf.in	2008-12-26 09:42:41.950513830 +0100
 @@ -24,6 +24,10 @@
      <deny own="*"/>
      <deny send_type="method_call"/>

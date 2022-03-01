@@ -12,12 +12,12 @@
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.12.20
-Release:	3
+Version:	1.14.0
+Release:	1
 License:	AFL v2.1 or GPL v2+
 Group:		Libraries
-Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.gz
-# Source0-md5:	dfe8a71f412e0b53be26ed4fbfdc91c4
+Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.xz
+# Source0-md5:	ddd5570aff05191dbee8e42d751f1b7d
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
@@ -47,8 +47,10 @@ BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 2.011
 BuildRequires:	sed >= 4.0
 %{?with_systemd:BuildRequires:	systemd-devel >= 32}
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	xmlto
 %{?with_X11:BuildRequires:	xorg-lib-libX11-devel}
+BuildRequires:	xz
 BuildRequires:	yelp-tools
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
@@ -299,7 +301,7 @@ fi
 
 %files libs
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog NEWS README doc/TODO
+%doc AUTHORS CONTRIBUTING.md COPYING NEWS README doc/TODO
 %attr(755,root,root) %{_libdir}/libdbus-1.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libdbus-1.so.3
 %dir %{_datadir}/dbus-1

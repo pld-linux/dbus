@@ -2,8 +2,8 @@ diff -urN dbus-1.0.2.orig/dbus/dbus-internals.c dbus-1.0.2/dbus/dbus-internals.c
 --- dbus-1.0.2.orig/dbus/dbus-internals.c	2007-03-04 19:25:33.503538844 +0100
 +++ dbus-1.0.2/dbus/dbus-internals.c	2007-03-04 19:25:47.572571912 +0100
 @@ -193,7 +193,7 @@
- 
- static dbus_bool_t warn_initted = FALSE;
+  * threads, the worst that will happen is that warnings get their default
+  * fatal/non-fatal nature. */
  static dbus_bool_t fatal_warnings = FALSE;
 -static dbus_bool_t fatal_warnings_on_check_failed = TRUE;
 +static dbus_bool_t fatal_warnings_on_check_failed = FALSE;

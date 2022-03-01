@@ -8,14 +8,5 @@ diff -urNp -x '*.orig' dbus-1.12.20.org/configure.ac dbus-1.12.20/configure.ac
 -AC_CHECK_FUNC(gethostbyname,,[AC_CHECK_LIB(nsl,gethostbyname)])
 +AC_CHECK_FUNC(gethostbyname,,[AC_SEARCH_LIBS(gethostbyname,nsl)])
  
- AC_CHECK_FUNCS([vsnprintf vasprintf nanosleep usleep setenv clearenv unsetenv socketpair getgrouplist fpathconf setrlimit poll setlocale localeconv strtoll strtoull issetugid getresuid setresuid getrlimit prlimit])
- 
-@@ -1209,7 +1209,7 @@ else
-         have_x11=no
-     else
-         have_x11=yes
--        DBUS_X_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS"
-+        DBUS_X_LIBS="$X_LIBS -lX11 $X_EXTRA_LIBS"
-         DBUS_X_CFLAGS="$X_CFLAGS"
-     fi
- fi
+ AC_CHECK_HEADERS([syslog.h])
+ if test "x$ac_cv_header_syslog_h" = "xyes"; then
