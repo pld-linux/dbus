@@ -1,9 +1,11 @@
 # TODO:
-# - enable ducktype-docs when it works
+# - enable ducktype-docs when it works and update files if necessary
 # - move /etc/dbus-1 from -libs to base after external packages transition to /usr/share/dbus-1
 #
 # Conditional build:
+%bcond_without	apidocs		# API docs
 %bcond_without	apparmor	# AppArmor support
+%bcond_with	ducktype	# ducktype docs
 %bcond_without	selinux		# SELinux support
 %bcond_without	systemd		# systemd at_console support
 %bcond_without	X11		# X11 support
@@ -34,7 +36,7 @@ BuildRequires:	autoconf >= 2.63
 BuildRequires:	autoconf-archive >= 2019.01.06
 BuildRequires:	automake >= 1:1.13
 BuildRequires:	docbook-dtd44-xml
-BuildRequires:	doxygen
+%{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	expat-devel >= %{expat_version}
 %{?with_apparmor:BuildRequires:	libapparmor-devel >= 1:2.10}
 BuildRequires:	libcap-ng-devel
@@ -42,7 +44,7 @@ BuildRequires:	libcap-ng-devel
 BuildRequires:	libtool >= 2:2.0
 BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
-#BuildRequires:	python3-ducktype
+%{?with_ducktype:BuildRequires:	python3-ducktype}
 BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 2.011
 BuildRequires:	sed >= 4.0
@@ -51,7 +53,7 @@ BuildRequires:	tar >= 1:1.22
 BuildRequires:	xmlto
 %{?with_X11:BuildRequires:	xorg-lib-libX11-devel}
 BuildRequires:	xz
-BuildRequires:	yelp-tools
+%{?with_ducktype:BuildRequires:	yelp-tools}
 Requires(post,postun):	/sbin/ldconfig
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -171,9 +173,10 @@ D-BUS wraz z sesją X11 użytkownika.
 %{__autoheader}
 %{__automake}
 %configure \
+	%{!?with_apidocs:--disable-doxygen-docs} \
 	%{!?with_apparmor:--disable-apparmor} \
 	--disable-asserts \
-	--disable-ducktype-docs \
+	%{!?with_ducktype:--disable-ducktype-docs} \
 	%{?debug:--enable-verbose-mode} \
 	%{!?with_selinux:--disable-selinux} \
 	--disable-silent-rules \
@@ -337,10 +340,12 @@ fi
 %defattr(644,root,root,755)
 %{_libdir}/libdbus-1.a
 
+%if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
 %{_docdir}/dbus/api
 %{_docdir}/dbus/dbus.devhelp2
+%endif
 
 %files x11
 %defattr(644,root,root,755)
