@@ -1,0 +1,243 @@
+commit 84fdcc5f277652153cc25972daa0efdcd0d5b319
+Author: Marc-André Lureau <marcandre.lureau@redhat.com>
+Date:   Thu May 19 17:28:08 2022 +0200
+
+    dbus: remove pam_console/pam_foreground support
+    
+    DBUS_CONSOLE_AUTH_DIR is deprecated since 1.11.18, and was intended to
+    have been removed in 1.13. Let's drop the related code now.
+    
+    Fixes: https://gitlab.freedesktop.org/dbus/dbus/-/issues/181
+    Fixes: https://bugs.freedesktop.org/show_bug.cgi?id=101629
+    
+    Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+
+diff --git a/dbus/dbus-sysdeps-util-unix.c b/dbus/dbus-sysdeps-util-unix.c
+index 8f079cbf..1fd9e464 100644
+--- a/dbus/dbus-sysdeps-util-unix.c
++++ b/dbus/dbus-sysdeps-util-unix.c
+@@ -568,53 +568,6 @@ _dbus_file_exists (const char *file)
+   return (access (file, F_OK) == 0);
+ }
+ 
+-/** Checks if user is at the console
+-*
+-* @param username user to check
+-* @param error return location for errors
+-* @returns #TRUE is the user is at the consolei and there are no errors
+-*/
+-dbus_bool_t 
+-_dbus_user_at_console (const char *username,
+-                       DBusError  *error)
+-{
+-#ifdef DBUS_CONSOLE_AUTH_DIR
+-  DBusString u, f;
+-  dbus_bool_t result;
+-
+-  result = FALSE;
+-  if (!_dbus_string_init (&f))
+-    {
+-      _DBUS_SET_OOM (error);
+-      return FALSE;
+-    }
+-
+-  if (!_dbus_string_append (&f, DBUS_CONSOLE_AUTH_DIR))
+-    {
+-      _DBUS_SET_OOM (error);
+-      goto out;
+-    }
+-
+-  _dbus_string_init_const (&u, username);
+-
+-  if (!_dbus_concat_dir_and_file (&f, &u))
+-    {
+-      _DBUS_SET_OOM (error);
+-      goto out;
+-    }
+-
+-  result = _dbus_file_exists (_dbus_string_get_const_data (&f));
+-
+- out:
+-  _dbus_string_free (&f);
+-
+-  return result;
+-#else
+-  return FALSE;
+-#endif
+-}
+-
+-
+ /**
+  * Checks whether the filename is an absolute path
+  *
+diff --git a/dbus/dbus-sysdeps.h b/dbus/dbus-sysdeps.h
+index 6c416651..0e51b32c 100644
+--- a/dbus/dbus-sysdeps.h
++++ b/dbus/dbus-sysdeps.h
+@@ -589,9 +589,6 @@ dbus_bool_t _dbus_command_for_pid (unsigned long  pid,
+                                    int            max_len,
+                                    DBusError     *error);
+ 
+-dbus_bool_t _dbus_user_at_console (const char *username,
+-                                   DBusError  *error);
+-
+ typedef enum {
+   DBUS_LOG_FLAGS_STDERR = (1 << 0),
+   DBUS_LOG_FLAGS_SYSTEM_LOG = (1 << 1)
+diff --git a/dbus/dbus-userdb-util.c b/dbus/dbus-userdb-util.c
+index 1ca21eb7..0eadc78a 100644
+--- a/dbus/dbus-userdb-util.c
++++ b/dbus/dbus-userdb-util.c
+@@ -65,11 +65,6 @@ dbus_bool_t
+ _dbus_is_console_user (dbus_uid_t uid,
+ 		       DBusError *error)
+ {
+-
+-  DBusUserDatabase *db;
+-  const DBusUserInfo *info;
+-  dbus_bool_t result = FALSE;
+-
+ #ifdef HAVE_SYSTEMD
+   /* check if we have logind */
+   if (access ("/run/systemd/seats/", F_OK) >= 0)
+@@ -120,35 +115,7 @@ _dbus_is_console_user (dbus_uid_t uid,
+ 
+ #endif /* HAVE_CONSOLE_OWNER_FILE */
+ 
+-  if (!_dbus_user_database_lock_system ())
+-    {
+-      _DBUS_SET_OOM (error);
+-      return FALSE;
+-    }
+-
+-  db = _dbus_user_database_get_system ();
+-  if (db == NULL)
+-    {
+-      dbus_set_error (error, DBUS_ERROR_FAILED, "Could not get system database.");
+-      _dbus_user_database_unlock_system ();
+-      return FALSE;
+-    }
+-
+-  /* TPTD: this should be cache-safe, we've locked the DB and
+-    _dbus_user_at_console doesn't pass it on. */
+-  info = _dbus_user_database_lookup (db, uid, NULL, error);
+-
+-  if (info == NULL)
+-    {
+-      _dbus_user_database_unlock_system ();
+-       return FALSE;
+-    }
+-
+-  result = _dbus_user_at_console (info->username, error);
+-
+-  _dbus_user_database_unlock_system ();
+-
+-  return result;
++  return FALSE;
+ }
+ 
+ /**
+#commit cf124a41d7be494a163a9ce1dd02243a49572f1c
+#Author: Marc-André Lureau <marcandre.lureau@redhat.com>
+#Date:   Thu May 19 17:29:29 2022 +0200
+#
+#    autotools: drop --with-console-auth-dir=
+#    
+#    Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+#
+#diff --git a/configure.ac b/configure.ac
+#index 26de0a55..2cd8e508 100644
+#--- a/configure.ac
+#+++ b/configure.ac
+#@@ -223,7 +223,6 @@ AC_ARG_WITH(session-socket-dir, AS_HELP_STRING([--with-session-socket-dir=[dirna
+# AC_ARG_WITH(test-socket-dir, AS_HELP_STRING([--with-test-socket-dir=[dirname]],[Where to put sockets for make check]))
+# AC_ARG_WITH(system-pid-file, AS_HELP_STRING([--with-system-pid-file=[pidfile]],[PID file for systemwide daemon]))
+# AC_ARG_WITH(system-socket, AS_HELP_STRING([--with-system-socket=[filename]],[UNIX domain socket for systemwide daemon]))
+#-AC_ARG_WITH(console-auth-dir, AS_HELP_STRING([--with-console-auth-dir=[dirname]],[directory to check for console ownerhip]))
+# AC_ARG_WITH(console-owner-file, AS_HELP_STRING([--with-console-owner-file=[filename]],[file whose owner determines current console owner]))
+# AC_ARG_WITH(launchd-agent-dir, AS_HELP_STRING([--with-launchd-agent-dir=[dirname]],[directory to put the launchd agent (default: /Library/LaunchAgents)]))
+# AC_ARG_WITH(dbus_user, AS_HELP_STRING([--with-dbus-user=<user>],[User for running the DBUS daemon (messagebus)]))
+#@@ -1448,12 +1447,6 @@ fi
+# 
+# AC_SUBST(DBUS_SYSTEM_PID_FILE)
+# 
+#-#### Directory to check for console ownership
+#-AS_IF([test -n "$with_console_auth_dir" && test "x$with_console_auth_dir" != xno],
+#-    [AC_DEFINE_UNQUOTED([DBUS_CONSOLE_AUTH_DIR], ["$with_console_auth_dir"],
+#-        [Directory to check for pam_console/pam_foreground flag files, or undefined])],
+#-    [with_console_auth_dir=])
+#-
+# #### File to check for console ownership
+# if test x$have_console_owner_file = xyes; then
+#    if ! test -z "$with_console_owner_file"; then
+commit 5705d14cf03367797d8fab9f084f9835f625f07d
+Author: Marc-André Lureau <marcandre.lureau@redhat.com>
+Date:   Thu May 19 17:29:51 2022 +0200
+
+    cmake: drop -DDBUS_CONSOLE_AUTH_DIR=
+    
+    Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b7d60899..0914f07b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -601,8 +601,6 @@ endif()
+  # Not used on Windows, where there is no system bus
+ set(DBUS_SYSTEM_PID_FILE ${DBUS_RUNSTATEDIR}/dbus/pid)
+ 
+-set(DBUS_CONSOLE_AUTH_DIR "" CACHE STRING "Directory to check for pam_console/pam_foreground flag files, or empty to ignore")
+-
+ # This won't work on Windows. It's not meant to - the system bus is
+ # meaningless on Windows anyway.
+ #
+@@ -784,12 +782,6 @@ message("        System bus PID file:      ${DBUS_SYSTEM_PID_FILE}             "
+ message("        System bus user:          ${DBUS_USER}                        ")
+ message("        Session bus socket dir:   ${DBUS_SESSION_SOCKET_DIR}          ")
+ 
+-if(DBUS_CONSOLE_AUTH_DIR)
+-message("        pam_console auth dir:     ${DBUS_CONSOLE_AUTH_DIR}            ")
+-else()
+-message("        pam_console auth dir:     (none)                              ")
+-endif()
+-
+ message("        'make check' socket dir:  ${TEST_SOCKET_DIR}                  ")
+ endif()
+ message("        Test listen address:      ${TEST_LISTEN}                      ")
+diff --git a/cmake/config.h.cmake b/cmake/config.h.cmake
+index 358f9d82..68c3dbfa 100644
+--- a/cmake/config.h.cmake
++++ b/cmake/config.h.cmake
+@@ -34,7 +34,6 @@
+ # define _XOPEN_SOURCE 500
+ #endif
+ 
+-#cmakedefine DBUS_CONSOLE_AUTH_DIR "@DBUS_CONSOLE_AUTH_DIR@"
+ #cmakedefine DBUS_DATADIR  "@DBUS_DATADIR@"
+ #cmakedefine DBUS_BINDIR   "@DBUS_BINDIR@"
+ #cmakedefine DBUS_PREFIX "@DBUS_PREFIX@"
+#commit 17caf7f3532bb27546d613f6c54f2e4ed0e230c3
+#Author: Marc-André Lureau <marcandre.lureau@redhat.com>
+#Date:   Thu May 19 17:30:22 2022 +0200
+#
+#    NEWS: add note about DBUS_CONSOLE_AUTH_DIR removal
+#    
+#    Signed-off-by: Marc-André Lureau <marcandre.lureau@redhat.com>
+#
+#diff --git a/NEWS b/NEWS
+#index 9ec142fd..fe4f4443 100644
+#--- a/NEWS
+#+++ b/NEWS
+#@@ -11,6 +11,12 @@ Fixes:
+# • Slightly improve error-handling for inotify
+#   (dbus!235, Simon McVittie)
+# 
+#+Feature removal:
+#+
+#+• Remove support for the obsolete pam_console and pam_foreground modules
+#+  (the Autotools --with-console-auth-dir= and CMake -DDBUS_CONSOLE_AUTH_DIR=
+#+  options, which have been deprecated since dbus 1.11.18).
+#+
+# dbus 1.14.0 (2022-02-28)
+# ========================
+# 

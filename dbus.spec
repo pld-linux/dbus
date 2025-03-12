@@ -9,45 +9,44 @@
 %bcond_without	selinux		# SELinux support
 %bcond_without	systemd		# systemd at_console support
 %bcond_without	X11		# X11 support
+%bcond_with	pam_console	# pam_console support restored
 
 %define		expat_version	1:1.95.5
 Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
-Version:	1.14.10
-Release:	2
+Version:	1.16.2
+Release:	1
 License:	AFL v2.1 or GPL v2+
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.xz
-# Source0-md5:	46070a3487817ff690981f8cd2ba9376
+# Source0-md5:	97832e6f0a260936d28536e5349c22e5
 Source1:	messagebus.init
 Source2:	%{name}-daemon-1-profile.d-sh
 Source3:	%{name}-sysconfig
 Source4:	%{name}-xinitrc.sh
 Source5:	%{name}.tmpfiles
-Patch0:		%{name}-nolibs.patch
 Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
 Patch3:		%{name}-allow-introspection.patch
-Patch4:		%{name}-autoconf-archive.patch
-Patch5:		log-commands.patch
+Patch4:		log-commands.patch
+Patch5:		%{name}-pam_console.patch
+Patch6:		%{name}-pam_console-meson.patch
 URL:		https://www.freedesktop.org/Software/dbus
 BuildRequires:	audit-libs-devel
-BuildRequires:	autoconf >= 2.63
-BuildRequires:	autoconf-archive >= 2019.01.06
-BuildRequires:	automake >= 1:1.13
 BuildRequires:	docbook-dtd44-xml
 %{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	expat-devel >= %{expat_version}
 %{?with_apparmor:BuildRequires:	libapparmor-devel >= 1:2.10}
 BuildRequires:	libcap-ng-devel
 %{?with_selinux:BuildRequires:	libselinux-devel >= 2.0.86}
-BuildRequires:	libtool >= 2:2.0
 BuildRequires:	libxslt-progs
+BuildRequires:	meson >= 0.56
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
 %{?with_ducktype:BuildRequires:	python3-ducktype}
 BuildRequires:	rpm-build >= 4.6
-BuildRequires:	rpmbuild(macros) >= 2.011
+BuildRequires:	rpmbuild(macros) >= 2.042
 BuildRequires:	sed >= 4.0
 %{?with_systemd:BuildRequires:	systemd-devel >= 32}
 BuildRequires:	tar >= 1:1.22
@@ -159,57 +158,56 @@ D-BUS wraz z sesją X11 użytkownika.
 
 %prep
 %setup -q
-%patch -P0 -p1
 %patch -P1 -p1
 %patch -P2 -p1
 %patch -P3 -p1
 %patch -P4 -p1
-%patch -P5 -p1
+%if %{with pam_console}
+%patch -P5 -p1 -R
+%patch -P6 -p1
+%endif
 
-%{__sed} -i -e '1s,/usr/bin/env python,%{__python},' tools/GetAllMatchRules.py
+%{__sed} -i -e '1s,/usr/bin/env python$,%{__python3},' tools/GetAllMatchRules.py
 
 %build
-%{__libtoolize}
-%{__aclocal} -I m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-%configure \
-	%{!?with_apidocs:--disable-doxygen-docs} \
-	%{!?with_apparmor:--disable-apparmor} \
-	--disable-asserts \
-	%{!?with_ducktype:--disable-ducktype-docs} \
-	%{?debug:--enable-verbose-mode} \
-	%{!?with_selinux:--disable-selinux} \
-	--disable-silent-rules \
-	%{!?with_systemd:--disable-systemd} \
-	--disable-tests \
-	--enable-user-session \
-	--with-console-auth-dir=%{_localstatedir}/run/console/ \
-	--with-session-socket-dir=/tmp \
-	--with-system-pid-file=%{_localstatedir}/run/dbus.pid \
-	--with-systemdsystemunitdir=%{systemdunitdir} \
-	%{!?with_X11:--without-x}
-%{__make}
+%meson \
+	-Dapparmor=%{__enabled_disabled apparmor} \
+	%{?with_pam_console:-Dconsole_auth_dir=%{_localstatedir}/run/console} \
+	-Ddoxygen_docs=%{__enabled_disabled apidocs} \
+	-Dducktype_docs=%{__enabled_disabled ducktype} \
+	-Depoll=enabled \
+	-Dinotify=enabled \
+	-Dkqueue=disabled \
+	-Dlaunchd=disabled \
+	-Dlibaudit=enabled \
+	-Dmodular_tests=disabled \
+	-Dqt_help=disabled \
+	-Drelocation=disabled \
+	-Dselinux=%{__enabled_disabled selinux} \
+	-Dsession_socket_dir=/tmp \
+	-Dsystem_pid_file=%{_localstatedir}/run/dbus.pid \
+	-Dsystem_socket=%{_localstatedir}/run/dbus/system_bus_socket \
+	-Dsystemd=%{__enabled_disabled systemd} \
+	-Dsystemd_system_unitdir=%{systemdunitdir} \
+	-Dx11_autolaunch=%{__enabled_disabled X11} \
+	-Dxml_docs=enabled
+
+%meson_build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/{profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
-	$RPM_BUILD_ROOT%{_datadir}/dbus-1/{services,interfaces} \
-	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus \
-	$RPM_BUILD_ROOT%{_localstatedir}/lib/dbus \
-	$RPM_BUILD_ROOT/%{_lib} \
-	$RPM_BUILD_ROOT%{systemdtmpfilesdir}
+install -d $RPM_BUILD_ROOT/etc/{profile.d,rc.d/init.d,sysconfig,X11/xinit/xinitrc.d} \
+	$RPM_BUILD_ROOT%{_datadir}/dbus-1/interfaces \
+	$RPM_BUILD_ROOT%{_localstatedir}/run/dbus
 
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+%meson_install
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/messagebus
 install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 
-cp -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
+cat %{SOURCE5} >>$RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %if %{with systemd}
 ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
@@ -326,7 +324,6 @@ fi
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libdbus-1.so
-%{_libdir}/libdbus-1.la
 %dir %{_libdir}/dbus-1.0
 %{_libdir}/dbus-1.0/include
 %{_libdir}/cmake/DBus1
@@ -337,6 +334,9 @@ fi
 %{_docdir}/dbus/*.png
 %{_docdir}/dbus/*.svg
 %{_docdir}/dbus/*.txt
+%dir %{_docdir}/dbus/examples
+%attr(755,root,root) %{_docdir}/dbus/examples/GetAllMatchRules.py
+%{_docdir}/dbus/examples/example-*.conf
 
 %files static
 %defattr(644,root,root,755)

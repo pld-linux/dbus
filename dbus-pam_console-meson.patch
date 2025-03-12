@@ -1,0 +1,26 @@
+--- dbus-1.16.2/meson_options.txt.orig	2025-03-12 21:28:53.334532141 +0100
++++ dbus-1.16.2/meson_options.txt	2025-03-12 21:28:56.917846062 +0100
+@@ -305,3 +305,10 @@ option(
+   value: false,
+   description: 'use OutputDebugString() to log messages to Windows debug port'
+ )
++
++option(
++  'console_auth_dir',
++  type: 'string',
++  value: '',
++  description: 'Directory to check for pam_console/pam_foreground flag files, or empty to ignore'
++)
+--- dbus-1.16.2/meson.build.orig	2025-03-12 21:30:33.567322467 +0100
++++ dbus-1.16.2/meson.build	2025-03-12 21:30:37.273969053 +0100
+@@ -1104,6 +1104,10 @@ if session_bus_connect_address == ''
+ endif
+ config.set_quoted('DBUS_SESSION_BUS_CONNECT_ADDRESS', session_bus_connect_address)
+ 
++console_auth_dir = get_option('console_auth_dir')
++if console_auth_dir != ''
++    config.set_quoted('DBUS_CONSOLE_AUTH_DIR', console_auth_dir)
++endif
+ 
+ config.set('DBUS_ENABLE_STATS', get_option('stats'))
+ enable_user_session = get_option('user_session')
