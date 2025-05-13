@@ -15,7 +15,7 @@ Summary:	D-BUS message bus
 Summary(pl.UTF-8):	Magistrala przesyłania komunikatów D-BUS
 Name:		dbus
 Version:	1.14.10
-Release:	1
+Release:	2
 License:	AFL v2.1 or GPL v2+
 Group:		Libraries
 Source0:	https://dbus.freedesktop.org/releases/dbus/%{name}-%{version}.tar.xz
@@ -30,6 +30,7 @@ Patch1:		%{name}-config.patch
 Patch2:		%{name}-no_fatal_checks.patch
 Patch3:		%{name}-allow-introspection.patch
 Patch4:		%{name}-autoconf-archive.patch
+Patch5:		log-commands.patch
 URL:		https://www.freedesktop.org/Software/dbus
 BuildRequires:	audit-libs-devel
 BuildRequires:	autoconf >= 2.63
@@ -163,6 +164,7 @@ D-BUS wraz z sesją X11 użytkownika.
 %patch -P2 -p1
 %patch -P3 -p1
 %patch -P4 -p1
+%patch -P5 -p1
 
 %{__sed} -i -e '1s,/usr/bin/env python,%{__python},' tools/GetAllMatchRules.py
 

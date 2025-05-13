@@ -1,0 +1,11 @@
+--- dbus-1.14.10/bus/connection.c~	2023-09-01 16:23:58.000000000 +0200
++++ dbus-1.14.10/bus/connection.c	2025-05-13 02:45:43.416664679 +0200
+@@ -40,7 +40,7 @@
+ #include <dbus/dbus-internals.h>
+ 
+ /* Trim executed commands to this length; we want to keep logs readable */
+-#define MAX_LOG_COMMAND_LEN 50
++#define MAX_LOG_COMMAND_LEN 250
+ 
+ static void bus_connection_remove_transactions (DBusConnection *connection);
+ 
