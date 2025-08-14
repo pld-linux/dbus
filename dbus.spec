@@ -207,9 +207,8 @@ install -p %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d/dbus-daemon-1.sh
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/messagebus
 install -p %{SOURCE4} $RPM_BUILD_ROOT/etc/X11/xinit/xinitrc.d
 
-cat %{SOURCE5} >>$RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
-
 %if %{with systemd}
+cat %{SOURCE5} >>$RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 ln -s dbus.service $RPM_BUILD_ROOT%{systemdunitdir}/messagebus.service
 
 # we are creating messagebus user from rpm pre
@@ -279,7 +278,6 @@ fi
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/messagebus
 %attr(754,root,root) /etc/rc.d/init.d/messagebus
 %attr(755,root,root) /etc/profile.d/dbus-daemon-1.sh
-%{systemdtmpfilesdir}/%{name}.conf
 %dir %{_localstatedir}/lib/dbus
 %dir %{_localstatedir}/run/dbus
 %{_mandir}/man1/dbus-cleanup-sockets.1*
@@ -292,6 +290,7 @@ fi
 %{_mandir}/man1/dbus-update-activation-environment.1*
 
 %if %{with systemd}
+%{systemdtmpfilesdir}/%{name}.conf
 %{systemdunitdir}/dbus.service
 %{systemdunitdir}/dbus.socket
 %{systemdunitdir}/messagebus.service
